@@ -20,24 +20,30 @@ namespace HKeInvestWebApplication
         {
             if (!Page.IsPostBack)
             {
-                // Get the available currencies to populate the DropDownList.
-                DataTable dtCurrency = myExternalFunctions.getCurrencyData();
-
-                foreach (DataRow row in dtCurrency.Rows)
+                if (Session.Count == 0)
                 {
-                    ddlCurrency.Items.Add(row["currency"].ToString().Trim());
+                    List<string>[] CurrencyData;
+                    CurrencyData = myHKeInvestCode.CurrencyData();
+                    Session.Add("rate", CurrencyData[0]);
+                    Session.Add("base", CurrencyData[1]);
                 }
 
-                //Load exchange rate into view state
-                List<string> rate = new List<string>();
-                List<string> currency = new List<string>();
-                foreach (DataRow row in dtCurrency.Rows)
+                List<string> bases = (List<string>)Session["base"];
+                for (int i = 0; i < bases.Count; i++)
                 {
-                    rate.Add(Convert.ToString(row["rate"]));
-                    currency.Add(Convert.ToString(row["currency"]));
+                    ddlCurrency.Items.Add(bases[i]);
                 }
-                ViewState.Add("rateView", rate);
-                ViewState.Add("baseView", currency);
+
+                ////Load exchange rate into view state
+                //List<string> rate = new List<string>();
+                //List<string> currency = new List<string>();
+                //foreach (DataRow row in dtCurrency.Rows)
+                //{
+                //    rate.Add(Convert.ToString(row["rate"]));
+                //    currency.Add(Convert.ToString(row["currency"]));
+                //}
+                //Session.Add("rateView", rate);
+                //Session.Add("baseView", currency);
             }
         }
 
@@ -175,8 +181,8 @@ namespace HKeInvestWebApplication
             int targetCurrency = ddlCurrency.SelectedIndex - 1;
             List<string> rate;
             List<string> currency;
-            rate = (List<string>)ViewState["rateView"];
-            currency = (List<string>)ViewState["baseView"];
+            rate = (List<string>)Session["rate"];
+            currency = (List<string>)Session["base"];
 
             foreach (DataRow row in dtSecurityHolding.Rows)
             {

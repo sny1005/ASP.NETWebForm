@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using System.Data;
+using HKeInvestWebApplication.ExternalSystems.Code_File;
 
 namespace HKeInvestWebApplication.Code_File
 {
@@ -109,5 +110,34 @@ namespace HKeInvestWebApplication.Code_File
             }
             return "-1";
         }
+
+        //access the external system and put the currency data into view state
+        public List<string>[] CurrencyData()
+        {
+            //declare local objects;
+            ExternalFunctions myExternalFunctions = new ExternalFunctions();
+
+            // Get the available currencies to populate the DropDownList.
+            DataTable dtCurrency = myExternalFunctions.getCurrencyData();
+
+            //Load currency data into 2 list
+            List<string> rate = new List<string>();
+            List<string> currency = new List<string>();
+            foreach (DataRow row in dtCurrency.Rows)
+            {
+                rate.Add(Convert.ToString(row["rate"]));
+                currency.Add(Convert.ToString(row["currency"]));
+            }
+
+            List<string>[] output = new List<string>[2];
+            output[0] = rate;
+            output[1] = currency;
+            return output;
+        }
+
+
+
+
+
     }
 }

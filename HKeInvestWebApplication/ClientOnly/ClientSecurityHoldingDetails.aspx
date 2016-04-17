@@ -4,7 +4,6 @@
     <div class="form-horizontal">
         <div class="form-group">
             <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="col-md-3" ></asp:Label>
-            <%--<asp:TextBox ID="txtAccountNumber" runat="server"></asp:TextBox>--%>
             <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSecurityType_SelectedIndexChanged">
                 <asp:ListItem Value="0">Security type</asp:ListItem>
                 <asp:ListItem Value="bond">Bond</asp:ListItem>
