@@ -186,7 +186,6 @@ namespace HKeInvestWebApplication
                     initialBalance = Convert.ToDecimal(ChequeV.Text);
 
                 //the account will be successfully updated
-                //TODO: update the [Client] table
                 string sql = "INSERT INTO [Account] VALUES ('" + acNo + "', '" + acType.SelectedValue + "', " + initialBalance + ", NULL)";
 
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();

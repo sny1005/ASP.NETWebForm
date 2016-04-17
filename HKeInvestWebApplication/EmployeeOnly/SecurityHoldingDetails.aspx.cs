@@ -58,7 +58,7 @@ namespace HKeInvestWebApplication
             string accountNumber = txtAccountNumber.Text;
 
             // *******************************************************************
-            // TODO: Set the account number and security type from the web page. *
+            // Set the account number and security type from the web page. *
             // *******************************************************************
             string securityType = ddlSecurityType.SelectedValue; // Set the securityType from a web form control!
 
@@ -75,7 +75,7 @@ namespace HKeInvestWebApplication
             if (securityType == "0") { return; }
 
             // *****************************************************************************************
-            // TODO: Construct the SQL statement to retrieve the first and last name of the client(s). *
+            // Construct the SQL statement to retrieve the first and last name of the client(s). *
             // *****************************************************************************************
             sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber + "'"; // Complete the SQL statement.
 
@@ -108,7 +108,7 @@ namespace HKeInvestWebApplication
             lblClientName.Visible = true;
 
             // *****************************************************************************************************************************
-            // TODO: Construct the SQL select statement to get the code, name, shares and base of the security holdings of a specific type *
+            //       Construct the SQL select statement to get the code, name, shares and base of the security holdings of a specific type *
             //       in an account. The select statement should also return three additonal columns -- price, value and convertedValue --  *
             //       whose values are not actually in the database, but are set to the constant 0.00 by the select statement. (HINT: see   *
             //       http://stackoverflow.com/questions/2504163/include-in-select-a-column-that-isnt-actually-in-the-database.)            *   
@@ -175,7 +175,7 @@ namespace HKeInvestWebApplication
             DataTable dtSecurityHolding = myHKeInvestCode.unloadGridView(gvSecurityHolding);
 
             // ***********************************************************************************************************
-            // TODO: For each row in the DataTable, get the base currency of the security, convert the current value to  *
+            //       For each row in the DataTable, get the base currency of the security, convert the current value to  *
             //       the selected currency and assign the converted value to the convertedValue column in the DataTable. *
             // ***********************************************************************************************************
             int targetCurrency = ddlCurrency.SelectedIndex - 1;

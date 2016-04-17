@@ -22,6 +22,15 @@ namespace HKeInvestWebApplication {
         protected global::System.Web.UI.WebControls.Label lblStatus;
         
         /// <summary>
+        /// ValidationSummary1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
+        
+        /// <summary>
         /// lblAccountNumber control.
         /// </summary>
         /// <remarks>
@@ -211,6 +220,15 @@ namespace HKeInvestWebApplication {
         protected global::System.Web.UI.WebControls.TextBox StockShares;
         
         /// <summary>
+        /// cvShares control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvShares;
+        
+        /// <summary>
         /// RequiredFieldValidator6 control.
         /// </summary>
         /// <remarks>
@@ -256,6 +274,15 @@ namespace HKeInvestWebApplication {
         protected global::System.Web.UI.WebControls.TextBox hPrice;
         
         /// <summary>
+        /// cvhPrice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvhPrice;
+        
+        /// <summary>
         /// lPrice control.
         /// </summary>
         /// <remarks>
@@ -263,6 +290,15 @@ namespace HKeInvestWebApplication {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox lPrice;
+        
+        /// <summary>
+        /// cvlPrice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvlPrice;
         
         /// <summary>
         /// rblIsAll control.
