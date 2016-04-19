@@ -224,5 +224,10 @@ namespace HKeInvestWebApplication.ClientOnly
             gvSecurityHolding.DataSource = dtSecurityHolding.DefaultView;
             gvSecurityHolding.DataBind();
         }
+
+        protected void gvSecurityHolding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -19,7 +19,7 @@
             <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>
         </div>
         <div>
-            <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5">
+            <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" OnSelectedIndexChanged="gvSecurityHolding_SelectedIndexChanged">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="name" />
