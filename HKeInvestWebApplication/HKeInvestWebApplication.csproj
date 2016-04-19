@@ -219,6 +219,7 @@
     </Content>
     <Content Include="App_Data\Lab02_Query.sql" />
     <Content Include="App_Themes\eInvestTheme\bootstrap.min.css" />
+    <Content Include="Calendar.aspx" />
     <Content Include="ClientOnly\ClientSecurityHoldingDetails.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -428,6 +429,13 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Calendar.aspx.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Calendar.aspx.designer.cs">
+      <DependentUpon>Calendar.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ClientOnly\ClientSecurityHoldingDetails.aspx.cs">
       <DependentUpon>ClientSecurityHoldingDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
