@@ -2,6 +2,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <asp:Label ID="lblStatus" runat="server" Visible="false"></asp:Label>
         <h2>Hello World</h2>
+        <h2>Buy/Sell 222</h2>
+
 
      <h2>trudy</h2>
 
