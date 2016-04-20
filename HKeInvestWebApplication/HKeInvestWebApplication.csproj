@@ -225,6 +225,7 @@
     <Content Include="App_Themes\eInvestTheme\bootstrap.min.css" />
     <Content Include="Calendar.aspx" />
     <Content Include="ClientOnly\ClientSecurityHoldingDetails.aspx" />
+    <Content Include="ClientOnly\SetAlert.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -446,6 +447,13 @@
     </Compile>
     <Compile Include="ClientOnly\ClientSecurityHoldingDetails.aspx.designer.cs">
       <DependentUpon>ClientSecurityHoldingDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientOnly\SetAlert.aspx.cs">
+      <DependentUpon>SetAlert.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientOnly\SetAlert.aspx.designer.cs">
+      <DependentUpon>SetAlert.aspx</DependentUpon>
     </Compile>
     <Compile Include="Code_File\HKeInvestCode.cs" />
     <Compile Include="Code_File\HKeInvestData.cs" />
