@@ -209,6 +209,10 @@
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
     <Content Include="AccountApplicationForm.aspx" />
+    <Content Include="App_Data\alert.mdf" />
+    <Content Include="App_Data\alert_log.ldf">
+      <DependentUpon>alert.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\Events.mdf" />
     <Content Include="App_Data\Events_log.ldf">
       <DependentUpon>Events.mdf</DependentUpon>
