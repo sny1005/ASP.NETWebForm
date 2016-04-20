@@ -230,6 +230,7 @@
     <Content Include="Calendar.aspx" />
     <Content Include="ClientOnly\ClientSecurityHoldingDetails.aspx" />
     <Content Include="ClientOnly\SetAlert.aspx" />
+    <Content Include="ClientOnly\trackProfitOrLoss.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -458,6 +459,13 @@
     </Compile>
     <Compile Include="ClientOnly\SetAlert.aspx.designer.cs">
       <DependentUpon>SetAlert.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientOnly\trackProfitOrLoss.aspx.cs">
+      <DependentUpon>trackProfitOrLoss.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientOnly\trackProfitOrLoss.aspx.designer.cs">
+      <DependentUpon>trackProfitOrLoss.aspx</DependentUpon>
     </Compile>
     <Compile Include="Code_File\HKeInvestCode.cs" />
     <Compile Include="Code_File\HKeInvestData.cs" />
