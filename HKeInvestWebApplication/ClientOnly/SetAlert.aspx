@@ -33,7 +33,8 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <asp:Button runat="server" Text="Set" CssClass="btn btn-default" />
+            <asp:Button runat="server" Text="Set" CssClass="btn btn-default" ID="Set" OnClick="Set_Click" />
+            <asp:CustomValidator ID="cvSet" runat="server" Display="Dynamic" EnableClientScript="False" ErrorMessage="CustomValidator" OnServerValidate="cvSet_ServerValidate" Visible="False"></asp:CustomValidator>
         </div>
     </div>
     

@@ -24,9 +24,9 @@ namespace HKeInvestWebApplication.ClientOnly
         protected void cvSecurityCode_ServerValidate(object source, ServerValidateEventArgs args)
         {
             string securityType = ddlSecurityType.SelectedItem.Text.Trim();
-            char code = Convert.ToChar( SecurityCode.Text.Trim());
-            string sql = "";
-
+            string input = SecurityCode.Text.Trim();
+            string sql = "SELECT code FROM securityHolding WHERE type = securityType AND accountNumber = (SELECT accountNumber FROM Account WHERE userName ='" + User.Identity.Name + "')";
+           
             DataTable dtSecurity = myHKeInvestData.getData(sql);
             if (dtSecurity == null) { return; } // If the DataSet is null, a SQL error occurred.
 
@@ -34,7 +34,20 @@ namespace HKeInvestWebApplication.ClientOnly
             if (dtSecurity.Rows.Count == 0)
             {
                 cvSecurityCode.ErrorMessage = "You do not own this security.";
-            };
+                return;
+            }
+            else
+                args.IsValid = true;
+        }
+
+        protected void cvSet_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+
+        }
+
+        protected void Set_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
