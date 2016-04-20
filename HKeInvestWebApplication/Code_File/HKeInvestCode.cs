@@ -101,18 +101,18 @@ namespace HKeInvestWebApplication.Code_File
         }
 
         //addtional helper function to get the exchange rate for the target currency
-        public string getCurrencyRate(List<string> currency, List<string> rate, string target)
+        public string findCurrencyRate(string[,] currency, string target)
         {
-            for(int i=0; i<currency.Count; i++)
+            for(int i=0; i < currency.GetLength(1); i++)
             {
-                if (currency[i] == target.Trim())
-                    return rate[i];
+                if (currency[0, i] == target.Trim())
+                    return currency[1, i];
             }
             return "-1";
         }
 
         //access the external system and put the currency data into view state
-        public List<string>[] CurrencyData()
+        public DataTable CurrencyData()
         {
             //declare local objects;
             ExternalFunctions myExternalFunctions = new ExternalFunctions();
@@ -120,19 +120,7 @@ namespace HKeInvestWebApplication.Code_File
             // Get the available currencies to populate the DropDownList.
             DataTable dtCurrency = myExternalFunctions.getCurrencyData();
 
-            //Load currency data into 2 list
-            List<string> rate = new List<string>();
-            List<string> currency = new List<string>();
-            foreach (DataRow row in dtCurrency.Rows)
-            {
-                rate.Add(Convert.ToString(row["rate"]));
-                currency.Add(Convert.ToString(row["currency"]));
-            }
-
-            List<string>[] output = new List<string>[2];
-            output[0] = rate;
-            output[1] = currency;
-            return output;
+            return dtCurrency;
         }
 
 

@@ -12,11 +12,19 @@
                     DataKeyNames="currency" DataSourceID="CurrencyConversionSqlDataSource1" CssClass="table table-bordered table-condensed" 
                     OnRowDataBound="gvCurrencyConversion_RowDataBound">
                     <Columns>
-                        <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" />
+                        <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" ValidationGroup="EditCurrencyValidationGroup" />
                         <asp:BoundField DataField="currency" HeaderText="Currency" ReadOnly="True" SortExpression="currency" />
-                        <asp:BoundField DataField="rate" HeaderText="Rate" >
-                        <ControlStyle Width="55px" />
-                        </asp:BoundField>
+                        <asp:TemplateField HeaderText="Rate">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtEditRate" runat="server" CssClass="form-control input-sm" Height="25px" MaxLength="7" Text='<%# Bind("rate") %>' TextMode="Number" ValidationGroup="EditCurrencyValidationGroup" Width="70px" Wrap="False"></asp:TextBox>
+                                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtEditRate" CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ErrorMessage="A rate is required." ValidationGroup="EditCurrencyValidationGroup"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator runat="server" ControlToValidate="txtEditRate" CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ErrorMessage="The rate value must be greater than 0." Operator="GreaterThan" ValidationGroup="EditCurrencyValidationGroup" ValueToCompare="0"></asp:CompareValidator>
+                                <asp:RegularExpressionValidator runat="server" ControlToValidate="txtEditRate" CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ErrorMessage="Rate must be a decimal number less than 999.999." ValidationExpression="^(?!\.?$)\d{0,3}(\.\d{0,3})?$" ValidationGroup="EditCurrencyValidationGroup"></asp:RegularExpressionValidator>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="Label1" runat="server" Text='<%# Bind("rate") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
             </div>
@@ -50,7 +58,7 @@
                                     <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("rate") %>'></asp:TextBox>
                                 </EditItemTemplate>
                                 <InsertItemTemplate>
-                                    <asp:TextBox ID="txtInsertRate" runat="server" CssClass="form-control input-sm" Height="25px" MaxLength="7" Text='<%# Bind("rate") %>' TextMode="Number" ValidationGroup="InsertCurrencyValidationGroup" Width="80px" Wrap="False"></asp:TextBox>
+                                    <asp:TextBox ID="txtInsertRate" runat="server" CssClass="form-control input-sm" Height="25px" MaxLength="7" Text='<%# Bind("rate") %>' TextMode="Number" ValidationGroup="InsertCurrencyValidationGroup" Width="70px" Wrap="False"></asp:TextBox>
                                     <asp:RequiredFieldValidator runat="server" ControlToValidate="txtInsertRate" CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ErrorMessage="A rate is required." ValidationGroup="InsertCurrencyValidationGroup"></asp:RequiredFieldValidator>
                                     <asp:CompareValidator runat="server" ControlToValidate="txtInsertRate" CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ErrorMessage="The rate value must be greater than 0." Operator="GreaterThan" ValidationGroup="InsertCurrencyValidationGroup" ValueToCompare="0"></asp:CompareValidator>
                                     <asp:RegularExpressionValidator runat="server" ControlToValidate="txtInsertRate" CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ErrorMessage="Rate must be a decimal number less than 999.999." ValidationExpression="^(?!\.?$)\d{0,3}(\.\d{0,3})?$" ValidationGroup="InsertCurrencyValidationGroup"></asp:RegularExpressionValidator>

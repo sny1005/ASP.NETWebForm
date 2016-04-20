@@ -20,30 +20,27 @@ namespace HKeInvestWebApplication
         {
             if (!Page.IsPostBack)
             {
-                if (Session.Count == 0)
+                if (Session["CurrencyData"] == null)
                 {
-                    List<string>[] CurrencyData;
-                    CurrencyData = myHKeInvestCode.CurrencyData();
-                    Session.Add("rate", CurrencyData[0]);
-                    Session.Add("base", CurrencyData[1]);
+                    DataTable CurrencyTable = myHKeInvestCode.CurrencyData();
+                    string[,] CurrencyData = new string[CurrencyTable.Columns.Count, CurrencyTable.Rows.Count];
+
+                    int i = 0;
+                    foreach (DataRow row in CurrencyTable.Rows)
+                    {
+                        CurrencyData[0, i] = Convert.ToString(row["currency"]);
+                        CurrencyData[1, i] = Convert.ToString(row["rate"]);
+                        i++;
+                    }
+
+                    Session.Add("CurrencyData", CurrencyData);
                 }
 
-                List<string> bases = (List<string>)Session["base"];
-                for (int i = 0; i < bases.Count; i++)
+                string[,] currencies = (string[,])Session["CurrencyData"];
+                for (int j = 0; j < currencies.GetLength(1); j++)
                 {
-                    ddlCurrency.Items.Add(bases[i]);
+                    ddlCurrency.Items.Add(currencies[0, j]);
                 }
-
-                ////Load exchange rate into view state
-                //List<string> rate = new List<string>();
-                //List<string> currency = new List<string>();
-                //foreach (DataRow row in dtCurrency.Rows)
-                //{
-                //    rate.Add(Convert.ToString(row["rate"]));
-                //    currency.Add(Convert.ToString(row["currency"]));
-                //}
-                //Session.Add("rateView", rate);
-                //Session.Add("baseView", currency);
             }
         }
 
@@ -178,16 +175,14 @@ namespace HKeInvestWebApplication
             //       For each row in the DataTable, get the base currency of the security, convert the current value to  *
             //       the selected currency and assign the converted value to the convertedValue column in the DataTable. *
             // ***********************************************************************************************************
-            int targetCurrency = ddlCurrency.SelectedIndex - 1;
-            List<string> rate;
-            List<string> currency;
-            rate = (List<string>)Session["rate"];
-            currency = (List<string>)Session["base"];
+            int toCurrencyIndex = ddlCurrency.SelectedIndex - 1;
+            string[,] currency = (string[,])Session["CurrencyData"];
 
             foreach (DataRow row in dtSecurityHolding.Rows)
             {
                 // Add your code here!
-                row["convertedValue"] = myHKeInvestCode.convertCurrency((string)row["base"], myHKeInvestCode.getCurrencyRate(currency, rate, (string)row["base"]), toCurrency, rate[targetCurrency], (decimal)row["value"]);
+                string fromRate = myHKeInvestCode.findCurrencyRate(currency, (string)row["base"]);
+                row["convertedValue"] = myHKeInvestCode.convertCurrency((string)row["base"], fromRate, toCurrency, currency[1, toCurrencyIndex], (decimal)row["value"]);
             }
 
             // Change the header text of the convertedValue column to indicate the currency. 

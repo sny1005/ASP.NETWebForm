@@ -14,6 +14,7 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
     public class ExternalFunctions
     {
         ExternalData myExternalData = new ExternalData();
+        bool displayMessage = true;
 
         // Returns the CurrencyRate table.
         public DataTable getCurrencyData()
@@ -70,6 +71,60 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             else if (securityType == "unit trust")
             {
                 dtSecurities = myExternalData.getData("select * from [UnitTrust]");
+            }
+            // Unknown security type; return null.
+            else { return null; }
+
+            // Return null if no result is returned.
+            if (dtSecurities == null || dtSecurities.Rows.Count == 0)
+            {
+                return null;
+            }
+            return dtSecurities;
+        }
+
+        public DataTable getSecuritiesByName(string securityType, string securityName)
+        {
+            // Returns all the data for the specified security type and the specified name.
+            DataTable dtSecurities = new DataTable();
+            if (securityType == "bond")
+            {
+                dtSecurities = myExternalData.getData("select * from [Bond] where [name] like '%" + securityName.Trim() + "%'");
+            }
+            else if (securityType == "stock")
+            {
+                dtSecurities = myExternalData.getData("select * from [Stock] where [name] like '%" + securityName.Trim() + "%'");
+            }
+            else if (securityType == "unit trust")
+            {
+                dtSecurities = myExternalData.getData("select * from [UnitTrust] where [name] like '%" + securityName.Trim() + "%'");
+            }
+            // Unknown security type; return null.
+            else { return null; }
+
+            // Return null if no result is returned.
+            if (dtSecurities == null || dtSecurities.Rows.Count == 0)
+            {
+                return null;
+            }
+            return dtSecurities;
+        }
+
+        public DataTable getSecuritiesByCode(string securityType, string securityCode)
+        {
+            // Returns all the data for the specified security type and the specified name.
+            DataTable dtSecurities = new DataTable();
+            if (securityType == "bond")
+            {
+                dtSecurities = myExternalData.getData("select * from [Bond] where [code] = '" + securityCode.Trim() + "'");
+            }
+            else if (securityType == "stock")
+            {
+                dtSecurities = myExternalData.getData("select * from [Stock] where [code] = '" + securityCode.Trim() + "'");
+            }
+            else if (securityType == "unit trust")
+            {
+                dtSecurities = myExternalData.getData("select * from [UnitTrust] where [code] = '" + securityCode.Trim() + "'");
             }
             // Unknown security type; return null.
             else { return null; }
@@ -226,7 +281,6 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             if (!securityCodeIsValid("unit trust", code)) { return null; }
             if (!sharesIsValid("unit trust", shares)) { return null; }
             string dateNow = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
-
             // Submit the order.
             return submitOrder("insert into [Order] values ('sell', 'unit trust', '" + code + "', '" + dateNow 
                 + "', 'pending', " + shares.Trim() + ", NULL, NULL, NULL, NULL, NULL, NULL)");
@@ -273,13 +327,13 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             return referenceNumber;
         }
 
-        private bool securityCodeIsValid( string securityType, string securityCode)
+        private bool securityCodeIsValid(string securityType, string securityCode)
         {
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             string dbTableName = textInfo.ToTitleCase(securityType).Replace(" ", string.Empty);
             if (myExternalData.getAggregateValue("select count(*) from [" + dbTableName + "] where [code]='" + securityCode + "'") == 0)
             {
-                MessageBox.Show(new Form { TopMost = true }, "Invalid or nonexistent " + securityType + " code.\nValue is '" + securityCode + "'.");
+               showMessage("Invalid or nonexistent " + securityType + " code.\nValue is '" + securityCode + "'.");
                 return false;
             }
             return true;
@@ -290,7 +344,7 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             decimal number;
             if (!decimal.TryParse(amount, out number) || number <= 0)
             {
-                MessageBox.Show(new Form { TopMost = true }, "Invalid or missing dollar amount of " + securityType + " to buy.\nValue is '" + amount + "'.");
+               showMessage("Invalid or missing dollar amount of " + securityType + " to buy.\nValue is '" + amount + "'.");
                 return false;
             }
             return true;
@@ -301,7 +355,7 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             decimal number;
             if (!decimal.TryParse(shares, out number) || number <= 0)
             {
-                MessageBox.Show(new Form { TopMost = true }, "Invalid or missing number of " + securityType + " shares to sell.\nValue is '" + shares + "'.");
+               showMessage("Invalid or missing number of " + securityType + " shares to sell.\nValue is '" + shares + "'.");
                 return false;
             }
             return true;
@@ -312,7 +366,7 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             decimal number = Convert.ToDecimal(shares);
             if ((number % 100) != 0)
             {
-                MessageBox.Show(new Form { TopMost = true }, "Shares to buy is not a multiple of 100.\nValue is '" + shares + "'.");
+                showMessage("Shares to buy is not a multiple of 100.\nValue is '" + shares + "'.");
                 return false;
             }
             return true;
@@ -327,21 +381,21 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             // Check if order type is valid.
             if (!(orderType == "market" || orderType == "limit" || orderType == "stop" || orderType == "stop limit"))
             {
-                MessageBox.Show(new Form { TopMost = true }, "Invalid or missing stock order type.\nValue is '" + orderType + "'.");
+                showMessage("Invalid or missing stock order type.\nValue is '" + orderType + "'.");
                 return false;
             }
 
             // Check if expiry day is valid.
             if (!int.TryParse(expiryDay, out intNumber) || intNumber < 1 || intNumber > 7)
             {
-                MessageBox.Show(new Form { TopMost = true }, "Invalid or missing expiry day.\nValue is '" + expiryDay + "'.");
+                showMessage("Invalid or missing expiry day.\nValue is '" + expiryDay + "'.");
                 return false;
             }
 
             // Check if all or none is valid.
             if (!(allOrNone.ToUpper() == "Y" || allOrNone.ToUpper() == "N"))
             {
-                MessageBox.Show(new Form { TopMost = true }, "Invalid or missing all or none.\nValue is '" + allOrNone + "'.");
+                showMessage("Invalid or missing all or none.\nValue is '" + allOrNone + "'.");
                 return false;
             }
 
@@ -350,7 +404,7 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             {
                 if (!decimal.TryParse(limitPrice, out decLimitPrice) || decLimitPrice <= 0)
                 {
-                    MessageBox.Show(new Form { TopMost = true }, "Invalid or missing limit price.\nValue is '" + limitPrice + "'.");
+                    showMessage("Invalid or missing limit price.\nValue is '" + limitPrice + "'.");
                     return false;
                 }
             }
@@ -360,7 +414,7 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
             {
                 if (!decimal.TryParse(stopPrice, out decStopPrice) || decStopPrice <= 0)
                 {
-                    MessageBox.Show(new Form { TopMost = true }, "Invalid or missing stop price.\nValue is '" + stopPrice + "'.");
+                    showMessage("Invalid or missing stop price.\nValue is '" + stopPrice + "'.");
                     return false;
                 }
                 
@@ -373,7 +427,7 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
                 {
                     if (decStopPrice > decLimitPrice)
                     {
-                        MessageBox.Show(new Form { TopMost = true }, "Stock buy order:\nstop price must be <= limit price.");
+                        showMessage("Stock buy order:\nstop price must be <= limit price.");
                         return false;
                     }
                 }
@@ -381,12 +435,20 @@ namespace HKeInvestWebApplication.ExternalSystems.Code_File
                 {
                     if (decStopPrice < decLimitPrice)
                     {
-                        MessageBox.Show(new Form { TopMost = true }, "Stock sell order:\n stop price must be >= limit price.");
+                        showMessage("Stock sell order:\n stop price must be >= limit price.");
                         return false;
                     }
                 }
             }            
             return true;
+        }
+
+        private void showMessage(string message)
+        {
+            if (displayMessage)
+            {
+                MessageBox.Show(new Form { TopMost = true }, message);
+            }
         }
     }
 }

@@ -25,13 +25,29 @@ namespace HKeInvestWebApplication
 
             if (!Page.IsPostBack)
             {
+                if (Session["CurrencyData"] == null)
+                {
+                    DataTable CurrencyTable = myHKeInvestCode.CurrencyData();
+                    string[,] CurrencyData = new string[CurrencyTable.Columns.Count, CurrencyTable.Rows.Count];
+
+                    int i = 0;
+                    foreach (DataRow row in CurrencyTable.Rows)
+                    {
+                        CurrencyData[0, i] = Convert.ToString(row["currency"]);
+                        CurrencyData[1, i] = Convert.ToString(row["rate"]);
+                        i++;
+                    }
+
+                    Session.Add("CurrencyData", CurrencyData);
+                }
+
                 //get the account number of the current logged in user
                 string username = User.Identity.Name;
-                string sql = "select [Client].[accountNumber], [accountBalance] from [Account] FULL OUTER JOIN [Client] ON [Account].[accountNumber]=[Client].[accountNumber] where username ='" + username + "'";    //need to modify in order to get account balance
+                string sql = "select [LoginAccount].[accountNumber], [balance] from [LoginAccount] FULL OUTER JOIN [Client] ON [LoginAccount].[accountNumber]=[Client].[accountNumber] where username ='" + username + "'";    //need to modify in order to get account balance
 
                 DataTable dtclient = myHKeInvestData.getData(sql);
                 if (dtclient == null) { return; } // if the dataset is null, a sql error occurred.
-                else if (dtclient.Rows.Count > 1)
+                else if (dtclient.Rows.Count > 1)   //should never happen
                 {
                     System.Web.HttpContext.Current.Response.Write("Databse error, returning more than one account!");
                     return;
@@ -40,13 +56,14 @@ namespace HKeInvestWebApplication
                 foreach (DataRow row in dtclient.Rows)
                 {
                     accountNumber = (string)row["accountnumber"];
-                    balance = Convert.ToDecimal(row["accountBalance"]);
+                    balance = Convert.ToDecimal(row["balance"]);
                 }
                 lblAccountNumber.Text = "Account number: " + accountNumber;
                 lblAccountBalance.Text = "Account balance: " + balance;
             }
         }
 
+        //UI change
         protected void ddlSecurityType_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ddlSecurityType.SelectedValue == "bond")
@@ -81,6 +98,7 @@ namespace HKeInvestWebApplication
             {
                 if (ddlSecurityType.SelectedValue == "bond")
                 {
+                    string baseAmount = HKDToBase("bond", BondCode.Text, BondAmount.Text);
                     orderNumber = myExternalFunctions.submitBondBuyOrder(BondCode.Text, BondAmount.Text);
                     amount = Convert.ToDecimal(BondAmount.Text);
                 }
@@ -132,14 +150,17 @@ namespace HKeInvestWebApplication
             lblStatus.Visible = true;
             lblStatus.Text = String.Format("Order submitted successfully, your order number is {0}", orderNumber);
 
-            string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}')", orderNumber, accountNumber);
+            //TODO: change variables dynamically
+            object[] para = { orderNumber, accountNumber, "bond", BondCode.Text, rblTransType.SelectedValue, "pending"};
+            string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", para);
+            //TODO: need to insert to bondbuy or stock table also
             SqlTransaction trans = myHKeInvestData.beginTransaction();
             myHKeInvestData.setData(sql, trans);
 
             //should not be written in this way to update the ac balance
             if (ddlSecurityType.SelectedValue == "bond" || ddlSecurityType.SelectedValue == "unit trust")
             {
-                sql = String.Format("UPDATE [Client] SET [accountBalance] = {0} WHERE [accountNumber] = '{1}'", balance, accountNumber);
+                sql = String.Format("UPDATE [LoginAccount] SET [balance] = {0} WHERE [accountNumber] = '{1}'", balance, accountNumber);
                 myHKeInvestData.setData(sql, trans);
                 lblAccountBalance.Text = "Account balance: " + balance;
             }
@@ -147,6 +168,7 @@ namespace HKeInvestWebApplication
             myHKeInvestData.commitTransaction(trans);
         }
 
+        //UI dynamic change
         protected void rblTransType_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (rblTransType.SelectedValue == "sell")
@@ -206,6 +228,22 @@ namespace HKeInvestWebApplication
                 cvlPrice.ErrorMessage = "Lowest selling price is needed.";
                 return;
             }
+        }
+
+        //helper function to convert currency to target base
+        private string HKDToBase(string type, string code, string amountHKD)
+        {
+            DataTable securityData = myExternalFunctions.getSecuritiesByCode(type, code);
+
+            string baseCurrency = "";
+            if(securityData == null) { return "-1"; }
+            foreach (DataRow row in securityData.Rows)
+            {
+                baseCurrency = (string)row["base"];
+            }
+
+            string toRate = myHKeInvestCode.findCurrencyRate((string[,])Session["CurrencyData"], baseCurrency);
+            return Convert.ToString(myHKeInvestCode.convertCurrency("HKD", "1", baseCurrency, toRate, Convert.ToDecimal(amountHKD)));
         }
     }
 }

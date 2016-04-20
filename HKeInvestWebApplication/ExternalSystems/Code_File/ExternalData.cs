@@ -6,10 +6,12 @@ using System.Configuration;
 
 namespace HKeInvestWebApplication.ExternalSystems.Code_File
 {
-    //**********************************************************
-    //* THE CODE IN THIS CLASS CANNOT BE MODIFIED OR ADDED TO. *
-    //*        Report problems to 3111rep@cse.ust.hk.          *
-    //**********************************************************
+    //************************************************************************************
+    //*              THE CODE IN THIS CLASS CANNOT BE MODIFIED OR ADDED TO.              *
+    //* Methods in this class cannot be accessed directly in your code. Only the methods *
+    //* in the ExternalFunctions.cs class can be used to access external systems data.   *
+    //*                      Report problems to 3111rep@cse.ust.hk.                      *
+    //************************************************************************************
 
     public class ExternalData
     {

@@ -20,36 +20,39 @@ namespace HKeInvestWebApplication.ClientOnly
         {
             if (!Page.IsPostBack)
             {
-                // Get the available currencies to populate the DropDownList.
-                DataTable dtCurrency = myExternalFunctions.getCurrencyData();
-
-                foreach (DataRow row in dtCurrency.Rows)
+                if (Session["CurrencyData"] == null)
                 {
-                    ddlCurrency.Items.Add(row["currency"].ToString().Trim());
+                    DataTable CurrencyTable = myHKeInvestCode.CurrencyData();
+                    string[,] CurrencyData = new string[CurrencyTable.Columns.Count, CurrencyTable.Rows.Count];
+
+                    int i = 0;
+                    foreach (DataRow row in CurrencyTable.Rows)
+                    {
+                        CurrencyData[0, i] = Convert.ToString(row["currency"]);
+                        CurrencyData[1, i] = Convert.ToString(row["rate"]);
+                        i++;
+                    }
+
+                    Session.Add("CurrencyData", CurrencyData);
                 }
 
-                //Load exchange rate into view state
-                List<string> rate = new List<string>();
-                List<string> currency = new List<string>();
-                foreach (DataRow row in dtCurrency.Rows)
+                string[,] currencies = (string[,])Session["CurrencyData"];
+                for (int j = 0; j < currencies.GetLength(1); j++)
                 {
-                    rate.Add(Convert.ToString(row["rate"]));
-                    currency.Add(Convert.ToString(row["currency"]));
+                    ddlCurrency.Items.Add(currencies[0, j]);
                 }
-                ViewState.Add("rateView", rate);
-                ViewState.Add("baseView", currency);
 
                 string accountNumber = "";
                 //get the account number of the current logged in user
                 string username = User.Identity.Name;
-                string sql = "select accountnumber from account where username ='" + username + "'";
+                string sql = "select accountNumber from LoginAccount where username ='" + username + "'";
 
                 DataTable dtclient = myHKeInvestData.getData(sql);
                 if (dtclient == null) { return; } // if the dataset is null, a sql error occurred.
 
                 foreach (DataRow row in dtclient.Rows)
                 {
-                    accountNumber = (string)row["accountnumber"];
+                    accountNumber = (string)row["accountNumber"];
                 }
                 lblAccountNumber.Text = "account number: " + accountNumber;
                 lblAccountNumber.Visible = true;
@@ -70,15 +73,6 @@ namespace HKeInvestWebApplication.ClientOnly
             // *******************************************************************
             string securityType = ddlSecurityType.SelectedValue; // Set the securityType from a web form control!
 
-            // Check if an account number has been specified.
-            //if (accountNumber == "")
-            //{
-            //    lblResultMessage.Text = "Please specify an account number.";
-            //    lblResultMessage.Visible = true;
-            //    ddlSecurityType.SelectedIndex = 0;
-            //    return;
-            //}
-
             // No action when the first item in the DropDownList is selected.
             if (securityType == "0") { return; }
 
@@ -86,7 +80,7 @@ namespace HKeInvestWebApplication.ClientOnly
             // Construct the SQL statement to retrieve the first and last name of the client(s). *
             // *****************************************************************************************
             string userName = User.Identity.Name;
-            sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = (SELECT accountNumber FROM Account WHERE userName ='" + userName + "')"; // Complete the SQL statement.
+            sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = (SELECT accountNumber FROM LoginAccount WHERE userName ='" + userName + "')"; // Complete the SQL statement.
 
             DataTable dtClient = myHKeInvestData.getData(sql);
             if (dtClient == null) { return; } // If the DataSet is null, a SQL error occurred.
@@ -122,7 +116,7 @@ namespace HKeInvestWebApplication.ClientOnly
             //       whose values are not actually in the database, but are set to the constant 0.00 by the select statement. (HINT: see   *
             //       http://stackoverflow.com/questions/2504163/include-in-select-a-column-that-isnt-actually-in-the-database.)            *   
             // *****************************************************************************************************************************
-            sql = "SELECT code, name, shares, base, '0.00' as price, '0.00' AS value, '0.00' AS convertedValue FROM dbo.SecurityHolding WHERE accountNumber= (SELECT accountNumber FROM Account WHERE userName ='" + userName + "') AND type='" + securityType + "'"; // Complete the SQL statement.
+            sql = "SELECT code, name, shares, base, '0.00' as price, '0.00' AS value, '0.00' AS convertedValue FROM dbo.SecurityHolding WHERE accountNumber= (SELECT accountNumber FROM LoginAccount WHERE userName ='" + userName + "') AND type='" + securityType + "'"; // Complete the SQL statement.
 
             DataTable dtSecurityHolding = myHKeInvestData.getData(sql);
             if (dtSecurityHolding == null) { return; } // If the DataSet is null, a SQL error occurred.
@@ -187,16 +181,14 @@ namespace HKeInvestWebApplication.ClientOnly
             //       For each row in the DataTable, get the base currency of the security, convert the current value to  *
             //       the selected currency and assign the converted value to the convertedValue column in the DataTable. *
             // ***********************************************************************************************************
-            int targetCurrency = ddlCurrency.SelectedIndex - 1;
-            List<string> rate;
-            List<string> currency;
-            rate = (List<string>)ViewState["rateView"];
-            currency = (List<string>)ViewState["baseView"];
+            int toCurrencyIndex = ddlCurrency.SelectedIndex - 1;
+            string[,] currency = (string[,])Session["CurrencyData"];
 
             foreach (DataRow row in dtSecurityHolding.Rows)
             {
                 // Add your code here!
-                row["convertedValue"] = myHKeInvestCode.convertCurrency((string)row["base"], myHKeInvestCode.getCurrencyRate(currency, rate, (string)row["base"]), toCurrency, rate[targetCurrency], (decimal)row["value"]);
+                string fromRate = myHKeInvestCode.findCurrencyRate(currency, (string)row["base"]);
+                row["convertedValue"] = myHKeInvestCode.convertCurrency((string)row["base"], fromRate, toCurrency, currency[1, toCurrencyIndex], (decimal)row["value"]);
             }
 
             // Change the header text of the convertedValue column to indicate the currency. 
