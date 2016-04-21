@@ -123,9 +123,48 @@ namespace HKeInvestWebApplication.Code_File
             return dtCurrency;
         }
 
+        public string getAccountNumber(string username)
+        {
+            HKeInvestWebApplication.Code_File.HKeInvestData myData = new HKeInvestData();
 
+            string sql = "select [accountNumber] from [LoginAccount] where username ='" + username + "'";
 
+            DataTable dtclient = myData.getData(sql);
+            if (dtclient == null) { return ""; } // if the dataset is null, a sql error occurred.
+            else if (dtclient.Rows.Count > 1)   //should never happen
+            {
+                System.Web.HttpContext.Current.Response.Write("Databse error, returning more than one account!");
+                return "";
+            }
 
+            string accountNumber = "";
+            foreach (DataRow row in dtclient.Rows)
+            {
+                accountNumber = (string)row["accountnumber"];
+            }
+            return accountNumber;
+        }
 
+        public decimal getAccountBalance(string accountNumber)
+        {
+            HKeInvestWebApplication.Code_File.HKeInvestData myData = new HKeInvestData();
+
+            string sql = "select [balance] from [LoginAccount] where accountNumber ='" + accountNumber + "'";
+
+            DataTable dtclient = myData.getData(sql);
+            if (dtclient == null) { return -1; } // if the dataset is null, a sql error occurred.
+            else if (dtclient.Rows.Count > 1)   //should never happen
+            {
+                System.Web.HttpContext.Current.Response.Write("Databse error, returning more than one account!");
+                return -1;
+            }
+
+            decimal balance = -1;
+            foreach (DataRow row in dtclient.Rows)
+            {
+                balance = Convert.ToDecimal(row["balance"]);
+            }
+            return balance;
+        }
     }
 }

@@ -38,7 +38,8 @@
                 <div class="col-md-4">
                     <asp:Label ID="lblBondAmount" AssociatedControlID="BondAmount" runat="server" Text="Amount in HKD" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="BondAmount" runat="server" CssClass="form-control"></asp:TextBox>
-                    <%-- TODO: CUSTOM VALIDATOR MAY BE NEEDED IF ERROR RAISED BY EXTERNAL SYSTEM IS CONSIDERED AS FAIL --%>                    
+                    <asp:CustomValidator ID="cvBondAmount" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="BondAmount" OnServerValidate="cvAmount_ServerValidate" CssClass="text-danger" ErrorMessage="Account balance is insufficient to place the order.">*</asp:CustomValidator>
+<%--                    <asp:RangeValidator ID="rvBondAmount" runat="server" ErrorMessage="The range " EnableClientScript="False" Display="Dynamic" Text="*" ControlToValidate="BondAmount" MaximumValue="000.00" MinimumValue="999.99"></asp:RangeValidator>--%>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Amount(Shares) to buy(sell) is required." ControlToValidate="BondAmount" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>   
             </div>
@@ -55,7 +56,7 @@
                 <div class="col-md-4">
                     <asp:Label ID="lblUnitAmount" AssociatedControlID="UnitAmount" runat="server" Text="Amount in HKD" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="UnitAmount" runat="server" CssClass="form-control"></asp:TextBox>
-                    <%-- TODO: CUSTOM VALIDATOR MAY BE NEEDED IF ERROR RAISED BY EXTERNAL SYSTEM IS CONSIDERED AS FAIL --%>                                        
+                    <asp:CustomValidator ID="cvUnitAmount" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="UnitAmount" OnServerValidate="cvAmount_ServerValidate" CssClass="text-danger" ErrorMessage="Account balance is insufficient to place the order.">*</asp:CustomValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="Amount(Shares) to buy(sell) is required." ControlToValidate="UnitAmount" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>   
             </div>
@@ -72,7 +73,7 @@
                 <div class="col-md-4">
                     <asp:Label ID="lblStockShares" AssociatedControlID="StockShares" runat="server" Text="Quantity of shares to buy" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="StockShares" runat="server" CssClass="form-control"></asp:TextBox>
-                    <asp:CustomValidator ID="cvShares" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="StockShares" OnServerValidate="cvShares_ServerValidate" ErrorMessage="Quantity of shares to buy must be a multiple of 100." CssClass="text-danger">*</asp:CustomValidator>
+                    <asp:CustomValidator ID="cvShares" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="StockShares" OnServerValidate="cvShares_ServerValidate" CssClass="text-danger">*</asp:CustomValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="Quantity of shares to buy is required." ControlToValidate="StockShares" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>   
                 <div class="col-md-4">

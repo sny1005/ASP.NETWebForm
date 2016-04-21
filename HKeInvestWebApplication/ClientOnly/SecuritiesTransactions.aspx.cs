@@ -43,24 +43,14 @@ namespace HKeInvestWebApplication
 
                 //get the account number of the current logged in user
                 string username = User.Identity.Name;
-                string sql = "select [LoginAccount].[accountNumber], [balance] from [LoginAccount] FULL OUTER JOIN [Client] ON [LoginAccount].[accountNumber]=[Client].[accountNumber] where username ='" + username + "'";    //need to modify in order to get account balance
+                accountNumber = myHKeInvestCode.getAccountNumber(username);
 
-                DataTable dtclient = myHKeInvestData.getData(sql);
-                if (dtclient == null) { return; } // if the dataset is null, a sql error occurred.
-                else if (dtclient.Rows.Count > 1)   //should never happen
-                {
-                    System.Web.HttpContext.Current.Response.Write("Databse error, returning more than one account!");
-                    return;
-                }
-
-                foreach (DataRow row in dtclient.Rows)
-                {
-                    accountNumber = (string)row["accountnumber"];
-                    balance = Convert.ToDecimal(row["balance"]);
-                }
                 lblAccountNumber.Text = "Account number: " + accountNumber;
-                lblAccountBalance.Text = "Account balance: " + balance;
             }
+
+            //update account balance every page load
+            balance = myHKeInvestCode.getAccountBalance(accountNumber);
+            lblAccountBalance.Text = "Account balance: " + balance;
         }
 
         //UI change
@@ -93,29 +83,30 @@ namespace HKeInvestWebApplication
             string orderNumber = null;
             decimal amount = 0;
 
-            //HOW TO CHECK ACCOUNT BALANCE?????
             if (rblTransType.SelectedValue == "buy")
             {
                 if (ddlSecurityType.SelectedValue == "bond")
                 {
-                    string baseAmount = HKDToBase("bond", BondCode.Text, BondAmount.Text);
+                    //if (!sufficientBalance(BondAmount.Text)) { return; }
+
                     orderNumber = myExternalFunctions.submitBondBuyOrder(BondCode.Text, BondAmount.Text);
                     amount = Convert.ToDecimal(BondAmount.Text);
                 }
                 else if (ddlSecurityType.SelectedValue == "unit trust")
                 {
+                    //if (!sufficientBalance(UnitAmount.Text)) { return; }
+
                     orderNumber = myExternalFunctions.submitUnitTrustBuyOrder(UnitCode.Text, UnitAmount.Text);
                     amount = Convert.ToDecimal(UnitAmount.Text);
                 }
                 else if (ddlSecurityType.SelectedValue == "stock")
                 {
-                    orderNumber = myExternalFunctions.submitStockBuyOrder(StockCode.Text, StockShares.Text, rblOrderType.SelectedValue, expDate.Text, rblIsAll.SelectedValue, hPrice.Text, lPrice.Text);
-                    //amountPaid = Convert.ToDecimal(StockShares.Text);
-                }
+                    //if (!sufficientBalance(StockShares.Text, "stock", StockCode.Text)) { return; }
 
-                //should not be written in this way to calculate amount of money used
-                balance -= amount;
+                    orderNumber = myExternalFunctions.submitStockBuyOrder(StockCode.Text, StockShares.Text, rblOrderType.SelectedValue, expDate.Text, rblIsAll.SelectedValue, hPrice.Text, lPrice.Text);
+                }
             }
+
             //
             //this part is incomplete!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //
@@ -190,7 +181,21 @@ namespace HKeInvestWebApplication
             if (rblTransType.SelectedValue == "buy")
             {
                 int remainder = Convert.ToInt32(StockShares.Text) % 100;
-                if (remainder != 0) { args.IsValid = false; }
+                if (remainder != 0)
+                {
+                    cvShares.ErrorMessage = "Quantity of shares to buy must be a multiple of 100.";
+                    args.IsValid = false;
+                    return;
+                }
+
+                decimal sharesValue = myExternalFunctions.getSecuritiesPrice("stock", StockCode.Text) * Convert.ToDecimal(StockShares.Text);
+
+                if (Convert.ToDecimal(args.Value) > balance)
+                {
+                    cvShares.ErrorMessage = "Account balance is insufficient to place the order.";
+                    args.IsValid = false;
+                    return;
+                }
             }
         }
 
@@ -230,6 +235,19 @@ namespace HKeInvestWebApplication
             }
         }
 
+        protected void cvAmount_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (rblTransType.SelectedValue == "buy")
+            {
+                if (Convert.ToDecimal(args.Value) > balance)
+                {
+                    args.IsValid = false;
+                    return;
+                }
+            }
+
+        }
+
         //helper function to convert currency to target base
         private string HKDToBase(string type, string code, string amountHKD)
         {
@@ -244,6 +262,33 @@ namespace HKeInvestWebApplication
 
             string toRate = myHKeInvestCode.findCurrencyRate((string[,])Session["CurrencyData"], baseCurrency);
             return Convert.ToString(myHKeInvestCode.convertCurrency("HKD", "1", baseCurrency, toRate, Convert.ToDecimal(amountHKD)));
+        }
+
+        // check whether balance in account is sufficient to place order
+        // dun need to use
+        private bool sufficientBalance(string amount, string type = "", string code = "")
+        {
+            if (type == "")
+            {
+                if(Convert.ToDecimal(amount) > balance)
+                {
+                    lblStatus.Visible = true;
+                    lblStatus.Text = "Insufficient balance in account to place order.";
+                    lblStatus.CssClass = "text-danger";
+                    return false;
+                }
+                return true;
+            }
+
+            decimal sharesValue = myExternalFunctions.getSecuritiesPrice(type, code) * Convert.ToDecimal(amount);
+            if (sharesValue > balance)
+            {
+                lblStatus.Visible = true;
+                lblStatus.Text = "Insufficient balance in account to place order.";
+                lblStatus.CssClass = "text-danger";
+                return false;
+            }
+            return true;
         }
     }
 }
