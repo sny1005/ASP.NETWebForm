@@ -44,13 +44,14 @@ namespace HKeInvestWebApplication
                 //get the account number of the current logged in user
                 string username = User.Identity.Name;
                 accountNumber = myHKeInvestCode.getAccountNumber(username);
-
                 lblAccountNumber.Text = "Account number: " + accountNumber;
+
+                //update account balance
+                balance = myHKeInvestCode.getAccountBalance(accountNumber);
+                lblAccountBalance.Text = "Account balance: " + Convert.ToString(balance);
             }
 
-            //update account balance every page load
-            balance = myHKeInvestCode.getAccountBalance(accountNumber);
-            lblAccountBalance.Text = "Account balance: " + balance;
+
         }
 
         //UI change
@@ -81,7 +82,7 @@ namespace HKeInvestWebApplication
             if (!Page.IsValid) { return; }
 
             string orderNumber = null;
-            decimal amount = 0;
+            string amount = "";
 
             // { orderNumber, accountNumber, type, code, buyOrSell, "pending" };
             object[] orderPara = new object[6];
@@ -96,33 +97,32 @@ namespace HKeInvestWebApplication
                 {
                     orderPara[2] = "bond";
                     orderPara[3] = BondCode.Text;
+                    amount = (string)BondAmount.Text;
                     //if (!sufficientBalance(BondAmount.Text)) { return; }
 
                     orderNumber = myExternalFunctions.submitBondBuyOrder(BondCode.Text, BondAmount.Text);
-                    amount = Convert.ToDecimal(BondAmount.Text);
+
                 }
                 else if (ddlSecurityType.SelectedValue == "unit trust")
                 {
                     orderPara[2] = "unit trust";
                     orderPara[3] = UnitCode.Text;
+                    amount = (string)UnitAmount.Text;
                     //if (!sufficientBalance(UnitAmount.Text)) { return; }
 
                     orderNumber = myExternalFunctions.submitUnitTrustBuyOrder(UnitCode.Text, UnitAmount.Text);
-                    amount = Convert.ToDecimal(UnitAmount.Text);
                 }
                 else if (ddlSecurityType.SelectedValue == "stock")
                 {
                     orderPara[2] = "stock";
                     orderPara[3] = StockCode.Text;
+                    amount = (string)StockShares.Text;
                     //if (!sufficientBalance(StockShares.Text, "stock", StockCode.Text)) { return; }
 
                     orderNumber = myExternalFunctions.submitStockBuyOrder(StockCode.Text, StockShares.Text, rblOrderType.SelectedValue, expDate.Text, rblIsAll.SelectedValue, hPrice.Text, lPrice.Text);
                 }
             }
 
-            //
-            //this part is incomplete!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //
             else if (rblTransType.SelectedValue == "sell")
             {
                 orderPara[4] = "sell";
@@ -131,17 +131,17 @@ namespace HKeInvestWebApplication
                 {
                     orderPara[2] = "bond";
                     orderPara[3] = BondCode.Text;
+                    amount = (string)BondAmount.Text;
 
                     orderNumber = myExternalFunctions.submitBondSellOrder(BondCode.Text, BondAmount.Text);
-                    amount = Convert.ToDecimal(BondAmount.Text);
                 }
                 else if (ddlSecurityType.SelectedValue == "unit trust")
                 {
                     orderPara[2] = "unit trust";
                     orderPara[3] = UnitCode.Text;
+                    amount = (string)UnitAmount.Text;
 
                     orderNumber = myExternalFunctions.submitUnitTrustSellOrder(UnitCode.Text, UnitAmount.Text);
-                    amount = Convert.ToDecimal(UnitAmount.Text);
                 }
                 else if (ddlSecurityType.SelectedValue == "stock")
                 {
@@ -149,10 +149,10 @@ namespace HKeInvestWebApplication
                     orderPara[3] = StockCode.Text;
 
                     orderNumber = myExternalFunctions.submitStockSellOrder(StockCode.Text, StockShares.Text, rblOrderType.SelectedValue, expDate.Text, rblIsAll.SelectedValue, lPrice.Text, hPrice.Text);
-                    //amountPaid = Convert.ToDecimal(StockShares.Text);
                 }
             }
 
+            // check if order is successfully submitted to External System, and display result
             if (orderNumber == null)
             {
                 lblStatus.Visible = true;
@@ -162,19 +162,67 @@ namespace HKeInvestWebApplication
             lblStatus.Visible = true;
             lblStatus.Text = String.Format("Order submitted successfully, your order number is {0}", orderNumber);
 
+            // set up sql to create a copy of Order from External System
             orderPara[0] = orderNumber;
             string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", orderPara);
 
-            //TODO: need to insert to bondbuy or stock table also
             SqlTransaction trans = myHKeInvestData.beginTransaction();
-            myHKeInvestData.setData(sql, trans);
+            myHKeInvestData.setData(sql, trans);    //insert into order
 
-            //should not be written in this way to update the ac balance
-            if (ddlSecurityType.SelectedValue == "bond" || ddlSecurityType.SelectedValue == "unit trust")
+            if ((string)orderPara[2] == "stock")
             {
-                sql = String.Format("UPDATE [LoginAccount] SET [balance] = {0} WHERE [accountNumber] = '{1}'", balance, accountNumber);
+                // stock operation
+                object[] stockPara = { orderNumber, StockShares.Text, rblOrderType.SelectedValue, expDate.Text, rblIsAll.SelectedIndex, "NULL", "NULL" };
+                sql = string.Format("INSERT INTO [StockOrder] VALUES ({0}, {1}, '{2}', {3}, {4}, ", stockPara);
+
+                if ((string)orderPara[4] == "buy")      //buy stock
+                {
+                    // Check for order type and set SQL statement accordingly
+                    switch (rblOrderType.SelectedValue)
+                    {
+                        case "market":
+                            sql = sql + "NULL, NULL)";
+                            break;
+                        case "limit":
+                            sql = sql + hPrice.Text + ", NULL)";
+                            break;
+                        case "stop":
+                            sql = sql + "NULL, " + lPrice.Text + ") ";
+                            break;
+                        default:
+                            sql = sql + hPrice.Text + ", " + lPrice.Text + ")";
+                            break;
+                    }
+                }
+                else             //sell stock
+                {
+                    switch (rblOrderType.SelectedValue)
+                    {
+                        case "market":
+                            sql = sql + "NULL, NULL)";
+                            break;
+                        case "limit":
+                            sql = sql + lPrice.Text + ", NULL)";
+                            break;
+                        case "stop":
+                            sql = sql + "NULL, " + hPrice.Text + ") ";
+                            break;
+                        default:
+                            sql = sql + lPrice.Text + ", " + hPrice.Text + ")";
+                            break;
+                    }
+                }
                 myHKeInvestData.setData(sql, trans);
-                lblAccountBalance.Text = "Account balance: " + balance;
+            }
+            else
+            {
+                // bond/unit trust operation
+                if (rblTransType.SelectedValue == "buy")
+                    sql = string.Format("INSERT INTO [BuyBondOrder] VALUES ('{0}', '{1}')", orderNumber, amount);
+                else
+                    sql = string.Format("INSERT INTO [SellBondOrder] VALUES ('{0}', '{1}')", orderNumber, amount);
+
+                myHKeInvestData.setData(sql, trans);
             }
 
             myHKeInvestData.commitTransaction(trans);
@@ -234,18 +282,35 @@ namespace HKeInvestWebApplication
         {
             if (rblTransType.SelectedValue == "buy" && (rblOrderType.SelectedValue == "limit" || rblOrderType.SelectedValue == "stop limit"))
             {
-                if (hPrice.Text != "") { return; }
-                args.IsValid = false;
-                cvhPrice.ErrorMessage = "Highest buying price is needed.";
-                return;
+                if (hPrice.Text == "")
+                {
+                    args.IsValid = false;
+                    cvhPrice.ErrorMessage = "Highest buying price is needed.";
+                    return;
+                }
             }
             else if (rblTransType.SelectedValue == "sell" && (rblOrderType.SelectedValue == "stop" || rblOrderType.SelectedValue == "stop limit"))
             {
-                if (hPrice.Text != "") { return; }
-                args.IsValid = false;
-                cvhPrice.ErrorMessage = "Highest selling price is needed.";
-                return;
+                if (hPrice.Text != "")
+                {
+                    args.IsValid = false;
+                    cvhPrice.ErrorMessage = "Highest selling price is needed.";
+                    return;
+                }
+                
             }
+
+            // check that high price must be larger than low price when the order type is stop limit
+            if (rblOrderType.SelectedValue == "stop limit")
+            {
+                if (Convert.ToDecimal(hPrice.Text) <= Convert.ToDecimal(lPrice.Text))
+                {
+                    args.IsValid = false;
+                    cvhPrice.ErrorMessage = "High price must be larger than low price.";
+                    return;
+                }
+            }
+
         }
 
         protected void cvlPrice_ServerValidate(object source, ServerValidateEventArgs args)
@@ -294,7 +359,6 @@ namespace HKeInvestWebApplication
                 }
                 return;
             }
-
         }
 
         //helper function to convert currency to target base

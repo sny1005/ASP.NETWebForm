@@ -145,6 +145,7 @@ namespace HKeInvestWebApplication.Code_File
             return accountNumber;
         }
 
+        // get account balance given a specific account number
         public decimal getAccountBalance(string accountNumber)
         {
             HKeInvestWebApplication.Code_File.HKeInvestData myData = new HKeInvestData();
@@ -155,7 +156,7 @@ namespace HKeInvestWebApplication.Code_File
             if (dtclient == null) { return -1; } // if the dataset is null, a sql error occurred.
             else if (dtclient.Rows.Count > 1)   //should never happen
             {
-                System.Web.HttpContext.Current.Response.Write("Databse error, returning more than one account!");
+                MessageBox.Show("Database Error! Returning more than 1 entry!");
                 return -1;
             }
 
@@ -167,12 +168,45 @@ namespace HKeInvestWebApplication.Code_File
             return balance;
         }
 
+        public bool isExistSecurity(string type, string code)
+        {
+
+            return false;
+        }
+
+        //returns all the incomplete orders' orderNumber as a list
+        public Queue<string> getIncompleteOrder()
+        {
+            HKeInvestData myData = new HKeInvestData();
+            Queue<string> orderNumbers = new Queue<string>();
+
+            string sql = "SELECT [orderNumber] FROM [Order] WHERE [status] <> 'completed'";
+            DataTable orders = myData.getData(sql);
+
+            foreach (DataRow row in orders.Rows)
+            {
+                orderNumbers.Enqueue(Convert.ToString(row["orderNumber"]));
+            }
+            return orderNumbers;
+        }
+
+        public string getTypeFromOrder(string orderNumber)
+        {
+            HKeInvestData myData = new HKeInvestData();
+
+            string sql = "SELECT [securityType] FROM [Order] WHERE [orderNumber] = '" + orderNumber + "'";
+            DataTable recordTable = myData.getData(sql);
+
+            DataRow[] record = recordTable.Select();
+            if (record.Count() != 1)       //should never happen
+                throw new Exception("Error! Returning non-single record!");
+            return Convert.ToString(record[0]["securityType"]);
+        }
+
         //public void updateAccountBalance()
         //{
-        //    //TODO: change variables dynamically
         //    object[] para = { orderNumber, accountNumber, "bond", BondCode.Text, rblTransType.SelectedValue, "pending" };
         //    string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", para);
-        //    //TODO: need to insert to bondbuy or stock table also
         //    SqlTransaction trans = myHKeInvestData.beginTransaction();
         //    myHKeInvestData.setData(sql, trans);
 

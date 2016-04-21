@@ -274,6 +274,15 @@ namespace HKeInvestWebApplication {
         protected global::System.Web.UI.WebControls.TextBox expDate;
         
         /// <summary>
+        /// rvExpDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator rvExpDate;
+        
+        /// <summary>
         /// RequiredFieldValidator8 control.
         /// </summary>
         /// <remarks>

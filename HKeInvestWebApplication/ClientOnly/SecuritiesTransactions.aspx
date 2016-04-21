@@ -78,9 +78,10 @@
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="Quantity of shares to buy is required." ControlToValidate="StockShares" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>   
                 <div class="col-md-4">
-                    <asp:Label AssociatedControlID="expDate" runat="server" Text="Expiary date of order" CssClass="control-label"></asp:Label>
+                    <asp:Label AssociatedControlID="expDate" runat="server" Text="Expiary day of order" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="expDate" runat="server" CssClass="form-control"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="Expiary date is required." ControlToValidate="expDate" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+                    <asp:RangeValidator ID="rvExpDate" runat="server" ErrorMessage="Range of exiary day is 1 to 7." EnableClientScript="False" Display="Dynamic" Text="*" ControlToValidate="expDate" MaximumValue="7" MinimumValue="1" CssClass="text-danger"></asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="Expiary day is required." ControlToValidate="expDate" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>
             </div>
 
@@ -110,8 +111,8 @@
                 <div class="col-md-4">
                     <asp:Label AssociatedControlID="rblIsAll" runat="server" Text="All or None order?" CssClass="control-label"></asp:Label>
                     <asp:RadioButtonList ID="rblIsAll" runat="server" CellPadding="5" CellSpacing="5">
-                        <asp:ListItem Value="y" Selected="True">Yes</asp:ListItem>
-                        <asp:ListItem Value="n">No</asp:ListItem>
+                        <asp:ListItem Value="n" Selected="True">No</asp:ListItem>
+                        <asp:ListItem Value="y">Yes</asp:ListItem>
                     </asp:RadioButtonList>
                 </div>  
             </div>
