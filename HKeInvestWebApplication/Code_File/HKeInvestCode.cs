@@ -166,5 +166,25 @@ namespace HKeInvestWebApplication.Code_File
             }
             return balance;
         }
+
+        //public void updateAccountBalance()
+        //{
+        //    //TODO: change variables dynamically
+        //    object[] para = { orderNumber, accountNumber, "bond", BondCode.Text, rblTransType.SelectedValue, "pending" };
+        //    string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", para);
+        //    //TODO: need to insert to bondbuy or stock table also
+        //    SqlTransaction trans = myHKeInvestData.beginTransaction();
+        //    myHKeInvestData.setData(sql, trans);
+
+        //    //should not be written in this way to update the ac balance
+        //    if (ddlSecurityType.SelectedValue == "bond" || ddlSecurityType.SelectedValue == "unit trust")
+        //    {
+        //        sql = String.Format("UPDATE [LoginAccount] SET [balance] = {0} WHERE [accountNumber] = '{1}'", balance, accountNumber);
+        //        myHKeInvestData.setData(sql, trans);
+        //        lblAccountBalance.Text = "Account balance: " + balance;
+        //    }
+
+        //    myHKeInvestData.commitTransaction(trans);
+        //}
     }
 }

@@ -83,10 +83,19 @@ namespace HKeInvestWebApplication
             string orderNumber = null;
             decimal amount = 0;
 
+            // { orderNumber, accountNumber, type, code, buyOrSell, "pending" };
+            object[] orderPara = new object[6];
+            orderPara[1] = accountNumber;
+            orderPara[5] = "pending";
+
             if (rblTransType.SelectedValue == "buy")
             {
+                orderPara[4] = "buy";
+
                 if (ddlSecurityType.SelectedValue == "bond")
                 {
+                    orderPara[2] = "bond";
+                    orderPara[3] = BondCode.Text;
                     //if (!sufficientBalance(BondAmount.Text)) { return; }
 
                     orderNumber = myExternalFunctions.submitBondBuyOrder(BondCode.Text, BondAmount.Text);
@@ -94,6 +103,8 @@ namespace HKeInvestWebApplication
                 }
                 else if (ddlSecurityType.SelectedValue == "unit trust")
                 {
+                    orderPara[2] = "unit trust";
+                    orderPara[3] = UnitCode.Text;
                     //if (!sufficientBalance(UnitAmount.Text)) { return; }
 
                     orderNumber = myExternalFunctions.submitUnitTrustBuyOrder(UnitCode.Text, UnitAmount.Text);
@@ -101,6 +112,8 @@ namespace HKeInvestWebApplication
                 }
                 else if (ddlSecurityType.SelectedValue == "stock")
                 {
+                    orderPara[2] = "stock";
+                    orderPara[3] = StockCode.Text;
                     //if (!sufficientBalance(StockShares.Text, "stock", StockCode.Text)) { return; }
 
                     orderNumber = myExternalFunctions.submitStockBuyOrder(StockCode.Text, StockShares.Text, rblOrderType.SelectedValue, expDate.Text, rblIsAll.SelectedValue, hPrice.Text, lPrice.Text);
@@ -112,24 +125,32 @@ namespace HKeInvestWebApplication
             //
             else if (rblTransType.SelectedValue == "sell")
             {
+                orderPara[4] = "sell";
+
                 if (ddlSecurityType.SelectedValue == "bond")
                 {
+                    orderPara[2] = "bond";
+                    orderPara[3] = BondCode.Text;
+
                     orderNumber = myExternalFunctions.submitBondSellOrder(BondCode.Text, BondAmount.Text);
                     amount = Convert.ToDecimal(BondAmount.Text);
                 }
                 else if (ddlSecurityType.SelectedValue == "unit trust")
                 {
+                    orderPara[2] = "unit trust";
+                    orderPara[3] = UnitCode.Text;
+
                     orderNumber = myExternalFunctions.submitUnitTrustSellOrder(UnitCode.Text, UnitAmount.Text);
                     amount = Convert.ToDecimal(UnitAmount.Text);
                 }
                 else if (ddlSecurityType.SelectedValue == "stock")
                 {
+                    orderPara[2] = "stock";
+                    orderPara[3] = StockCode.Text;
+
                     orderNumber = myExternalFunctions.submitStockSellOrder(StockCode.Text, StockShares.Text, rblOrderType.SelectedValue, expDate.Text, rblIsAll.SelectedValue, lPrice.Text, hPrice.Text);
                     //amountPaid = Convert.ToDecimal(StockShares.Text);
                 }
-
-                //should not be written in this way to calculate amount of money used
-                balance += amount;
             }
 
             if (orderNumber == null)
@@ -141,9 +162,9 @@ namespace HKeInvestWebApplication
             lblStatus.Visible = true;
             lblStatus.Text = String.Format("Order submitted successfully, your order number is {0}", orderNumber);
 
-            //TODO: change variables dynamically
-            object[] para = { orderNumber, accountNumber, "bond", BondCode.Text, rblTransType.SelectedValue, "pending"};
-            string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", para);
+            orderPara[0] = orderNumber;
+            string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", orderPara);
+
             //TODO: need to insert to bondbuy or stock table also
             SqlTransaction trans = myHKeInvestData.beginTransaction();
             myHKeInvestData.setData(sql, trans);
@@ -293,7 +314,7 @@ namespace HKeInvestWebApplication
         }
 
         // check whether balance in account is sufficient to place order
-        // dun need to use
+        // legacy function
         private bool sufficientBalance(string amount, string type = "", string code = "")
         {
             if (type == "")
