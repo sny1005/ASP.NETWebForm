@@ -178,9 +178,19 @@ namespace HKeInvestWebApplication
 
         protected void cvShares_ServerValidate(object source, ServerValidateEventArgs args)
         {
+            if (!rvShares.IsValid) { return; }  //input string is not integer
+
+            int value = Convert.ToInt32(args.Value);
+            if (value <= 0)
+            {
+                cvShares.ErrorMessage = "Quantity of shares must greater than 0";
+                args.IsValid = false;
+                return;
+            }
+
             if (rblTransType.SelectedValue == "buy")
             {
-                int remainder = Convert.ToInt32(StockShares.Text) % 100;
+                int remainder = value % 100;
                 if (remainder != 0)
                 {
                     cvShares.ErrorMessage = "Quantity of shares to buy must be a multiple of 100.";
@@ -189,13 +199,13 @@ namespace HKeInvestWebApplication
                 }
 
                 decimal sharesValue = myExternalFunctions.getSecuritiesPrice("stock", StockCode.Text) * Convert.ToDecimal(StockShares.Text);
-
-                if (Convert.ToDecimal(args.Value) > balance)
+                if (sharesValue > balance)
                 {
                     cvShares.ErrorMessage = "Account balance is insufficient to place the order.";
                     args.IsValid = false;
                     return;
                 }
+                return;
             }
         }
 
@@ -237,13 +247,31 @@ namespace HKeInvestWebApplication
 
         protected void cvAmount_ServerValidate(object source, ServerValidateEventArgs args)
         {
+            decimal value = Convert.ToDecimal(args.Value);
+            if (value <= 0)
+            {
+                if (source.Equals(cvBondAmount))
+                    cvBondAmount.ErrorMessage = "Amount in HKD must greater than 0";
+                else if (source.Equals(cvUnitAmount))
+                    cvUnitAmount.ErrorMessage = "Amount in HKD must greater than 0";
+
+                args.IsValid = false;
+                return;
+            }
+
             if (rblTransType.SelectedValue == "buy")
             {
-                if (Convert.ToDecimal(args.Value) > balance)
+                if (value > balance)
                 {
+                    if (source.Equals(cvBondAmount))
+                        cvBondAmount.ErrorMessage = "Account balance is insufficient to place the order.";
+                    else if (source.Equals(cvUnitAmount))
+                        cvUnitAmount.ErrorMessage = "Account balance is insufficient to place the order.";
+
                     args.IsValid = false;
                     return;
                 }
+                return;
             }
 
         }
