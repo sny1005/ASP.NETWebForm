@@ -50,12 +50,21 @@ namespace HKeInvestWebApplication
                         if (myCode.getTypeFromOrder(orderNumbers.First()).Trim() == "stock")
                         {
                             DataTable transTable = myExternal.getOrderTransaction(orderNumbers.First());
-                            //transTable.Rows.Count;
-                            //
-                            //TODO : update transaction table
-                            //currently working on inserting new record into the transaction table for a specific updated order
-                            //
-                            //
+
+                            string sql;
+                            SqlTransaction trans = myData.beginTransaction();
+
+                            foreach (DataRow row in transTable.Rows)
+                            {
+                                if (!myCode.isExistTransaction(Convert.ToString(row["transactionNumber"])))
+                                {
+                                    object[] para = { Convert.ToString(row["transactionNumber"]), Convert.ToString(row["referenceNumber"]), Convert.ToString(row["executeDate"]), Convert.ToString(row["executeShares"]), Convert.ToString(row["executePrice"]) };
+                                    sql = string.Format("INSERT INTO [Transaction] VALUES ( {0}, {1}, '{2}', {3}, {4})", para);
+                                    myData.setData(sql, trans);
+                                }
+                            }
+
+                            myData.commitTransaction(trans);
                         }
 
 
@@ -64,12 +73,13 @@ namespace HKeInvestWebApplication
 
 
                         // this part is working
-                        SqlTransaction trans = myData.beginTransaction();
+/*                        SqlTransaction trans = myData.beginTransaction();
 
                         string sql = string.Format("UPDATE [Order] SET [status] = '{0}' WHERE [orderNumber] = '{1}'", status, orderNumbers.First());
                         myData.setData(sql, trans);
 
                         myData.commitTransaction(trans);
+*/
                     }
 
 
@@ -82,15 +92,19 @@ namespace HKeInvestWebApplication
                     orderNumbers.Dequeue();
                 }
 /*
-    check order,  reduce cost by only checking incomplete orders
-    if any changes
-        update transaction
-        update security holding
-        calculate gain using formula if sell
-        subtract fee from balance if buy
-        update login ac, change balance
-        update order, change status     
-        send invoice       
+check order,  reduce cost by only checking incomplete orders
+if any changes
+    update transaction
+    update order, change status 
+    if(buy)
+        increase security holding
+        calculate money used
+        update ac balance
+    else
+        decrease security holding
+        calculate gain
+        update ac balance
+    send invoice       
 */
             } while (true);
         }

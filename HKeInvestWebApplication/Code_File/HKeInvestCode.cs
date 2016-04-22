@@ -190,17 +190,34 @@ namespace HKeInvestWebApplication.Code_File
             return orderNumbers;
         }
 
+        //
         public string getTypeFromOrder(string orderNumber)
         {
             HKeInvestData myData = new HKeInvestData();
+            orderNumber = orderNumber.Trim();
 
-            string sql = "SELECT [securityType] FROM [Order] WHERE [orderNumber] = '" + orderNumber + "'";
+            string sql = "SELECT [securityType] FROM [Order] WHERE [orderNumber] = " + orderNumber;
             DataTable recordTable = myData.getData(sql);
 
             DataRow[] record = recordTable.Select();
             if (record.Count() != 1)       //should never happen
                 throw new Exception("Error! Returning non-single record!");
             return Convert.ToString(record[0]["securityType"]);
+        }
+
+        public bool isExistTransaction(string transactionNumber)
+        {
+            HKeInvestData myData = new HKeInvestData();
+            transactionNumber = transactionNumber.Trim();
+
+            string sql = "SELECT [transactionNumber] FROM [Transaction] WHERE [transactionNumber] = " + transactionNumber;
+            DataTable recordTable = myData.getData(sql);
+
+            DataRow[] record = recordTable.Select();
+            if (record.Count() == 1)
+                return true;
+            else
+                return false;
         }
 
         //public void updateAccountBalance()
