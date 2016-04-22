@@ -220,6 +220,25 @@ namespace HKeInvestWebApplication.Code_File
                 return false;
         }
 
+        public bool isBuyOrder(string orderNumber)
+        {
+            HKeInvestData myData = new HKeInvestData();
+            orderNumber = orderNumber.Trim();
+
+            string sql = "SELECT [buyOrSell] FROM [Order] WHERE [orderNumber] = " + orderNumber;
+            DataTable recordTable = myData.getData(sql);
+
+            DataRow[] record = recordTable.Select();
+            if (record.Count() == 1)
+            {
+                if (Convert.ToString(record[0]["buyOrSell"]).Trim() == "buy")
+                    return true;
+                return false;
+            }
+            else        //should never happen
+                throw new Exception("Error! Returning more than 1 record!");
+        }
+
         //public void updateAccountBalance()
         //{
         //    object[] para = { orderNumber, accountNumber, "bond", BondCode.Text, rblTransType.SelectedValue, "pending" };
