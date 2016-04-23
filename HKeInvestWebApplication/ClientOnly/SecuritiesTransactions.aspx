@@ -32,7 +32,7 @@
                 <div class="col-md-4">
                     <asp:Label AssociatedControlID="BondCode" runat="server" Text="Bond Code" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="BondCode" runat="server" CssClass="form-control" MaxLength="4"></asp:TextBox>
-                    <%-- CUSTOM VALIDATOR MAY BE NEEDED IF ERROR RAISED BY EXTERNAL SYSTEM IS CONSIDERED AS FAIL --%>
+                    <asp:CustomValidator ID="cvBondCode" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="BondCode" OnServerValidate="cvCode_ServerValidate" CssClass="text-danger">*</asp:CustomValidator>                    
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Bond Code is required." ControlToValidate="BondCode" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator> 
                 </div>
                 <div class="col-md-4">
@@ -49,7 +49,7 @@
                 <div class="col-md-4">
                     <asp:Label AssociatedControlID="UnitCode" runat="server" Text="Unit Trust Code" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="UnitCode" runat="server" CssClass="form-control" MaxLength="4"></asp:TextBox>
-                    <%-- TODO: CUSTOM VALIDATOR MAY BE NEEDED IF ERROR RAISED BY EXTERNAL SYSTEM IS CONSIDERED AS FAIL --%>                    
+                    <asp:CustomValidator ID="cvUnitCode" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="UnitCode" OnServerValidate="cvCode_ServerValidate" CssClass="text-danger">*</asp:CustomValidator>                    
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Unit Trust Code is required." ControlToValidate="UnitCode" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator> 
                 </div>
                 <div class="col-md-4">
@@ -66,7 +66,7 @@
                 <div class="col-md-4">
                     <asp:Label AssociatedControlID="StockCode" runat="server" Text="Stock Code" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="StockCode" runat="server" CssClass="form-control" MaxLength="4"></asp:TextBox>
-                    <%-- TODO: CUSTOM VALIDATOR MAY BE NEEDED IF ERROR RAISED BY EXTERNAL SYSTEM IS CONSIDERED AS FAIL --%>                                        
+                    <asp:CustomValidator ID="cvStockCode" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="StockCode" OnServerValidate="cvCode_ServerValidate" CssClass="text-danger">*</asp:CustomValidator>                    
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="Bond Code is required." ControlToValidate="StockCode" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator> 
                 </div>
                 <div class="col-md-4">

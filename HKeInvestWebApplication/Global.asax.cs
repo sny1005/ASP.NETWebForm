@@ -120,7 +120,7 @@ namespace HKeInvestWebApplication
                         // need to delete(subtract) the sold(shares) security holding record and increase ac balance taking commision into account
                         else
                         {
-                            // TODO: repeat same procedure as buy
+                            // repeat same procedure as buy
                             updateSellHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
 
                             // calculate money used and update account
@@ -155,10 +155,16 @@ namespace HKeInvestWebApplication
                             sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
                             myData.setData(sql, trans);
                         }
-
                         myData.commitTransaction(trans);
 
                         // TODO: send invoice
+
+
+
+
+
+
+
                     }
                     orderNumbers.Dequeue();
                 }

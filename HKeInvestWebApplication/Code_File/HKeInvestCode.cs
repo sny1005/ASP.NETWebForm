@@ -168,13 +168,6 @@ namespace HKeInvestWebApplication.Code_File
             return balance;
         }
 
-        // TODO: to be implemented for validation
-        public bool isExistSecurity(string type, string code)
-        {
-
-            return false;
-        }
-
         //returns all the incomplete orders' orderNumber in our database as a list
         public Queue<string> getIncompleteOrder()
         {
@@ -191,7 +184,6 @@ namespace HKeInvestWebApplication.Code_File
             return orderNumbers;
         }
 
-        //
         public string getTypeFromOrder(string orderNumber)
         {
             HKeInvestData myData = new HKeInvestData();
@@ -268,5 +260,13 @@ namespace HKeInvestWebApplication.Code_File
                 throw new Exception("Error!Returning non-single record!");
         }
 
+        public bool securityCodeIsValid(string securityType, string securityCode)
+        {
+            ExternalFunctions myExternal = new ExternalFunctions();
+            DataTable dt = myExternal.getSecuritiesByCode(securityType, securityCode);
+            if (dt == null)
+                return false;
+            return true;
+        }
     }
 }

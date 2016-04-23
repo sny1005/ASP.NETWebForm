@@ -438,6 +438,34 @@ namespace HKeInvestWebApplication
             }
         }
 
+        protected void cvCode_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (source.Equals(cvBondCode))
+            {
+                if (myHKeInvestCode.securityCodeIsValid("bond", args.Value))
+                    return;
+                cvBondCode.ErrorMessage = "Bond code invalid";
+                args.IsValid = false;
+                return;
+            }
+            else if (source.Equals(cvUnitCode))
+            {
+                if (myHKeInvestCode.securityCodeIsValid("unit trust", args.Value))
+                    return;
+                cvUnitCode.ErrorMessage = "Unit trust code invalid";
+                args.IsValid = false;
+                return;
+            }
+            else    //cvStockCode
+            {
+                if (myHKeInvestCode.securityCodeIsValid("stock", args.Value))
+                    return;
+                cvStockCode.ErrorMessage = "Stock code invalid";
+                args.IsValid = false;
+                return;
+            }
+        }
+
         //helper function to convert currency to target base
         private string HKDToBase(string type, string code, string amountHKD)
         {

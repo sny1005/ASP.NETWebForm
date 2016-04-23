@@ -85,6 +85,15 @@ namespace HKeInvestWebApplication {
         protected global::System.Web.UI.WebControls.TextBox BondCode;
         
         /// <summary>
+        /// cvBondCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvBondCode;
+        
+        /// <summary>
         /// RequiredFieldValidator1 control.
         /// </summary>
         /// <remarks>
@@ -148,6 +157,15 @@ namespace HKeInvestWebApplication {
         protected global::System.Web.UI.WebControls.TextBox UnitCode;
         
         /// <summary>
+        /// cvUnitCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvUnitCode;
+        
+        /// <summary>
         /// RequiredFieldValidator3 control.
         /// </summary>
         /// <remarks>
@@ -209,6 +227,15 @@ namespace HKeInvestWebApplication {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox StockCode;
+        
+        /// <summary>
+        /// cvStockCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvStockCode;
         
         /// <summary>
         /// RequiredFieldValidator5 control.
