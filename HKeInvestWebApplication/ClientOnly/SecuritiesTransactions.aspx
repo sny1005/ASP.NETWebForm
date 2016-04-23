@@ -39,7 +39,6 @@
                     <asp:Label ID="lblBondAmount" AssociatedControlID="BondAmount" runat="server" Text="Amount in HKD" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="BondAmount" runat="server" CssClass="form-control"></asp:TextBox>
                     <asp:CustomValidator ID="cvBondAmount" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="BondAmount" OnServerValidate="cvAmount_ServerValidate" CssClass="text-danger">*</asp:CustomValidator>
-<%--                    <asp:RangeValidator ID="rvBondAmount" runat="server" ErrorMessage="The range " EnableClientScript="False" Display="Dynamic" Text="*" ControlToValidate="BondAmount" MaximumValue="000.00" MinimumValue="999.99"></asp:RangeValidator>--%>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Amount(Shares) to buy(sell) is required." ControlToValidate="BondAmount" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>   
             </div>
@@ -73,7 +72,6 @@
                 <div class="col-md-4">
                     <asp:Label ID="lblStockShares" AssociatedControlID="StockShares" runat="server" Text="Quantity of shares to buy" CssClass="control-label"></asp:Label>
                     <asp:TextBox ID="StockShares" runat="server" CssClass="form-control"></asp:TextBox>
-                    <asp:RegularExpressionValidator ID="rvShares" runat="server" ErrorMessage="Shares can only be positive integer values." EnableClientScript="False" Text="*" ValidationExpression="^\d*$" ControlToValidate="StockShares" CssClass="text-danger"></asp:RegularExpressionValidator>
                     <asp:CustomValidator ID="cvShares" runat="server" EnableClientScript="false" Display="Dynamic" ControlToValidate="StockShares" OnServerValidate="cvShares_ServerValidate" CssClass="text-danger">*</asp:CustomValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="Quantity of shares to buy is required." ControlToValidate="StockShares" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>   

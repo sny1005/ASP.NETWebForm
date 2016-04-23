@@ -168,6 +168,7 @@ namespace HKeInvestWebApplication.Code_File
             return balance;
         }
 
+        // TODO: to be implemented for validation
         public bool isExistSecurity(string type, string code)
         {
 
@@ -267,22 +268,5 @@ namespace HKeInvestWebApplication.Code_File
                 throw new Exception("Error!Returning non-single record!");
         }
 
-        //public void updateAccountBalance()
-        //{
-        //    object[] para = { orderNumber, accountNumber, "bond", BondCode.Text, rblTransType.SelectedValue, "pending" };
-        //    string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", para);
-        //    SqlTransaction trans = myHKeInvestData.beginTransaction();
-        //    myHKeInvestData.setData(sql, trans);
-
-        //    //should not be written in this way to update the ac balance
-        //    if (ddlSecurityType.SelectedValue == "bond" || ddlSecurityType.SelectedValue == "unit trust")
-        //    {
-        //        sql = String.Format("UPDATE [LoginAccount] SET [balance] = {0} WHERE [accountNumber] = '{1}'", balance, accountNumber);
-        //        myHKeInvestData.setData(sql, trans);
-        //        lblAccountBalance.Text = "Account balance: " + balance;
-        //    }
-
-        //    myHKeInvestData.commitTransaction(trans);
-        //}
     }
 }

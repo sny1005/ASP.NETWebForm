@@ -247,9 +247,7 @@ namespace HKeInvestWebApplication
 
         protected void cvShares_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (!rvShares.IsValid) { return; }  //input string is not integer
-
-            int value = Convert.ToInt32(args.Value);
+            decimal value = Convert.ToDecimal(args.Value);
             if (value <= 0)
             {
                 cvShares.ErrorMessage = "Quantity of shares must greater than 0";
@@ -257,24 +255,64 @@ namespace HKeInvestWebApplication
                 return;
             }
 
+            // check buy conditions
             if (rblTransType.SelectedValue == "buy")
             {
-                int remainder = value % 100;
-                if (remainder != 0)
+                int intValue;
+                if (int.TryParse(args.Value, out intValue))
                 {
-                    cvShares.ErrorMessage = "Quantity of shares to buy must be a multiple of 100.";
-                    args.IsValid = false;
+                    int remainder = intValue % 100;
+                    if (remainder != 0)
+                    {
+                        cvShares.ErrorMessage = "Quantity of shares to buy must be a multiple of 100.";
+                        args.IsValid = false;
+                        return;
+                    }
+
+                    decimal sharesValue = myExternalFunctions.getSecuritiesPrice("stock", StockCode.Text) * Convert.ToDecimal(args.Value);
+                    if (sharesValue > balance)
+                    {
+                        cvShares.ErrorMessage = "Account balance is insufficient to place the order.";
+                        args.IsValid = false;
+                        return;
+                    }
                     return;
                 }
 
-                decimal sharesValue = myExternalFunctions.getSecuritiesPrice("stock", StockCode.Text) * Convert.ToDecimal(StockShares.Text);
-                if (sharesValue > balance)
+                cvShares.ErrorMessage = "Quantity of shares to buy must be an integer.";
+                args.IsValid = false;
+                return;
+            }
+            // check sell conditions
+            else
+            {
+                string code = StockCode.Text;
+
+                string sql = "SELECT [shares] FROM [SecurityHolding] WHERE [accountNumber] = '" + accountNumber + "' AND [type] = 'stock' AND [code] = '" + code + "'";
+                DataTable Table = myHKeInvestData.getData(sql);
+                DataRow[] record = Table.Select();
+                if (record.Count() != 1)
+                    throw new Exception("Error! Returning more than 1 record or stock is not owned by account");
+                else
                 {
-                    cvShares.ErrorMessage = "Account balance is insufficient to place the order.";
+                    decimal ownedShares = Convert.ToDecimal(record[0]["shares"]);
+
+                    sql = "SELECT [shares] from [Order] JOIN [StockOrder] on [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [securityType] = 'stock' AND [buyOrSell] = 'sell' AND [securityCode] = '" + code + "'";
+                    Table = myHKeInvestData.getData(sql);
+
+                    decimal pendingShares = 0;
+                    foreach (DataRow row in Table.Rows)
+                    {
+                        pendingShares += Convert.ToDecimal(row["shares"]);
+                    }
+
+                    if ((pendingShares + Convert.ToDecimal(args.Value)) <= ownedShares)
+                        return;
+
+                    cvShares.ErrorMessage = "You cannot have simultaneous sell orders for the same security whoose quantity exceeds the amount pf shreas that you own.";
                     args.IsValid = false;
                     return;
                 }
-                return;
             }
         }
 
@@ -358,6 +396,45 @@ namespace HKeInvestWebApplication
                     return;
                 }
                 return;
+            }
+            // sell conditions
+            else
+            {
+                string code;
+                string type = ddlSecurityType.SelectedValue;
+                if (type == "bond")
+                    code = BondCode.Text;
+                else
+                    code = UnitCode.Text;
+
+                string sql = "SELECT [shares] FROM [SecurityHolding] WHERE [accountNumber] = '" + accountNumber + "' AND [type] = '" + type + "' AND [code] = '" + code + "'";
+                DataTable Table = myHKeInvestData.getData(sql);
+                DataRow[] record = Table.Select();
+                if (record.Count() != 1)
+                    throw new Exception("Error! Returning more than 1 record or stock is not owned by account");
+                else
+                {
+                    decimal ownedShares = Convert.ToDecimal(record[0]["shares"]);
+
+                    sql = "SELECT [shares] from [Order] JOIN [SellBondOrder] on [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [securityType] = '" + type + "' AND [buyOrSell] = 'sell' AND [securityCode] = '" + code + "'";
+                    Table = myHKeInvestData.getData(sql);
+
+                    decimal pendingShares = 0;
+                    foreach (DataRow row in Table.Rows)
+                    {
+                        pendingShares += Convert.ToDecimal(row["shares"]);
+                    }
+
+                    if ((pendingShares + Convert.ToDecimal(args.Value)) <= ownedShares)
+                        return;
+
+                    if (type == "bond")
+                        cvBondAmount.ErrorMessage = "You cannot have simultaneous sell orders for the same security whoose quantity exceeds the amount pf shreas that you own.";
+                    else
+                        cvUnitAmount.ErrorMessage = "You cannot have simultaneous sell orders for the same security whoose quantity exceeds the amount pf shreas that you own.";
+                    args.IsValid = false;
+                    return;
+                }
             }
         }
 

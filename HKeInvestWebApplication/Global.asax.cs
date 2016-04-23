@@ -23,9 +23,9 @@ namespace HKeInvestWebApplication
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Add periordic task for system to check order and transaction information
-            Thread mythread = new Thread(PeriodicTasks);
-            mythread.IsBackground = true;
-            mythread.Start();
+            //Thread mythread = new Thread(PeriodicTasks);
+            //mythread.IsBackground = true;
+            //mythread.Start();
         }
 
         private void PeriodicTasks()
@@ -82,9 +82,9 @@ namespace HKeInvestWebApplication
                         // need to add the new/extra security holding record and decrease ac balance taking commision into account
                         if (myCode.isBuyOrder(orderNumbers.First()))
                         {
-                            updateHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
+                            updateBuyHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
 
-                            // TODO: calculate money used and update account
+                            // calculate money used and update account
                             decimal totalExpenditure = 0;
                             decimal acBalance = myCode.getAccountBalance(accountNumber);
                             string[,] CurrencyData = getCurrencyData(myCode);
@@ -120,19 +120,55 @@ namespace HKeInvestWebApplication
                         // need to delete(subtract) the sold(shares) security holding record and increase ac balance taking commision into account
                         else
                         {
+                            // TODO: repeat same procedure as buy
+                            updateSellHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
 
+                            // calculate money used and update account
+                            decimal totalRevenue = 0;
+                            decimal acBalance = myCode.getAccountBalance(accountNumber);
+                            string[,] CurrencyData = getCurrencyData(myCode);
+                            string fromRate = myCode.findCurrencyRate(CurrencyData, currency);
+                            while (executeShares.Count() != 0)
+                            {
+                                decimal executePriceHKD = myCode.convertCurrency(currency, fromRate, "HKD", "1", executePrice.First());
+
+                                decimal revenue = executePriceHKD * executeShares.First();         //money gained without comission
+
+                                if (securityType == "stock")
+                                {
+                                    revenue -= stockFee(myCode, orderNumbers.First(), revenue, acBalance);
+                                }
+                                else        //the order is on bond or unit trust
+                                {
+                                    if (acBalance < 500000)
+                                        revenue -= 100;                    //selling fee for assets less than HK$ 500,000
+                                    else
+                                        revenue -= 50;                     //selling fee for assets more than or equal HK$ 500,000
+                                }
+
+                                totalRevenue += revenue;
+                                executePrice.RemoveAt(0);
+                                executeShares.RemoveAt(0);
+                            }
+
+                            acBalance += totalRevenue;
+                            sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
+                            myData.setData(sql, trans);
                         }
 
                         myData.commitTransaction(trans);
+
+                        // TODO: send invoice
                     }
                     orderNumbers.Dequeue();
                 }
+
                 /*
                 check order,  reduce cost by only checking incomplete orders
                 if any changes
                     update transaction(finished)
                     update order, change status (finished)
-                    if(buy)
+                    if(buy) (finished)
                         increase security holding
                         calculate money used
                         update ac balance
@@ -142,6 +178,7 @@ namespace HKeInvestWebApplication
                         update ac balance
                     send invoice       
                 */
+
             } while (true);
         }
 
@@ -191,12 +228,12 @@ namespace HKeInvestWebApplication
             return fee;
         }
 
-        private static void updateHolding(ref HKeInvestData myData, ref HKeInvestCode myCode, ref SqlTransaction trans, string accountNumber, string securityType, string securityCode, string name, string currency, decimal shares)
+        private static void updateBuyHolding(ref HKeInvestData myData, ref HKeInvestCode myCode, ref SqlTransaction trans, string accountNumber, string securityType, string securityCode, string name, string currency, decimal shares)
         {
             string sql;
-
             // get current shares first
             decimal ownedShares = myCode.getOwnedShares(accountNumber, securityType, securityCode);
+
             if (ownedShares == 0)
             {
                 // new security bought by account
@@ -211,6 +248,34 @@ namespace HKeInvestWebApplication
                 object[] para = { ownedShares, accountNumber, securityType, securityCode };
                 sql = string.Format("UPDATE [SecurityHolding] SET [shares] = {0} WHERE [accountNumber] = '{1}' AND [type] = '{2}' AND [code] = '{3}'", para);
                 myData.setData(sql, trans);
+            }
+        }
+
+        private static void updateSellHolding(ref HKeInvestData myData, ref HKeInvestCode myCode, ref SqlTransaction trans, string accountNumber, string securityType, string securityCode, string name, string currency, decimal shares)
+        {
+            string sql;
+
+            // get current shares first
+            decimal ownedShares = myCode.getOwnedShares(accountNumber, securityType, securityCode);
+            if (ownedShares <= 0)
+                throw new Exception("The security is not owned by the account!");
+            else
+            {
+                ownedShares -= shares;
+                if (ownedShares == 0)       //all shares of that security is sold
+                {
+                    object[] para = { accountNumber, securityType, securityCode };
+                    sql = string.Format("DELETE FROM [SecurityHolding] WHERE [accountNumber] = '{0}' AND [type] = '{1}' AND [code] = '{2}'", para);
+                    myData.setData(sql, trans);
+                    return;
+                }
+                // sold part of the shares owned
+                else
+                {
+                    object[] para = { ownedShares, accountNumber, securityType, securityCode };
+                    sql = string.Format("UPDATE [SecurityHolding] SET [shares] = {0} WHERE [accountNumber] = '{1}' AND [type] = '{2}' AND [code] = '{3}'", para);
+                    myData.setData(sql, trans);
+                }
             }
         }
 
