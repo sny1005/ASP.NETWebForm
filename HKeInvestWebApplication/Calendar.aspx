@@ -10,13 +10,15 @@
     </asp:Calendar>
     <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource1">
         <Columns>
-            <asp:BoundField DataField="EventDate" HeaderText="EventDate" SortExpression="EventDate" />
-            <asp:BoundField DataField="EventDesc" HeaderText="EventDesc" SortExpression="EventDesc" />
+            <asp:BoundField DataField="eventName" HeaderText="eventName" SortExpression="eventName" />
+            <asp:BoundField DataField="eventRegion" HeaderText="eventRegion" SortExpression="eventRegion" />
+            <asp:BoundField DataField="eventDate" HeaderText="eventDate" SortExpression="eventDate" />
+            <asp:BoundField DataField="description" HeaderText="description" SortExpression="description" />
         </Columns>
     </asp:GridView>
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT [EventDate], [EventDesc] FROM [Table] WHERE ([EventDate] = @EventDate)">
+    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:HKeInvestConnectionString %>" SelectCommand="SELECT [eventName], [eventRegion], [eventDate], [description] FROM [Event] WHERE ([eventDate] = @eventDate)">
         <SelectParameters>
-            <asp:ControlParameter ControlID="Calendar1" DbType="Date" Name="EventDate" PropertyName="SelectedDate" />
+            <asp:ControlParameter ControlID="Calendar1" DbType="Date" Name="eventDate" PropertyName="SelectedDate" />
         </SelectParameters>
     </asp:SqlDataSource>
 </asp:Content>
