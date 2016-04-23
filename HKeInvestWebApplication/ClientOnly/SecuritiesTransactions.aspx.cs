@@ -85,7 +85,7 @@ namespace HKeInvestWebApplication
             string amount = "";
 
             // { orderNumber, accountNumber, type, code, buyOrSell, "pending" };
-            object[] orderPara = new object[6];
+            object[] orderPara = new object[7];
             orderPara[1] = accountNumber;
             orderPara[5] = "pending";
 
@@ -152,6 +152,9 @@ namespace HKeInvestWebApplication
                 }
             }
 
+            //get datetime
+            orderPara[6] = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+
             // check if order is successfully submitted to External System, and display result
             if (orderNumber == null)
             {
@@ -164,7 +167,7 @@ namespace HKeInvestWebApplication
 
             // set up sql to create a copy of Order from External System
             orderPara[0] = orderNumber;
-            string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", orderPara);
+            string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')", orderPara);
 
             SqlTransaction trans = myHKeInvestData.beginTransaction();
             myHKeInvestData.setData(sql, trans);    //insert into order
