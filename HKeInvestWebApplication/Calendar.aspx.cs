@@ -12,6 +12,10 @@ namespace HKeInvestWebApplication
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            SelectedDatesCollection eventdates = Calendar1.SelectedDates;
+            eventdates.Add(new DateTime(2016, 4, 24));
+            eventdates.Add(new DateTime(2016, 4, 25));
+            eventdates.Add(new DateTime(2016, 4, 26));
 
         }
 

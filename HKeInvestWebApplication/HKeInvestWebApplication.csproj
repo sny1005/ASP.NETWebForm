@@ -210,17 +210,8 @@
     <Content Include="Account\VerifyPhoneNumber.aspx" />
     <Content Include="AccountApplicationForm.aspx" />
     <Content Include="App_Data\alert.mdf" />
-    <Content Include="App_Data\alert_log.ldf">
-      <DependentUpon>alert.mdf</DependentUpon>
-    </Content>
-    <Content Include="App_Data\Events.mdf" />
-    <Content Include="App_Data\Events_log.ldf">
-      <DependentUpon>Events.mdf</DependentUpon>
-    </Content>
+    <Content Include="App_Data\aspnet-HKeInvestWebApplication-20160205055552.mdf" />
     <Content Include="App_Data\ExternalDatabases.mdf" />
-    <Content Include="App_Data\ExternalDatabases_log.ldf">
-      <DependentUpon>ExternalDatabases.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\HKeInvestDB.mdf" />
     <Content Include="App_Data\HKeInvestDB_log.ldf">
       <DependentUpon>HKeInvestDB.mdf</DependentUpon>
