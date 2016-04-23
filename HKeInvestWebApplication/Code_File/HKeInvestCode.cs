@@ -260,6 +260,20 @@ namespace HKeInvestWebApplication.Code_File
                 throw new Exception("Error!Returning non-single record!");
         }
 
+        public DateTime getSubmittedDate(string orderNumber)
+        {
+            orderNumber = orderNumber.Trim();
+            HKeInvestData myData = new HKeInvestData();
+            string sql = "SELECT [dateSubmitted] FROM [Order] WHERE [orderNumber] = '" + orderNumber + "'";
+
+            DataTable Table = myData.getData(sql);
+            DataRow[] record = Table.Select();
+            if (record.Count() == 1)
+                return Convert.ToDateTime(record[0]["dateSubmitted"]);
+            else
+                throw new Exception("Error!Returning non-single record!");
+        }
+
         public bool securityCodeIsValid(string securityType, string securityCode)
         {
             ExternalFunctions myExternal = new ExternalFunctions();

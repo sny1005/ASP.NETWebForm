@@ -23,9 +23,9 @@ namespace HKeInvestWebApplication
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Add periordic task for system to check order and transaction information
-            //Thread mythread = new Thread(PeriodicTasks);
-            //mythread.IsBackground = true;
-            //mythread.Start();
+            Thread mythread = new Thread(PeriodicTasks);
+            mythread.IsBackground = true;
+            mythread.Start();
         }
 
         private void PeriodicTasks()
@@ -65,6 +65,7 @@ namespace HKeInvestWebApplication
                         //get executed shares and price from retrieved new transaction record earlier
                         List<decimal> executeShares = new List<decimal>();
                         List<decimal> executePrice = new List<decimal>();
+                        List<decimal> feeCharged = new List<decimal>();
                         DataRow[] record = transTable.Select();
                         if (record.Count() >= 1)
                         {
@@ -80,7 +81,8 @@ namespace HKeInvestWebApplication
                         trans = myData.beginTransaction();
                         // if the order is a buy order
                         // need to add the new/extra security holding record and decrease ac balance taking commision into account
-                        if (myCode.isBuyOrder(orderNumbers.First()))
+                        bool isBuyOrder = myCode.isBuyOrder(orderNumbers.First());
+                        if (isBuyOrder)         //if buy order
                         {
                             updateBuyHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
 
@@ -88,28 +90,33 @@ namespace HKeInvestWebApplication
                             decimal totalExpenditure = 0;
                             decimal acBalance = myCode.getAccountBalance(accountNumber);
                             string[,] CurrencyData = getCurrencyData(myCode);
-                            while (executeShares.Count() != 0)
+                            for (int i = 0; i < executePrice.Count(); i++)
                             {
                                 string fromRate = myCode.findCurrencyRate(CurrencyData, currency);
-                                decimal executePriceHKD = myCode.convertCurrency(currency, fromRate, "HKD", "1", executePrice.First());
+                                decimal executePriceHKD = myCode.convertCurrency(currency, fromRate, "HKD", "1", executePrice[i]);
 
-                                decimal expenditure = executePriceHKD * executeShares.First();         //money spent without comission
+                                decimal expenditure = executePriceHKD * executeShares[i];         //money spent without comission
 
                                 if (securityType == "stock")
                                 {
-                                    expenditure += stockFee(myCode, orderNumbers.First(), expenditure, acBalance);
+                                    feeCharged.Add(stockFee(myCode, orderNumbers.First(), expenditure, acBalance));
+                                    expenditure += feeCharged.Last();
                                 }
                                 else        //the order is on bond or unit trust
                                 {
                                     if (acBalance < 500000)
-                                        expenditure += expenditure * (decimal)0.05;                     //buying fee for assets less than HK$ 500,000
+                                    {
+                                        feeCharged.Add(expenditure * (decimal)0.05);
+                                        expenditure += feeCharged.Last();                     //buying fee for assets less than HK$ 500,000
+                                    }
                                     else
-                                        expenditure += expenditure * (decimal)0.03;                     //buying fee for assets more than or equal HK$ 500,000
+                                    {
+                                        feeCharged.Add(expenditure * (decimal)0.03);         //buying fee for assets more than or equal HK$ 500,000
+                                        expenditure += feeCharged.Last();
+                                    }
                                 }
 
                                 totalExpenditure += expenditure;
-                                executePrice.RemoveAt(0);
-                                executeShares.RemoveAt(0);
                             }
 
                             acBalance -= totalExpenditure;
@@ -128,27 +135,32 @@ namespace HKeInvestWebApplication
                             decimal acBalance = myCode.getAccountBalance(accountNumber);
                             string[,] CurrencyData = getCurrencyData(myCode);
                             string fromRate = myCode.findCurrencyRate(CurrencyData, currency);
-                            while (executeShares.Count() != 0)
+                            for (int i=0; i<executePrice.Count(); i++)
                             {
-                                decimal executePriceHKD = myCode.convertCurrency(currency, fromRate, "HKD", "1", executePrice.First());
+                                decimal executePriceHKD = myCode.convertCurrency(currency, fromRate, "HKD", "1", executePrice[i]);
 
-                                decimal revenue = executePriceHKD * executeShares.First();         //money gained without comission
+                                decimal revenue = executePriceHKD * executeShares[i];         //money gained without comission
 
                                 if (securityType == "stock")
                                 {
-                                    revenue -= stockFee(myCode, orderNumbers.First(), revenue, acBalance);
+                                    feeCharged.Add(stockFee(myCode, orderNumbers.First(), revenue, acBalance));
+                                    revenue -= feeCharged.Last();
                                 }
                                 else        //the order is on bond or unit trust
                                 {
                                     if (acBalance < 500000)
+                                    {
+                                        feeCharged.Add(100);
                                         revenue -= 100;                    //selling fee for assets less than HK$ 500,000
+                                    }
                                     else
+                                    {
+                                        feeCharged.Add(50);
                                         revenue -= 50;                     //selling fee for assets more than or equal HK$ 500,000
+                                    }
                                 }
 
                                 totalRevenue += revenue;
-                                executePrice.RemoveAt(0);
-                                executeShares.RemoveAt(0);
                             }
 
                             acBalance += totalRevenue;
@@ -157,34 +169,45 @@ namespace HKeInvestWebApplication
                         }
                         myData.commitTransaction(trans);
 
-                        // TODO: send invoice
+                        // prepares mail body
+                        // general information
+                        char nl = '\n';
+                        string mailBody = "Order number: " + orderNumbers.First() + nl;
+                        mailBody += "Account number: " + accountNumber + nl;
+                        mailBody += "Buy/Sell: " + isBuyOrder + nl;
+                        mailBody += "Security code: " + securityCode + nl;
+                        mailBody += "Security name: " + name + nl;
 
+                        // if the security is a stock
+                        mailBody += nl;
+                        if (securityType == "stock")
+                        {
+                            string orderType = myCode.getOrderType(orderNumbers.First());
+                            DateTime date = myCode.getSubmittedDate(orderNumbers.First());
+                            mailBody += "Order type: " + orderType + nl;
+                            mailBody += "Submitted date: " + date + nl;
+                            mailBody += "Total shares bought/sold: " + executeShares.Sum() + nl;
+                            mailBody += "Total dollar amount: " + executePrice.Sum() + nl;
+                            // TODO: how to get fee charged?? store the fees in a list again
+                            mailBody += "Total fee charged: " + feeCharged.Sum() + nl;
+                        }
 
+                        // for each transaction
+                        mailBody += nl;
+                        for (int i = 0; i < executePrice.Count(); i++)
+                        {
+                            mailBody += "Transaction number: " + transTable.Rows[i]["transactionNumber"] + nl;
+                            mailBody += "Quantity of shares: " + executeShares[i] + nl;
+                            mailBody += "Price per share: " + executePrice[i] + nl;
+                            mailBody += nl;
+                        }
 
-
-
-
+                        // TODO: send the invoice
+                        System.Windows.Forms.MessageBox.Show(mailBody);
 
                     }
                     orderNumbers.Dequeue();
                 }
-
-                /*
-                check order,  reduce cost by only checking incomplete orders
-                if any changes
-                    update transaction(finished)
-                    update order, change status (finished)
-                    if(buy) (finished)
-                        increase security holding
-                        calculate money used
-                        update ac balance
-                    else
-                        decrease security holding
-                        calculate gain
-                        update ac balance
-                    send invoice       
-                */
-
             } while (true);
         }
 
