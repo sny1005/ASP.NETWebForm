@@ -174,13 +174,13 @@ namespace HKeInvestWebApplication.Code_File
             return false;
         }
 
-        //returns all the incomplete orders' orderNumber as a list
+        //returns all the incomplete orders' orderNumber in our database as a list
         public Queue<string> getIncompleteOrder()
         {
             HKeInvestData myData = new HKeInvestData();
             Queue<string> orderNumbers = new Queue<string>();
 
-            string sql = "SELECT [orderNumber] FROM [Order] WHERE [status] <> 'completed'";
+            string sql = "SELECT [orderNumber] FROM [Order] WHERE [status] <> 'completed' AND [status] <> 'cancelled'";
             DataTable orders = myData.getData(sql);
 
             foreach (DataRow row in orders.Rows)
@@ -237,6 +237,20 @@ namespace HKeInvestWebApplication.Code_File
             }
             else        //should never happen
                 throw new Exception("Error! Returning more than 1 record!");
+        }
+
+        public decimal getOwnedShares(string accountNumber, string type, string code)
+        {
+            HKeInvestData myData = new HKeInvestData();
+            string sql = string.Format("SELECT [shares] FROM [SecurityHolding] WHERE [accountNumber] = '{0}' AND [type] = '{1}' AND [code] = '{2}'", accountNumber, type, code);
+            DataTable Table = myData.getData(sql);
+            DataRow[] record = Table.Select();
+            if (record.Count() == 1)
+                return Convert.ToDecimal(record[0]["shares"]);
+            else if (record.Count() == 0)
+                return 0;
+            else
+                throw new Exception("Error!Returning more than 1 record!");
         }
 
         //public void updateAccountBalance()

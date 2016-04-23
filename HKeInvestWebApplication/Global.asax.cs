@@ -43,7 +43,7 @@ namespace HKeInvestWebApplication
                 while (orderNumbers.Count != 0)
                 {
                     string status = myExternal.getOrderStatus(orderNumbers.First()).Trim();
-                    if (!status.Equals("pending"))      // if the order is still pending, there is no update on that order
+                    if (!status.Equals("pending"))      // if the order is still pending in external system, there is no update on that order
                     {
                         string sql;
                         SqlTransaction trans = myData.beginTransaction();
@@ -54,32 +54,54 @@ namespace HKeInvestWebApplication
 
                         // update transaction table
                         DataTable transTable = myExternal.getOrderTransaction(orderNumbers.First());
-                        updateTransaction(transTable, myData, myCode, orderNumbers.First(), trans);
+                        updateTransaction(ref transTable, myData, myCode, orderNumbers.First(), trans);
 
                         myData.commitTransaction(trans);
 
-                        // TODO: move getHoldingDetails() into "new security" section
                         // setup for updating SecurityHolding
                         string accountNumber, securityType, securityCode, name, currency;
                         getHoldingDetails(myExternal, myData, orderNumbers.First(), out sql, out accountNumber, out securityType, out securityCode, out name, out currency);
 
-                        //get executed shares from retrieved transaction record earlier
+                        //get executed shares from retrieved new transaction record earlier
+                        decimal shares = 0;
                         DataRow[] record = transTable.Select();
-                        string shares = Convert.ToString(record[0]["executeShares"]).Trim();
+                        if (record.Count() > 1)
+                        {
+                            for (int i = 0; i < record.Count(); i++)
+                            {
+                                shares += Convert.ToDecimal(record[i]["executeShares"]);
+                            }
+                        }
+                        else if (record.Count() == 1)
+                            shares = Convert.ToDecimal(record[0]["executeShares"]);
+                        else        // no new transaction for a partial stock order
+                            continue;
 
                         trans = myData.beginTransaction();
                         // if the order is a buy order
                         // need to add the new/extra security holding record and decrease ac balance taking commision into account
                         if (myCode.isBuyOrder(orderNumbers.First()))
                         {
-                            //assume new security
-                            object[] para = { accountNumber, securityType, securityCode, name, shares, currency };
-                            sql = string.Format("INSERT INTO [SecurityHolding] VALUES ( '{0}', '{1}', '{2}', '{3}', {4}, '{5}', NULL, NULL)", para);
-                            myData.setData(sql, trans);
+                            // get current shares first
+                            decimal ownedShares = myCode.getOwnedShares(accountNumber, securityType, securityCode);
+                            if(ownedShares == 0)
+                            {
+                                // new security bought by account
+                                object[] para = { accountNumber, securityType, securityCode, name, shares, currency };
+                                sql = string.Format("INSERT INTO [SecurityHolding] VALUES ( '{0}', '{1}', '{2}', '{3}', {4}, '{5}', NULL, NULL)", para);
+                                myData.setData(sql, trans);
+                            }
+                            else
+                            {
+                                // the security is already owned by ac
+                                ownedShares += shares;
+                                object[] para = { ownedShares, accountNumber, securityType, securityCode};
+                                sql = string.Format("UPDATE [SecurityHolding] SET [shares] = {0} WHERE [accountNumber] = '{1}' AND [type] = '{2}' AND [code] = '{3}'", para);
+                                myData.setData(sql, trans);
+                            }
 
-                            //
-                            // TODO: implement the case that the security is already owned by the ac
-                            //
+                            // TODO: calculate money used and update account
+
                         }
                         // if the order is a sell order
                         // need to delete(subtract) the sold(shares) security holding record and increase ac balance taking commision into account
@@ -134,20 +156,43 @@ namespace HKeInvestWebApplication
                 currency = Convert.ToString(record[0]["base"]).Trim();
         }
 
-        private static void updateTransaction(DataTable transTable, HKeInvestData myData, HKeInvestCode myCode, string orderNumber, SqlTransaction trans)
+        // the transaction table will be modified and the transTable is reduced to holding new transaction records only
+        private static void updateTransaction(ref DataTable transTable, HKeInvestData myData, HKeInvestCode myCode, string orderNumber, SqlTransaction trans)
         {
             if (transTable == null)
                 throw new Exception("Database error! Cannot retrieve records!");
-            foreach (DataRow row in transTable.Rows)
+            else if (transTable.Rows.Count == 1)
             {
-                //if it is a stock need to check if adding partial transaction is needed
-                if (!myCode.isExistTransaction(Convert.ToString(row["transactionNumber"])))
+                DataRow[] record = transTable.Select();
+                DataRow row = record[0];
+                // TODO: may need to update the stock order as well...
+                object[] para = { Convert.ToString(row["transactionNumber"]), Convert.ToString(row["referenceNumber"]), Convert.ToString(row["executeDate"]), Convert.ToString(row["executeShares"]), Convert.ToString(row["executePrice"]) };
+                string sql = string.Format("INSERT INTO [Transaction] VALUES ( {0}, {1}, '{2}', {3}, {4})", para);
+                myData.setData(sql, trans);
+            }
+            else
+            {
+                for (int i=0; i<transTable.Rows.Count; i++)
                 {
-                    object[] para = { Convert.ToString(row["transactionNumber"]), Convert.ToString(row["referenceNumber"]), Convert.ToString(row["executeDate"]), Convert.ToString(row["executeShares"]), Convert.ToString(row["executePrice"]) };
-                    string sql = string.Format("INSERT INTO [Transaction] VALUES ( {0}, {1}, '{2}', {3}, {4})", para);
-                    myData.setData(sql, trans);
+                    //if it is a stock need to check if adding partial transaction is needed
+                    DataRow row = transTable.Rows[i];
+                    if (!myCode.isExistTransaction(Convert.ToString(row["transactionNumber"])))
+                    {
+                        // TODO: may need to update the stock order as well...
+                        object[] para = { Convert.ToString(row["transactionNumber"]), Convert.ToString(row["referenceNumber"]), Convert.ToString(row["executeDate"]), Convert.ToString(row["executeShares"]), Convert.ToString(row["executePrice"]) };
+                        string sql = string.Format("INSERT INTO [Transaction] VALUES ( {0}, {1}, '{2}', {3}, {4})", para);
+                        myData.setData(sql, trans);
+                    }
+                    else
+                    {
+                        row.Delete();
+                    }
                 }
             }
+
+
+
+
         }
     }
 }
