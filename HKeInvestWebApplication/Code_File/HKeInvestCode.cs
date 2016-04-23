@@ -253,6 +253,20 @@ namespace HKeInvestWebApplication.Code_File
                 throw new Exception("Error!Returning more than 1 record!");
         }
 
+        public string getOrderType(string orderNumber)
+        {
+            orderNumber = orderNumber.Trim();
+            HKeInvestData myData = new HKeInvestData();
+            string sql = "SELECT [orderType] FROM [StockOrder] WHERE [orderNumber] = '" + orderNumber + "'";
+
+            DataTable Table = myData.getData(sql);
+            DataRow[] record = Table.Select();
+            if (record.Count() == 1)
+                return Convert.ToString(record[0]["orderType"]);
+            else
+                throw new Exception("Error!Returning non-single record!");
+        }
+
         //public void updateAccountBalance()
         //{
         //    object[] para = { orderNumber, accountNumber, "bond", BondCode.Text, rblTransType.SelectedValue, "pending" };
