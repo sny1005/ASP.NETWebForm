@@ -16,7 +16,7 @@ namespace HKeInvestWebApplication
         protected void Page_Load(object sender, EventArgs e)
         {
             HKeInvestData myHKeInvestData = new HKeInvestData();
-            DataTable eventinfo = myHKeInvestData.getData("Select year, month, day From Events");
+            DataTable eventinfo = myHKeInvestData.getData("Select year, month, day From Event");
             SelectedDatesCollection eventdates = Calendar1.SelectedDates;
             //for( int i=1; i<= eventid.Rows.Count; i++ )
             foreach(DataRow row in eventinfo.Rows)
@@ -29,7 +29,7 @@ namespace HKeInvestWebApplication
                 string month_string = row[1].ToString();
                 int month = Int32.Parse(month_string);
                 string day_string = row[2].ToString();
-                int day = Int32.Parse(year_string);
+                int day = Int32.Parse(day_string);
 
                 eventdates.Add(new DateTime(year,month,day));
 
