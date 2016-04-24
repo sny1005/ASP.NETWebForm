@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using System.Data;
 using HKeInvestWebApplication.ExternalSystems.Code_File;
+using System.Net.Mail;
 
 namespace HKeInvestWebApplication.Code_File
 {
@@ -309,5 +310,17 @@ namespace HKeInvestWebApplication.Code_File
                 return false;
             return true;
         }
+
+        public void sendemail (string target, string subject, string body)
+        {
+            MailMessage mail = new MailMessage();
+            SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
+            mail.From = new MailAddress("lychowaa@cse.ust.hk", "InvestPro");
+            mail.To.Add(target);
+            mail.Subject = subject;
+            mail.Body = body;
+            emailServer.Send(mail);
+        }
+
     }
 }

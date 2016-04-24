@@ -18,12 +18,8 @@ namespace HKeInvestWebApplication
             HKeInvestData myHKeInvestData = new HKeInvestData();
             DataTable eventinfo = myHKeInvestData.getData("Select year, month, day From Event");
             SelectedDatesCollection eventdates = Calendar1.SelectedDates;
-            //for( int i=1; i<= eventid.Rows.Count; i++ )
             foreach(DataRow row in eventinfo.Rows)
             {
-                /*DataTable year = myHKeInvestData.getData("Select year from Events where Eventid = '" + i + "'");
-                DataTable month= myHKeInvestData.getData("Select month from Events where Eventid = '" + i + "'");
-                DataTable day = myHKeInvestData.getData("Select day from Events where Eventid = '" + i + "'");*/
                 string year_string = row[0].ToString();
                 int year = Int32.Parse(year_string);
                 string month_string = row[1].ToString();

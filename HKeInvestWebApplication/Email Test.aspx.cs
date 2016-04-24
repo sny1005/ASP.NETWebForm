@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Net.Mail;
+using HKeInvestWebApplication.Code_File;
 
 namespace HKeInvestWebApplication
 {
@@ -14,13 +15,8 @@ namespace HKeInvestWebApplication
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            MailMessage mail = new MailMessage();
-            SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
-            mail.From = new MailAddress("lychowaa@cse.ust.hk", "<Sunny Chow>");
-            mail.To.Add("csunny95@yahoo.com.hk");
-            mail.Subject = "Test";
-            mail.Body = "Hellow World";
-            emailServer.Send(mail);
+            HKeInvestCode myHkeInvestCode = new HKeInvestCode();
+            myHkeInvestCode.sendemail("csunny95@yahoo.com.hk", "InvestProSystemTest", "Test");  
 
         }
         protected void Page_Load(object sender, EventArgs e)
