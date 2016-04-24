@@ -274,6 +274,33 @@ namespace HKeInvestWebApplication.Code_File
                 throw new Exception("Error!Returning non-single record!");
         }
 
+        public decimal getAccountAsset(string accountNumber)
+        {
+            accountNumber = accountNumber.Trim();
+            decimal asset;
+            HKeInvestData myData = new HKeInvestData();
+            ExternalFunctions myExternal = new ExternalFunctions();
+            string sql = "SELECT [balance] FROM [LoginAccount] WHERE [LoginAccount].[accountNumber] = '" + accountNumber + "'";
+
+            DataTable Table = myData.getData(sql);
+            DataRow[] record = Table.Select();
+            if (record.Count() == 0)
+                throw new Exception("Error! No record retrieved!");
+            else
+                asset = Convert.ToDecimal(record[0]["balance"]);
+
+
+            sql = "SELECT [code], [type], [shares], [base] FROM [LoginAccount] JOIN [SecurityHolding] ON [LoginAccount].[accountNumber] = [SecurityHolding].[accountNumber] WHERE [LoginAccount].[accountNumber] = '" + accountNumber + "'";
+            Table = myData.getData(sql);
+            foreach (DataRow row in Table.Rows)
+            {
+                decimal price = myExternal.getSecuritiesPrice((string)row["type"], (string)row["code"]);
+                string rate = Convert.ToString(myExternal.getCurrencyRate((string)row["base"])).Trim();
+                asset += convertCurrency("from", rate, "HKD", "1", price);
+            }
+            return asset;
+        }
+
         public bool securityCodeIsValid(string securityType, string securityCode)
         {
             ExternalFunctions myExternal = new ExternalFunctions();

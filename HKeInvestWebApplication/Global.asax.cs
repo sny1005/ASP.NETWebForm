@@ -43,7 +43,7 @@ namespace HKeInvestWebApplication
                 while (orderNumbers.Count != 0)
                 {
                     string status = myExternal.getOrderStatus(orderNumbers.First()).Trim();
-                    if (!status.Equals("pending"))      // if the order is still pending in external system, there is no update on that order
+                    if (status.Equals("completed") || status.Equals("cancelled"))      // if the order is still pending in external system, there is no update on that order
                     {
                         string sql;
                         SqlTransaction trans = myData.beginTransaction();
@@ -66,6 +66,7 @@ namespace HKeInvestWebApplication
                         List<decimal> executeShares = new List<decimal>();
                         List<decimal> executePrice = new List<decimal>();
                         List<decimal> feeCharged = new List<decimal>();
+                        List<decimal> dollarAmount = new List<decimal>();
                         DataRow[] record = transTable.Select();
                         if (record.Count() >= 1)
                         {
@@ -81,6 +82,7 @@ namespace HKeInvestWebApplication
                         trans = myData.beginTransaction();
                         // if the order is a buy order
                         // need to add the new/extra security holding record and decrease ac balance taking commision into account
+                        decimal asset = myCode.getAccountAsset(accountNumber);
                         bool isBuyOrder = myCode.isBuyOrder(orderNumbers.First());
                         if (isBuyOrder)         //if buy order
                         {
@@ -89,22 +91,23 @@ namespace HKeInvestWebApplication
                             // calculate money used and update account
                             decimal totalExpenditure = 0;
                             decimal acBalance = myCode.getAccountBalance(accountNumber);
-                            string[,] CurrencyData = getCurrencyData(myCode);
                             for (int i = 0; i < executePrice.Count(); i++)
                             {
-                                string fromRate = myCode.findCurrencyRate(CurrencyData, currency);
-                                decimal executePriceHKD = myCode.convertCurrency(currency, fromRate, "HKD", "1", executePrice[i]);
+                                decimal fromRate = myExternal.getCurrencyRate(currency);
+                                decimal executePriceHKD = myCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", executePrice[i]);
+                                executePrice[i] = executePriceHKD;                              //change the executePrice to base HKD
 
-                                decimal expenditure = executePriceHKD * executeShares[i];         //money spent without comission
+                                decimal expenditure = executePriceHKD * executeShares[i];       //money spent without comission
+                                dollarAmount.Add(expenditure);                              
 
                                 if (securityType == "stock")
                                 {
-                                    feeCharged.Add(stockFee(myCode, orderNumbers.First(), expenditure, acBalance));
+                                    feeCharged.Add(stockFee(myCode, orderNumbers.First(), expenditure, asset));
                                     expenditure += feeCharged.Last();
                                 }
                                 else        //the order is on bond or unit trust
                                 {
-                                    if (acBalance < 500000)
+                                    if (asset < 500000)
                                     {
                                         feeCharged.Add(expenditure * (decimal)0.05);
                                         expenditure += feeCharged.Last();                     //buying fee for assets less than HK$ 500,000
@@ -133,22 +136,23 @@ namespace HKeInvestWebApplication
                             // calculate money used and update account
                             decimal totalRevenue = 0;
                             decimal acBalance = myCode.getAccountBalance(accountNumber);
-                            string[,] CurrencyData = getCurrencyData(myCode);
-                            string fromRate = myCode.findCurrencyRate(CurrencyData, currency);
+                            decimal fromRate = myExternal.getCurrencyRate(currency);
                             for (int i=0; i<executePrice.Count(); i++)
                             {
-                                decimal executePriceHKD = myCode.convertCurrency(currency, fromRate, "HKD", "1", executePrice[i]);
+                                decimal executePriceHKD = myCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", executePrice[i]);
+                                executePrice[i] = executePriceHKD;                              //change the executePrice to base HKD
 
                                 decimal revenue = executePriceHKD * executeShares[i];         //money gained without comission
+                                dollarAmount.Add(revenue);
 
                                 if (securityType == "stock")
                                 {
-                                    feeCharged.Add(stockFee(myCode, orderNumbers.First(), revenue, acBalance));
+                                    feeCharged.Add(stockFee(myCode, orderNumbers.First(), revenue, asset));
                                     revenue -= feeCharged.Last();
                                 }
                                 else        //the order is on bond or unit trust
                                 {
-                                    if (acBalance < 500000)
+                                    if (asset < 500000)
                                     {
                                         feeCharged.Add(100);
                                         revenue -= 100;                    //selling fee for assets less than HK$ 500,000
@@ -187,14 +191,13 @@ namespace HKeInvestWebApplication
                             mailBody += "Order type: " + orderType + nl;
                             mailBody += "Submitted date: " + date + nl;
                             mailBody += "Total shares bought/sold: " + executeShares.Sum() + nl;
-                            mailBody += "Total dollar amount: " + executePrice.Sum() + nl;
-                            // TODO: how to get fee charged?? store the fees in a list again
+                            mailBody += "Total dollar amount: " + dollarAmount.Sum() + nl;
                             mailBody += "Total fee charged: " + feeCharged.Sum() + nl;
                         }
 
                         // for each transaction
                         mailBody += nl;
-                        for (int i = 0; i < executePrice.Count(); i++)
+                        for (int i = 0; i < executeShares.Count(); i++)
                         {
                             mailBody += "Transaction number: " + transTable.Rows[i]["transactionNumber"] + nl;
                             mailBody += "Quantity of shares: " + executeShares[i] + nl;
@@ -211,27 +214,11 @@ namespace HKeInvestWebApplication
             } while (true);
         }
 
-        private static string[,] getCurrencyData(HKeInvestCode myCode)
-        {
-            // get currency data
-            DataTable CurrencyTable = myCode.CurrencyData();
-            string[,] CurrencyData = new string[CurrencyTable.Columns.Count, CurrencyTable.Rows.Count];
-
-            int i = 0;
-            foreach (DataRow row in CurrencyTable.Rows)
-            {
-                CurrencyData[0, i] = Convert.ToString(row["currency"]);
-                CurrencyData[1, i] = Convert.ToString(row["rate"]);
-                i++;
-            }
-            return CurrencyData;
-        }
-
-        private static decimal stockFee(HKeInvestCode myCode, string orderNumber, decimal expenditure, decimal acBalance)
+        private static decimal stockFee(HKeInvestCode myCode, string orderNumber, decimal expenditure, decimal asset)
         {
             decimal fee;
             string orderType = myCode.getOrderType(orderNumber).Trim();
-            if (acBalance < 1000000)
+            if (asset < 1000000)
             {
                 if (orderType.Equals("market"))
                     fee = expenditure * (decimal)0.04;
@@ -240,7 +227,7 @@ namespace HKeInvestWebApplication
                 else
                     fee = expenditure * (decimal)0.06;
 
-                fee = Math.Min(150, fee);
+                fee = Math.Max(150, fee);
             }
             else
             {
@@ -251,7 +238,7 @@ namespace HKeInvestWebApplication
                 else
                     fee = expenditure * (decimal)0.04;
 
-                fee = Math.Min(100, fee);
+                fee = Math.Max(100, fee);
             }
 
             return fee;
@@ -365,10 +352,6 @@ namespace HKeInvestWebApplication
                     }
                 }
             }
-
-
-
-
         }
     }
 }
