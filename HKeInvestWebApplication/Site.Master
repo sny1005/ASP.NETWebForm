@@ -78,7 +78,7 @@
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <p>&copy; <%: DateTime.Now.Year %> -CHAN Long Hei Stanley (20187854)</p>
+                <p>&copy; <%: DateTime.Now.Year %> -InvestPro (Team 109)</p>
             </footer>
         </div>
     </form>
