@@ -238,6 +238,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Email Test.aspx" />
+    <Content Include="EmployeeOnly\AddEvents.aspx" />
     <Content Include="ExternalSystems\BondOrder.aspx" />
     <Content Include="ExternalSystems\ControlCenter.aspx" />
     <Content Include="ExternalSystems\ManageBond.aspx" />
@@ -485,6 +486,13 @@
     </Compile>
     <Compile Include="Email Test.aspx.designer.cs">
       <DependentUpon>Email Test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeOnly\AddEvents.aspx.cs">
+      <DependentUpon>AddEvents.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployeeOnly\AddEvents.aspx.designer.cs">
+      <DependentUpon>AddEvents.aspx</DependentUpon>
     </Compile>
     <Compile Include="ExternalSystems\BondOrder.aspx.cs">
       <DependentUpon>BondOrder.aspx</DependentUpon>
