@@ -40,178 +40,194 @@ namespace HKeInvestWebApplication
                 Thread.Sleep(10 * 1000);
                 Queue<string> orderNumbers = myCode.getIncompleteOrder();
 
-                while (orderNumbers.Count != 0)
+                buySellUpdate(myExternal, ref myData, ref myCode, orderNumbers);
+
+            } while (true);
+        }
+
+        private static void buySellUpdate(ExternalFunctions myExternal, ref HKeInvestData myData, ref HKeInvestCode myCode, Queue<string> orderNumbers)
+        {
+            while (orderNumbers.Count != 0)
+            {
+                string status = myExternal.getOrderStatus(orderNumbers.First()).Trim();
+                if (status.Equals("completed") || status.Equals("cancelled"))      // if the order is still pending in external system, there is no update on that order
                 {
-                    string status = myExternal.getOrderStatus(orderNumbers.First()).Trim();
-                    if (status.Equals("completed") || status.Equals("cancelled"))      // if the order is still pending in external system, there is no update on that order
+                    string sql;
+                    SqlTransaction trans = myData.beginTransaction();
+
+                    // update order status
+                    sql = string.Format("UPDATE [Order] SET [status] = '{0}' WHERE [orderNumber] = '{1}'", status, orderNumbers.First());
+                    myData.setData(sql, trans);
+
+                    // update transaction table
+                    DataTable transTable = myExternal.getOrderTransaction(orderNumbers.First());
+                    updateTransaction(ref transTable, myData, myCode, orderNumbers.First(), trans);
+
+                    myData.commitTransaction(trans);
+
+                    // setup for updating SecurityHolding
+                    string accountNumber, securityType, securityCode, name, currency;
+                    getOrderDetails(ref myExternal, ref myCode, ref myData, orderNumbers.First(), out sql, out accountNumber, out securityType, out securityCode, out name, out currency);
+
+                    //get executed shares and price from retrieved new transaction record earlier
+                    List<decimal> executeShares = new List<decimal>();
+                    List<decimal> executePrice = new List<decimal>();
+                    List<decimal> feeCharged = new List<decimal>();
+                    List<decimal> dollarAmount = new List<decimal>();
+                    DataRow[] record = transTable.Select();
+                    if (record.Count() >= 1)
                     {
-                        string sql;
-                        SqlTransaction trans = myData.beginTransaction();
-
-                        // update order status
-                        sql = string.Format("UPDATE [Order] SET [status] = '{0}' WHERE [orderNumber] = '{1}'", status, orderNumbers.First());
-                        myData.setData(sql, trans);
-
-                        // update transaction table
-                        DataTable transTable = myExternal.getOrderTransaction(orderNumbers.First());
-                        updateTransaction(ref transTable, myData, myCode, orderNumbers.First(), trans);
-
-                        myData.commitTransaction(trans);
-
-                        // setup for updating SecurityHolding
-                        string accountNumber, securityType, securityCode, name, currency;
-                        getOrderDetails(myExternal, myData, orderNumbers.First(), out sql, out accountNumber, out securityType, out securityCode, out name, out currency);
-
-                        //get executed shares and price from retrieved new transaction record earlier
-                        List<decimal> executeShares = new List<decimal>();
-                        List<decimal> executePrice = new List<decimal>();
-                        List<decimal> feeCharged = new List<decimal>();
-                        List<decimal> dollarAmount = new List<decimal>();
-                        DataRow[] record = transTable.Select();
-                        if (record.Count() >= 1)
+                        for (int i = 0; i < record.Count(); i++)
                         {
-                            for (int i = 0; i < record.Count(); i++)
-                            {
-                                executeShares.Add(Convert.ToDecimal(record[i]["executeShares"]));
-                                executePrice.Add(Convert.ToDecimal(record[i]["executePrice"]));
-                            }
+                            executeShares.Add(Convert.ToDecimal(record[i]["executeShares"]));
+                            executePrice.Add(Convert.ToDecimal(record[i]["executePrice"]));
                         }
-                        else        // no new transaction for a partial stock order
-                            continue;
+                    }
+                    else        // no new transaction for a partial stock order
+                        continue;
 
-                        trans = myData.beginTransaction();
-                        // if the order is a buy order
-                        // need to add the new/extra security holding record and decrease ac balance taking commision into account
-                        decimal asset = myCode.getAccountAsset(accountNumber);
-                        bool isBuyOrder = myCode.isBuyOrder(orderNumbers.First());
-                        if (isBuyOrder)         //if buy order
+                    trans = myData.beginTransaction();
+                    // if the order is a buy order
+                    // need to add the new/extra security holding record and decrease ac balance taking commision into account
+                    decimal asset = myCode.getAccountAsset(accountNumber);
+                    bool isBuyOrder = myCode.isBuyOrder(orderNumbers.First());
+                    if (isBuyOrder)         //if buy order
+                    {
+                        updateBuyHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
+
+                        // calculate money used and update account
+                        decimal totalExpenditure = 0;
+                        decimal acBalance = myCode.getAccountBalance(accountNumber);
+                        for (int i = 0; i < executePrice.Count(); i++)
                         {
-                            updateBuyHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
+                            decimal fromRate = myExternal.getCurrencyRate(currency);
+                            decimal executePriceHKD = myCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", executePrice[i]);
+                            executePrice[i] = executePriceHKD;                              //change the executePrice to base HKD
 
-                            // calculate money used and update account
-                            decimal totalExpenditure = 0;
-                            decimal acBalance = myCode.getAccountBalance(accountNumber);
-                            for (int i = 0; i < executePrice.Count(); i++)
+                            decimal expenditure = executePriceHKD * executeShares[i];       //money spent without comission
+                            dollarAmount.Add(expenditure);
+
+                            if (securityType == "stock")
                             {
-                                decimal fromRate = myExternal.getCurrencyRate(currency);
-                                decimal executePriceHKD = myCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", executePrice[i]);
-                                executePrice[i] = executePriceHKD;                              //change the executePrice to base HKD
-
-                                decimal expenditure = executePriceHKD * executeShares[i];       //money spent without comission
-                                dollarAmount.Add(expenditure);                              
-
-                                if (securityType == "stock")
+                                feeCharged.Add(stockFee(myCode, orderNumbers.First(), expenditure, asset));
+                                expenditure += feeCharged.Last();
+                            }
+                            else        //the order is on bond or unit trust
+                            {
+                                if (asset < 500000)
                                 {
-                                    feeCharged.Add(stockFee(myCode, orderNumbers.First(), expenditure, asset));
+                                    feeCharged.Add(expenditure * (decimal)0.05);
+                                    expenditure += feeCharged.Last();                     //buying fee for assets less than HK$ 500,000
+                                }
+                                else
+                                {
+                                    feeCharged.Add(expenditure * (decimal)0.03);         //buying fee for assets more than or equal HK$ 500,000
                                     expenditure += feeCharged.Last();
                                 }
-                                else        //the order is on bond or unit trust
-                                {
-                                    if (asset < 500000)
-                                    {
-                                        feeCharged.Add(expenditure * (decimal)0.05);
-                                        expenditure += feeCharged.Last();                     //buying fee for assets less than HK$ 500,000
-                                    }
-                                    else
-                                    {
-                                        feeCharged.Add(expenditure * (decimal)0.03);         //buying fee for assets more than or equal HK$ 500,000
-                                        expenditure += feeCharged.Last();
-                                    }
-                                }
-
-                                totalExpenditure += expenditure;
                             }
 
-                            acBalance -= totalExpenditure;
-                            sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
-                            myData.setData(sql, trans);
-                        }
-                        // if the order is a sell order
-                        // need to delete(subtract) the sold(shares) security holding record and increase ac balance taking commision into account
-                        else
-                        {
-                            // repeat same procedure as buy
-                            updateSellHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
-
-                            // calculate money used and update account
-                            decimal totalRevenue = 0;
-                            decimal acBalance = myCode.getAccountBalance(accountNumber);
-                            decimal fromRate = myExternal.getCurrencyRate(currency);
-                            for (int i=0; i<executePrice.Count(); i++)
-                            {
-                                decimal executePriceHKD = myCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", executePrice[i]);
-                                executePrice[i] = executePriceHKD;                              //change the executePrice to base HKD
-
-                                decimal revenue = executePriceHKD * executeShares[i];         //money gained without comission
-                                dollarAmount.Add(revenue);
-
-                                if (securityType == "stock")
-                                {
-                                    feeCharged.Add(stockFee(myCode, orderNumbers.First(), revenue, asset));
-                                    revenue -= feeCharged.Last();
-                                }
-                                else        //the order is on bond or unit trust
-                                {
-                                    if (asset < 500000)
-                                    {
-                                        feeCharged.Add(100);
-                                        revenue -= 100;                    //selling fee for assets less than HK$ 500,000
-                                    }
-                                    else
-                                    {
-                                        feeCharged.Add(50);
-                                        revenue -= 50;                     //selling fee for assets more than or equal HK$ 500,000
-                                    }
-                                }
-
-                                totalRevenue += revenue;
-                            }
-
-                            acBalance += totalRevenue;
-                            sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
-                            myData.setData(sql, trans);
-                        }
-                        myData.commitTransaction(trans);
-
-                        // prepares mail body
-                        // general information
-                        char nl = '\n';
-                        string mailBody = "Order number: " + orderNumbers.First() + nl;
-                        mailBody += "Account number: " + accountNumber + nl;
-                        mailBody += "Buy/Sell: " + isBuyOrder + nl;
-                        mailBody += "Security code: " + securityCode + nl;
-                        mailBody += "Security name: " + name + nl;
-
-                        // if the security is a stock
-                        mailBody += nl;
-                        if (securityType == "stock")
-                        {
-                            string orderType = myCode.getOrderType(orderNumbers.First());
-                            DateTime date = myCode.getSubmittedDate(orderNumbers.First());
-                            mailBody += "Order type: " + orderType + nl;
-                            mailBody += "Submitted date: " + date + nl;
-                            mailBody += "Total shares bought/sold: " + executeShares.Sum() + nl;
-                            mailBody += "Total dollar amount: " + dollarAmount.Sum() + nl;
-                            mailBody += "Total fee charged: " + feeCharged.Sum() + nl;
+                            totalExpenditure += expenditure;
                         }
 
-                        // for each transaction
-                        mailBody += nl;
-                        for (int i = 0; i < executeShares.Count(); i++)
-                        {
-                            mailBody += "Transaction number: " + transTable.Rows[i]["transactionNumber"] + nl;
-                            mailBody += "Quantity of shares: " + executeShares[i] + nl;
-                            mailBody += "Price per share: " + executePrice[i] + nl;
-                            mailBody += nl;
-                        }
-
-                        // TODO: send the invoice
-                        System.Windows.Forms.MessageBox.Show(mailBody);
-
+                        acBalance -= totalExpenditure;
+                        sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
+                        myData.setData(sql, trans);
                     }
-                    orderNumbers.Dequeue();
+                    // if the order is a sell order
+                    // need to delete(subtract) the sold(shares) security holding record and increase ac balance taking commision into account
+                    else
+                    {
+                        // repeat same procedure as buy
+                        updateSellHolding(ref myData, ref myCode, ref trans, accountNumber, securityType, securityCode, name, currency, executeShares.Sum());
+
+                        // calculate money used and update account
+                        decimal totalRevenue = 0;
+                        decimal acBalance = myCode.getAccountBalance(accountNumber);
+                        decimal fromRate = myExternal.getCurrencyRate(currency);
+                        for (int i = 0; i < executePrice.Count(); i++)
+                        {
+                            decimal executePriceHKD = myCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", executePrice[i]);
+                            executePrice[i] = executePriceHKD;                              //change the executePrice to base HKD
+
+                            decimal revenue = executePriceHKD * executeShares[i];         //money gained without comission
+                            dollarAmount.Add(revenue);
+
+                            if (securityType == "stock")
+                            {
+                                feeCharged.Add(stockFee(myCode, orderNumbers.First(), revenue, asset));
+                                revenue -= feeCharged.Last();
+                            }
+                            else        //the order is on bond or unit trust
+                            {
+                                if (asset < 500000)
+                                {
+                                    feeCharged.Add(100);
+                                    revenue -= 100;                    //selling fee for assets less than HK$ 500,000
+                                }
+                                else
+                                {
+                                    feeCharged.Add(50);
+                                    revenue -= 50;                     //selling fee for assets more than or equal HK$ 500,000
+                                }
+                            }
+
+                            totalRevenue += revenue;
+                        }
+
+                        acBalance += totalRevenue;
+                        sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
+                        myData.setData(sql, trans);
+                    }
+                    myData.commitTransaction(trans);
+
+                    // prepares mail body
+                    // general information
+                    char nl = '\n';
+                    string mailBody = "Order number: " + orderNumbers.First() + nl;
+                    mailBody += "Account number: " + accountNumber + nl;
+                    mailBody += "Buy/Sell: " + isBuyOrder + nl;
+                    mailBody += "Security code: " + securityCode + nl;
+                    mailBody += "Security name: " + name + nl;
+
+                    // if the security is a stock
+                    mailBody += nl;
+                    if (securityType == "stock")
+                    {
+                        string orderType = myCode.getOrderType(orderNumbers.First());
+                        DateTime date = myCode.getSubmittedDate(orderNumbers.First());
+                        mailBody += "Order type: " + orderType + nl;
+                        mailBody += "Submitted date: " + date + nl;
+                        mailBody += "Total shares bought/sold: " + executeShares.Sum() + nl;
+                        mailBody += "Total dollar amount: " + dollarAmount.Sum() + nl;
+                        mailBody += "Total fee charged: " + feeCharged.Sum() + nl;
+                    }
+
+                    // for each transaction
+                    mailBody += nl;
+                    for (int i = 0; i < executeShares.Count(); i++)
+                    {
+                        mailBody += "Transaction number: " + transTable.Rows[i]["transactionNumber"] + nl;
+                        mailBody += "Quantity of shares: " + executeShares[i] + nl;
+                        mailBody += "Price per share: " + executePrice[i] + nl;
+                        mailBody += nl;
+                    }
+
+                    // TODO: send the invoice
+                    //System.Windows.Forms.MessageBox.Show(mailBody);
+                    //sql = "SELECT [email] from [Client] WHERE [isPrimary] = 'true' AND [accountNumber] = '" + accountNumber + "'";
+                    //DataTable Table = myData.getData(sql);
+                    //record = Table.Select();
+                    //if (record.Count() != 1)
+                    //    throw new Exception("Error! Returning non-single record!");
+                    //else
+                    //{
+                    //    string mailTo = (string)record[0]["email"];
+                    //    string subject = "Order Invoice";
+                    //    myCode.sendemail(mailTo, subject, mailBody);
+                    //}
                 }
-            } while (true);
+                orderNumbers.Dequeue();
+            }
         }
 
         private static decimal stockFee(HKeInvestCode myCode, string orderNumber, decimal expenditure, decimal asset)
@@ -295,7 +311,7 @@ namespace HKeInvestWebApplication
             }
         }
 
-        private static void getOrderDetails(ExternalFunctions myExternal, HKeInvestData myData, string orderNumber, out string sql, out string accountNumber, out string securityType, out string securityCode, out string name, out string currency)
+        private static void getOrderDetails(ref ExternalFunctions myExternal, ref HKeInvestCode myCode, ref HKeInvestData myData, string orderNumber, out string sql, out string accountNumber, out string securityType, out string securityCode, out string name, out string currency)
         {
             // get accountNumber, security type and code
             sql = "SELECT [accountNumber], [securityType], [securityCode] FROM [Order] WHERE [orderNumber] = " + orderNumber;
@@ -308,15 +324,7 @@ namespace HKeInvestWebApplication
             securityCode = Convert.ToString(record[0]["securityCode"]).Trim();
 
             // get security name, base
-            Table = myExternal.getSecuritiesByCode(securityType, securityCode);
-            record = Table.Select();
-            if (record.Count() != 1)       //should never happen
-                throw new Exception("Error! Returning non-single record!");
-            name = Convert.ToString(record[0]["name"]).Trim();
-            if (securityType == "stock")    // all stocks have base "HKD"
-                currency = "HKD";
-            else
-                currency = Convert.ToString(record[0]["base"]).Trim();
+            myCode.getSecurityNameBase(securityType, securityCode, out name, out currency);
         }
 
         // the transaction table will be modified and the transTable is reduced to holding new transaction records only

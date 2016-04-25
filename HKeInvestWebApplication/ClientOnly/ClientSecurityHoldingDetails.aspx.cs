@@ -15,6 +15,7 @@ namespace HKeInvestWebApplication.ClientOnly
         HKeInvestData myHKeInvestData = new HKeInvestData();
         HKeInvestCode myHKeInvestCode = new HKeInvestCode();
         ExternalFunctions myExternalFunctions = new ExternalFunctions();
+        static string accountNumber;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -42,7 +43,6 @@ namespace HKeInvestWebApplication.ClientOnly
                     ddlCurrency.Items.Add(currencies[0, j]);
                 }
 
-                string accountNumber = "";
                 //get the account number of the current logged in user
                 string username = User.Identity.Name;
                 string sql = "select accountNumber from LoginAccount where username ='" + username + "'";
@@ -220,6 +220,46 @@ namespace HKeInvestWebApplication.ClientOnly
         protected void gvSecurityHolding_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        protected void generate_Click(object sender, EventArgs e)
+        {
+            // REQUIREMENT 6C IMPLEMENTATION
+            // Bond/Unit trust listings
+            lblActiveBond.Visible = true;
+            string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [status] <> 'completed' AND [accountNumber] = '" + accountNumber + "'";
+            DataTable activeBondOrder = myHKeInvestData.getData(sql);
+            sql = "SELECT [Order].*, [SellBondOrder].shares AS amount FROM [Order] INNER JOIN [SellBondOrder] ON [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [status] <> 'completed' AND [accountNumber] = '" + accountNumber + "'";
+            activeBondOrder.Merge(myHKeInvestData.getData(sql));
+            activeBondOrder.Columns.Add("name");
+
+            string name, baseCurrency;          // baseCurrency is just a dummy variable
+            foreach (DataRow row in activeBondOrder.Rows)
+            {
+                if (Convert.ToString(row["securityType"]).Trim() == "bond")
+                    myHKeInvestCode.getSecurityNameBase("bond", (string)row["securityCode"], out name, out baseCurrency);
+                else
+                    myHKeInvestCode.getSecurityNameBase("unit trust", (string)row["securityCode"], out name, out baseCurrency);
+                row["name"] = name;
+            }
+
+            gvActiveBond.DataSource = activeBondOrder;
+            gvActiveBond.DataBind();
+
+            // Stock listings
+            lblActiveStock.Visible = true;
+            sql = "SELECT [Order].*, [StockOrder].shares, [StockOrder].orderType, [StockOrder].expiaryDay, [StockOrder].limitPrice, [StockOrder].stopPrice FROM [Order] INNER JOIN [StockOrder] ON [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [status] <> 'completed' AND [status] <> 'cancelled' AND [accountNumber] = '" + accountNumber + "'";
+            DataTable activeStockOrder = myHKeInvestData.getData(sql);
+            activeStockOrder.Columns.Add("name");
+
+            foreach (DataRow row in activeStockOrder.Rows)
+            {
+                myHKeInvestCode.getSecurityNameBase("stock", (string)row["securityCode"], out name, out baseCurrency);
+                row["name"] = name;
+            }
+
+            gvActiveStock.DataSource = activeStockOrder;
+            gvActiveStock.DataBind();
         }
     }
 }
