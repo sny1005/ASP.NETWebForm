@@ -275,6 +275,20 @@ namespace HKeInvestWebApplication.Code_File
                 throw new Exception("Error!Returning non-single record!");
         }
 
+        public void getSecurityNameBase(string securityType, string securityCode, out string name, out string baseCurrency)
+        {
+            ExternalFunctions myExternal = new ExternalFunctions();
+            DataTable Table = myExternal.getSecuritiesByCode(securityType, securityCode);
+            DataRow[] record = Table.Select();
+            if (record.Count() != 1)       //should never happen
+                throw new Exception("Error! Returning non-single record!");
+            name = Convert.ToString(record[0]["name"]).Trim();
+            if (securityType == "stock")    // all stocks have base "HKD"
+                baseCurrency = "HKD";
+            else
+                baseCurrency = Convert.ToString(record[0]["base"]).Trim();
+        }
+
         public decimal getAccountAsset(string accountNumber)
         {
             accountNumber = accountNumber.Trim();
@@ -313,6 +327,9 @@ namespace HKeInvestWebApplication.Code_File
 
         public void sendemail (string target, string subject, string body)
         {
+            target = target.Trim();
+            subject = subject.Trim();
+            body = body.Trim();
             MailMessage mail = new MailMessage();
             SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
             mail.From = new MailAddress("lychowaa@cse.ust.hk", "InvestPro");
