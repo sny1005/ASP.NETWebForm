@@ -3,7 +3,6 @@
 
     <h10>Search Securites</h10>
     <div class="form-horizontal">
-
         <div class="form-group">
             <asp:Label runat="server" Text="Security Type : " CssClass="control-label col-md-2" ></asp:Label>
             <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True">
@@ -21,17 +20,6 @@
             <asp:Label runat="server" Text="Secutity Code : " CssClass="control-label col-md-2" AssociatedControlID="SecCode"></asp:Label>
             <asp:TextBox ID="SecCode" runat="server" CssClass="form-control"></asp:TextBox>
         </div>
-
-<%--    <div class="form-group">
-            <asp:DropDownList ID="ddlCurrency" runat="server" AutoPostBack="True" Visible="False" >
-                <asp:ListItem Value="0">Currency</asp:ListItem>
-            </asp:DropDownList>
-        </div>--%>
-
-<%--        <div class="form-group">
-            <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
-            <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>
-        </div>--%>
        
         <div class="form-group">
          <div>
@@ -50,7 +38,7 @@
                 </Columns>
             </asp:GridView>
         </div>
-        <div>
+         <div>
             <asp:GridView ID="BondGV" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="BondGV_Sorting" CellPadding="5">
                 <Columns>
                     <asp:BoundField DataField="BondCode" HeaderText="Bond Code" ReadOnly="True" SortExpression="code" />
@@ -65,8 +53,7 @@
                     <asp:BoundField DataField="CAGP00" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage since the bond was launched" ReadOnly="True" SortExpression="cagp00"/>
                 </Columns>
             </asp:GridView>
-        </div>
-
+         </div>
          <div>
             <asp:GridView ID="UnitTrustGV" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="UnitTrustGV_Sorting" CellPadding="5">
                 <Columns>
@@ -84,11 +71,6 @@
                 </Columns>
             </asp:GridView>
         </div>
-
-
-
-
-
-    </div>
+        </div>
     </div>
 </asp:Content>
