@@ -12,7 +12,7 @@ using HKeInvestWebApplication.ExternalSystems.Code_File;
 
 namespace HKeInvestWebApplication
 {
-    public partial class ApplicationPage : System.Web.UI.Page
+    public partial class SearchSecurities : System.Web.UI.Page
     {
         HKeInvestData myHKeInvestData = new HKeInvestData();
         HKeInvestCode myHKeInvestCode = new HKeInvestCode();

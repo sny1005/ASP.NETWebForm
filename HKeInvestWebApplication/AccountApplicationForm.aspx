@@ -63,8 +63,7 @@
             <div class="col-md-4">
                 <asp:TextBox ID="DateOfBirth" runat="server" CssClass="form-control" MaxLength="10"></asp:TextBox>
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="Date of Birth is required." ControlToValidate="DateOfBirth" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
-                <asp:CustomValidator ID="cvDOB" runat="server" ControlToValidate="DateOfBirth" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvDOB_ServerValidate">*</asp:CustomValidator>                
-                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="Date of Birth must be in the format of dd/mm/yyyy" ControlToValidate="DateOfBirth" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="\d{2}\/\d{2}\/\d{4}">*</asp:RegularExpressionValidator>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="Date of Birth must be in the format of dd/mm/yyyy" ControlToValidate="DateOfBirth" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\d\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)">*</asp:RegularExpressionValidator>
             </div>
             <asp:Label AssociatedControlID="Email" runat="server" Text="Email" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
@@ -294,8 +293,7 @@
                 <div class="col-md-4">
                     <asp:TextBox ID="DateOfBirth2" runat="server" CssClass="form-control" MaxLength="10"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="Date of Birth is required." ControlToValidate="DateOfBirth2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
-                    <asp:CustomValidator ID="cvDOB2" runat="server" ControlToValidate="DateOfBirth2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvDOB_ServerValidate">*</asp:CustomValidator>                
-                    <asp:RegularExpressionValidator ID="RegularExpressionValidator8" runat="server" ErrorMessage="Co-holder date of Birth must be in the format dd/mm/yyyy" ControlToValidate="DateOfBirth2" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="\d{2}\/\d{2}\/\d{4}">*</asp:RegularExpressionValidator>
+                    <asp:RegularExpressionValidator ID="RegularExpressionValidator8" runat="server" ErrorMessage="Co-holder date of Birth must be in the format dd/mm/yyyy" ControlToValidate="DateOfBirth2" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\d\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)">*</asp:RegularExpressionValidator>
                 </div>
                 <asp:Label AssociatedControlID="Email2" runat="server" Text="Email" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
@@ -548,11 +546,17 @@
         <asp:CustomValidator ID="cvDeposit" runat="server" Text="*" OnServerValidate="cvDeposit_ServerValidate" ControlToValidate="ChequeV" ValidateEmptyText="true" CssClass="text-danger" Display="Dynamic" EnableClientScript="False"></asp:CustomValidator>
         <div class="form-group">
             <asp:CheckBox ID="Cheque" runat="server" Text="A cheque for the value below will be made payable to HKeInvest LLC."  CssClass="col-md-4"/>
-            <div class="col-md-4"><asp:TextBox ID="ChequeV" runat="server" CssClass="form-control"></asp:TextBox></div>
+            <div class="col-md-4">
+                <asp:TextBox ID="ChequeV" runat="server" CssClass="form-control"></asp:TextBox>
+                <asp:RegularExpressionValidator runat="server" ErrorMessage="Cheque value is not an valid number." CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ControlToValidate="ChequeV" ValidationExpression="^\d+\.*\d*" Text="*"></asp:RegularExpressionValidator>
+            </div>
         </div>
         <div class="form-group">
             <asp:CheckBox ID="Transfer" runat="server" Text="A completed Account Trasfer Form for the value indicated will be attached." CssClass="col-md-4" />
-            <div class="col-md-4"><asp:TextBox ID="TransferV" runat="server" CssClass="form-control"></asp:TextBox></div>
+            <div class="col-md-4">
+                <asp:TextBox ID="TransferV" runat="server" CssClass="form-control"></asp:TextBox>
+                <asp:RegularExpressionValidator runat="server" ErrorMessage="Transfer value is not an valid number." CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ControlToValidate="TransferV" ValidationExpression="^\d+\.*\d*" Text="*"></asp:RegularExpressionValidator>
+            </div>
         </div>
 
         <div class="form-group">

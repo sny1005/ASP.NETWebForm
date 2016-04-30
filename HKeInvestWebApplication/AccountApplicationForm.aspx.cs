@@ -55,7 +55,8 @@ namespace HKeInvestWebApplication
             }
         }
 
-        protected void cvDOB_ServerValidate(object source, ServerValidateEventArgs args)
+        //LEGACY function
+/*        protected void cvDOB_ServerValidate(object source, ServerValidateEventArgs args)
         {
             string dob = DateOfBirth.Text.Trim();
 
@@ -83,7 +84,7 @@ namespace HKeInvestWebApplication
             cvDOB.ErrorMessage = "Date of Birth is not valid.";
             cvDOB2.ErrorMessage = "Co-account holder date of Birth is not valid.";
             return;
-        }
+        }*/
 
         protected void cvPhone_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -160,10 +161,14 @@ namespace HKeInvestWebApplication
             }
 
             //make sure amount >=20000
-            decimal temp = 0;
-            if (Cheque.Checked) temp = Convert.ToDecimal(ChequeV.Text);
-            if(Transfer.Checked) temp = temp + Convert.ToDecimal(TransferV.Text);
-            if (temp >= 20000) return;
+            decimal chequeV = 0, transferV = 0;
+            if (Cheque.Checked)
+                if (decimal.TryParse(ChequeV.Text, out chequeV)) ;
+            if (Transfer.Checked)
+                if (decimal.TryParse(TransferV.Text, out transferV)) ;
+
+            decimal temp = chequeV + transferV;
+                if (temp >= 20000) return;
             
             args.IsValid = false;
             cvDeposit.ErrorMessage = "A HK$20,000 minimum deposit is required to open an account.";
@@ -186,14 +191,14 @@ namespace HKeInvestWebApplication
                     initialBalance = Convert.ToDecimal(ChequeV.Text);
 
                 //the account will be successfully updated
-                string sql = "INSERT INTO [Account] VALUES ('" + acNo + "', '" + acType.SelectedValue + "', " + initialBalance + ", NULL)";
+                string sql = "INSERT INTO [LoginAccount] VALUES ('" + acNo + "', '" + acType.SelectedValue + "', " + initialBalance + ", NULL)";
 
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
                 myHKeInvest.setData(sql, myTransaction);
 
                 //insert all required fields first
-                sql = "INSERT INTO [Client] (title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";
-                sql = sql + "VALUES ('" + title.SelectedValue + "', '" + acNo + "', '" + FirstName.Text + "', '" + LastName.Text + "', CONVERT(date, '" + DateOfBirth.Text + "', 103), '" + Email.Text + "', '" + HKID.Text + "', '" + Citizen.Text + "', '" + Residence.Text + "', '" + Building.Text + "', '" + Street.Text + "', '" + District.Text + "', '" + EmpStatus.SelectedValue + "', '" + EmpByBroker.SelectedValue + "', '" + CompanyDirector.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
+                sql = "INSERT INTO [Client] (isPrimary, title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";
+                sql = sql + "VALUES ('true', '" + title.SelectedValue + "', '" + acNo + "', '" + FirstName.Text + "', '" + LastName.Text + "', CONVERT(date, '" + DateOfBirth.Text + "', 103), '" + Email.Text + "', '" + HKID.Text + "', '" + Citizen.Text + "', '" + Residence.Text + "', '" + Building.Text + "', '" + Street.Text + "', '" + District.Text + "', '" + EmpStatus.SelectedValue + "', '" + EmpByBroker.SelectedValue + "', '" + CompanyDirector.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
                 myHKeInvest.setData(sql, myTransaction);
 
                 //insert optional fields
@@ -252,8 +257,8 @@ namespace HKeInvestWebApplication
                     myTransaction = myHKeInvest.beginTransaction();
                     
                     //insert all required fields first
-                    sql = "INSERT INTO [Client] (title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";
-                    sql = sql + "VALUES ('" + title2.SelectedValue + "', '" + acNo + "', '" + FirstName2.Text + "', '" + LastName2.Text + "', CONVERT(date, '" + DateOfBirth2.Text + "', 103), '" + Email2.Text + "', '" + HKID2.Text + "', '" + Citizen2.Text + "', '" + Residence2.Text + "', '" + Building2.Text + "', '" + Street2.Text + "', '" + District2.Text + "', '" + EmpStatus2.SelectedValue + "', '" + EmpByBroker2.SelectedValue + "', '" + CompanyDirector2.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
+                    sql = "INSERT INTO [Client] (isPrimary, title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";
+                    sql = sql + "VALUES ('false', '" + title2.SelectedValue + "', '" + acNo + "', '" + FirstName2.Text + "', '" + LastName2.Text + "', CONVERT(date, '" + DateOfBirth2.Text + "', 103), '" + Email2.Text + "', '" + HKID2.Text + "', '" + Citizen2.Text + "', '" + Residence2.Text + "', '" + Building2.Text + "', '" + Street2.Text + "', '" + District2.Text + "', '" + EmpStatus2.SelectedValue + "', '" + EmpByBroker2.SelectedValue + "', '" + CompanyDirector2.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
                     myHKeInvest.setData(sql, myTransaction);
                     myHKeInvest.commitTransaction(myTransaction);       //need to commit transaction before being able to retreive information from the database
 

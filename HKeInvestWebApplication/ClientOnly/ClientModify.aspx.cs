@@ -55,7 +55,7 @@ namespace HKeInvestWebApplication.ClientOnly
         }
 
 
-        protected void Register_Click(object sender, EventArgs e)
+/*        protected void Register_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
@@ -76,13 +76,13 @@ namespace HKeInvestWebApplication.ClientOnly
                 if (Street.Text != null)
                 {
                     sql = "UPDATE [Client] SET street = '" + Street.Text + "' WHERE accountNumber = '" + acNo + "'";
-                    myHKeInvest.setData(sql, myTransaction);
+                myHKeInvest.setData(sql, myTransaction);
                 }
 
                 if (District.Text != null)
                 {
                     sql = "UPDATE [Client] SET district = '" + District.Text + "' WHERE accountNumber = '" + acNo + "'";
-                    myHKeInvest.setData(sql, myTransaction);
+                myHKeInvest.setData(sql, myTransaction);
                 }
 
                 if (EmpStatus.SelectedValue != null)
@@ -213,7 +213,7 @@ namespace HKeInvestWebApplication.ClientOnly
                     if (District2.Text != null)
                     {
                         sql = "UPDATE [Client] SET district = '" + District2.Text + "' WHERE accountNumber = '" + acNo + "'";
-                        myHKeInvest.setData(sql, myTransaction);
+                    myHKeInvest.setData(sql, myTransaction);
                     }
 
                     if (EmpStatus2.SelectedValue != null)
@@ -286,15 +286,9 @@ namespace HKeInvestWebApplication.ClientOnly
             }
         }
 
-        //protected void acType_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    if (acType.SelectedIndex == 0)
-        //        CoHolderPanel.Visible = false;
-        //    else
-        //        CoHolderPanel.Visible = true;
-        //}
-    }
 
+    }
+*/
 
 
 
