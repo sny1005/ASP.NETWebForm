@@ -9,6 +9,15 @@
     </div>
 
     <div class="row">
+         <div class="col-md-4">
+            <h2>Application Form</h2>
+            <p>
+               For security account application, complete the form and either taken to or mailed to HKeInvest’s office for processing.
+            </p>
+            <p>
+                <a class="btn btn-default" href="Application Form.pdf">Download Form</a>
+            </p>
+        </div>
         <div class="col-md-4">
             <h2>Securities Transaction</h2>
             <p>
