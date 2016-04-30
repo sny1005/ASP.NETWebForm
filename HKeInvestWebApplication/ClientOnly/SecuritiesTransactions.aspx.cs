@@ -153,7 +153,7 @@ namespace HKeInvestWebApplication
             }
 
             //get datetime
-            orderPara[6] = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt");
+            orderPara[6] = DateTime.Now.ToString("MM/dd/yyyy");
 
             // check if order is successfully submitted to External System, and display result
             if (orderNumber == null)
@@ -167,7 +167,7 @@ namespace HKeInvestWebApplication
 
             // set up sql to create a copy of Order from External System
             orderPara[0] = orderNumber;
-            string sql = String.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')", orderPara);
+            string sql = string.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', NULL)", orderPara);
 
             SqlTransaction trans = myHKeInvestData.beginTransaction();
             myHKeInvestData.setData(sql, trans);    //insert into order
