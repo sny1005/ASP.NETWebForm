@@ -548,11 +548,17 @@
         <asp:CustomValidator ID="cvDeposit" runat="server" Text="*" OnServerValidate="cvDeposit_ServerValidate" ControlToValidate="ChequeV" ValidateEmptyText="true" CssClass="text-danger" Display="Dynamic" EnableClientScript="False"></asp:CustomValidator>
         <div class="form-group">
             <asp:CheckBox ID="Cheque" runat="server" Text="A cheque for the value below will be made payable to HKeInvest LLC."  CssClass="col-md-4"/>
-            <div class="col-md-4"><asp:TextBox ID="ChequeV" runat="server" CssClass="form-control"></asp:TextBox></div>
+            <div class="col-md-4">
+                <asp:TextBox ID="ChequeV" runat="server" CssClass="form-control"></asp:TextBox>
+                <asp:RegularExpressionValidator runat="server" ErrorMessage="Cheque value is not an valid number." CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ControlToValidate="ChequeV" ValidationExpression="^\d+\.*\d*" Text="*"></asp:RegularExpressionValidator>
+            </div>
         </div>
         <div class="form-group">
             <asp:CheckBox ID="Transfer" runat="server" Text="A completed Account Trasfer Form for the value indicated will be attached." CssClass="col-md-4" />
-            <div class="col-md-4"><asp:TextBox ID="TransferV" runat="server" CssClass="form-control"></asp:TextBox></div>
+            <div class="col-md-4">
+                <asp:TextBox ID="TransferV" runat="server" CssClass="form-control"></asp:TextBox>
+                <asp:RegularExpressionValidator runat="server" ErrorMessage="Transfer value is not an valid number." CssClass="text-danger" Display="Dynamic" EnableClientScript="False" ControlToValidate="TransferV" ValidationExpression="^\d+\.*\d*" Text="*"></asp:RegularExpressionValidator>
+            </div>
         </div>
 
         <div class="form-group">

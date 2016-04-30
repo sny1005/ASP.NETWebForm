@@ -160,10 +160,14 @@ namespace HKeInvestWebApplication
             }
 
             //make sure amount >=20000
-            decimal temp = 0;
-            if (Cheque.Checked) temp = Convert.ToDecimal(ChequeV.Text);
-            if(Transfer.Checked) temp = temp + Convert.ToDecimal(TransferV.Text);
-            if (temp >= 20000) return;
+            decimal chequeV = 0, transferV = 0;
+            if (Cheque.Checked)
+                if (decimal.TryParse(ChequeV.Text, out chequeV)) ;
+            if (Transfer.Checked)
+                if (decimal.TryParse(TransferV.Text, out transferV)) ;
+
+            decimal temp = chequeV + transferV;
+                if (temp >= 20000) return;
             
             args.IsValid = false;
             cvDeposit.ErrorMessage = "A HK$20,000 minimum deposit is required to open an account.";
