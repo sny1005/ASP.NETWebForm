@@ -23,9 +23,9 @@ namespace HKeInvestWebApplication
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Add periordic task for system to check order and transaction information
-            //Thread mythread = new Thread(PeriodicTasks);
-            //mythread.IsBackground = true;
-            //mythread.Start();
+            Thread mythread = new Thread(PeriodicTasks);
+            mythread.IsBackground = true;
+            mythread.Start();
         }
 
         private void PeriodicTasks()

@@ -75,8 +75,8 @@ namespace HKeInvestWebApplication.ClientOnly
                 decimal totalFeeCharged = 0;
                 DataTable dtFee = myHKeInvestData.getData(sql);
                 if(dtFee.Rows.Count != 0) { 
-                foreach (DataRow row in dtFee.Rows)
-                    totalFeeCharged = totalFeeCharged + Convert.ToDecimal(row["feeCharged"]);
+                    foreach (DataRow row in dtFee.Rows)
+                        totalFeeCharged = totalFeeCharged + Convert.ToDecimal(row["feeCharged"]); // need to handle null values!!!
                 }
 
                 //current value
