@@ -2,7 +2,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
      <h2>Modify Account Informations - EMPLOYEE view</h2>
 
-  
     <div class="form-horizontal">
         <asp:ValidationSummary runat="server" CssClass="text-danger" EnableClientScript="False" />
          
