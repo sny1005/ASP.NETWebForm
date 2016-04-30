@@ -12,9 +12,8 @@
         <div class="form-group">
             <asp:Label AssociatedControlID="AccountNumber" runat="server" Text="Account #" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
-                <asp:TextBox ID="AccountNumber" runat="server" CssClass="form-control"></asp:TextBox>
+                <asp:TextBox ID="AccountNumber" runat="server" CssClass="form-control" MaxLength="10"></asp:TextBox>
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Account Number is required." ControlToValidate="AccountNumber" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
-                <asp:CustomValidator ID="cvAcNo" runat="server" ErrorMessage="Invalid Account Number format" ControlToValidate="AccountNumber" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvAcNo_ServerValidate">*</asp:CustomValidator>                
             </div>
         </div>
 
@@ -68,6 +67,7 @@
             <div class="col-md-4">
                 <asp:TextBox ID="ConfirmPassword" runat="server" Textmode="Password" CssClass="form-control" MaxLength="15"></asp:TextBox>
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="Confirm Password is required." ControlToValidate="ConfirmPassword" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+                <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Confirm password does not match with password." CssClass="text-danger" Display="Dynamic" ControlToCompare="Password" ControlToValidate="ConfirmPassword" EnableClientScript="False">*</asp:CompareValidator>
             </div>
         </div>
 

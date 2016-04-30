@@ -28,14 +28,23 @@ namespace HKeInvestWebApplication.Account
                 string dob = DateOfBirth.Text;
                 string email = Email.Text;
 
-                string sql = "SELECT accountNumber FROM Client WHERE accountNumber = '" + acNo + "' AND firstName ='" + fName + "' AND lastName = '" + lName + "' AND dateOfBirth = CONVERT(date, '" + dob + "', 103) AND email = '" + email + "'";
+                string sql = "SELECT accountNumber, isPrimary FROM Client WHERE accountNumber = '" + acNo + "' AND firstName ='" + fName + "' AND lastName = '" + lName + "' AND dateOfBirth = CONVERT(date, '" + dob + "', 103) AND email = '" + email + "'";
 
                 HKeInvestData myHKeInvestData = new HKeInvestData();
                 System.Data.DataTable dtClient = myHKeInvestData.getData(sql);
                 if (dtClient.Rows.Count == 0 || dtClient == null) // If the DataSet is null, a SQL error occurred.
                 {
-                    ErrorMessage.Text = "Account information is incorrect."; 
+                    ErrorMessage.Text = "Account information is incorrect.";
                     return;
+                }
+                else
+                {
+                    System.Data.DataRow[] row = dtClient.Select();
+                    if ((bool)row[0]["isPrimary"] == false)
+                    {
+                        ErrorMessage.Text = "You must use the information of the primary account holder to register a login account.";
+                        return;
+                    }
                 }
 
                 var user = new ApplicationUser() { UserName = UserName.Text.ToLower(), Email = Email.Text };
@@ -55,7 +64,7 @@ namespace HKeInvestWebApplication.Account
                     }
 
                     //relate the newly created username with existing record
-                    sql = "UPDATE Account SET userName = '" + user.UserName + "' WHERE accountNumber = '" + acNo + "'";
+                    sql = "UPDATE LoginAccount SET username = '" + user.UserName + "' WHERE accountNumber = '" + acNo + "'";
                     SqlTransaction trans = myHKeInvestData.beginTransaction();
                     myHKeInvestData.setData(sql, trans);
                     myHKeInvestData.commitTransaction(trans);
@@ -70,7 +79,8 @@ namespace HKeInvestWebApplication.Account
             }
         }
 
-        protected void cvAcNo_ServerValidate(object source, ServerValidateEventArgs args)
+        //LEGACY function
+/*        protected void cvAcNo_ServerValidate(object source, ServerValidateEventArgs args)
         {
             string acn = AccountNumber.Text.Trim();
             string lastname = LastName.Text.Trim();
@@ -105,6 +115,7 @@ namespace HKeInvestWebApplication.Account
                 return;
             }
         }
+        */
 
         protected void cvDOB_ServerValidate(object source, ServerValidateEventArgs args)
         {
