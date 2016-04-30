@@ -222,9 +222,41 @@ namespace HKeInvestWebApplication.ClientOnly
             gvSecurityHolding.DataBind();
         }
 
-        protected void gvSecurityHolding_SelectedIndexChanged(object sender, EventArgs e)
+        protected void gvActive_Sorting(object sender, GridViewSortEventArgs e)
         {
+            // Since a GridView cannot be sorted directly, it is first loaded into a DataTable using the helper method 'unloadGridView'.
+            // Create a DataTable from the GridView.
+            GridView gv = (GridView)sender;
+            DataTable dtActive = myHKeInvestCode.unloadGridView(gv);
 
+            // Set the sort expression in ViewState for correct toggling of sort direction,
+            // Sort the DataTable and bind it to the GridView.
+            string sortExpression = e.SortExpression.ToLower();
+            ViewState["SortExpression"] = sortExpression;
+            dtActive.DefaultView.Sort = sortExpression + " " + myHKeInvestCode.getSortDirection(ViewState, e.SortExpression);
+            dtActive.AcceptChanges();
+
+            // Bind the DataTable to the GridView.
+            gv.DataSource = dtActive.DefaultView;
+            gv.DataBind();
+        }
+
+        protected void gvHistory_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            // Since a GridView cannot be sorted directly, it is first loaded into a DataTable using the helper method 'unloadGridView'.
+            // Create a DataTable from the GridView.
+            DataTable dtHistory = myHKeInvestCode.unloadGridView(gvHistory);
+
+            // Set the sort expression in ViewState for correct toggling of sort direction,
+            // Sort the DataTable and bind it to the GridView.
+            string sortExpression = e.SortExpression.ToLower();
+            ViewState["SortExpression"] = sortExpression;
+            dtHistory.DefaultView.Sort = sortExpression + " " + myHKeInvestCode.getSortDirection(ViewState, e.SortExpression);
+            dtHistory.AcceptChanges();
+
+            // Bind the DataTable to the GridView.
+            gvHistory.DataSource = dtHistory.DefaultView;
+            gvHistory.DataBind();
         }
 
         protected void generate6c_Click(object sender, EventArgs e)
@@ -248,8 +280,13 @@ namespace HKeInvestWebApplication.ClientOnly
                 row["name"] = name;
             }
 
+            // Set the initial sort expression and sort direction for sorting the GridView in ViewState.
+            ViewState["SortExpression"] = "datesubmitted";
+            ViewState["SortDirection"] = "DESC";
+
             gvActiveBond.DataSource = activeBondOrder;
             gvActiveBond.DataBind();
+            gvActiveBond.Sort("datesubmitted", SortDirection.Descending);
             gvActiveBond.Visible = true;
 
             // Stock listings
@@ -272,19 +309,51 @@ namespace HKeInvestWebApplication.ClientOnly
         protected void generate6d_Click(object sender, EventArgs e)
         {
             // REQUIREMENT 6D IMPLEMENTATION
-            System.Globalization.CultureInfo provider = System.Globalization.CultureInfo.InvariantCulture;
-            DateTime start = DateTime.ParseExact(startDate.Text, "dd/MM/yyyy", provider);
-            DateTime end = DateTime.ParseExact(endDate.Text, "dd/MM/yyyy", provider);
+            string start = startDate.Text;
+            string end = endDate.Text;
 
-            string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "'";
+            string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND [dateSubmitted] BETWEEN CONVERT(date, '" + start + "', 103) AND CONVERT(date, '" + end + "', 103)";
             DataTable orderHistory = myHKeInvestData.getData(sql);
-            sql = "SELECT [Order].*, [SellBondOrder].shares AS amount FROM [Order] INNER JOIN [SellBondOrder] ON [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "'";
+            sql = "SELECT [Order].*, [SellBondOrder].shares AS amount FROM [Order] INNER JOIN [SellBondOrder] ON [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND [dateSubmitted] BETWEEN CONVERT(date, '" + start + "', 103) AND CONVERT(date, '" + end + "', 103)";
             orderHistory.Merge(myHKeInvestData.getData(sql));
-            sql = "SELECT [Order].*, [StockOrder].shares AS amount FROM [Order] INNER JOIN [StockOrder] ON [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "'";
+            sql = "SELECT [Order].*, [StockOrder].shares AS amount FROM [Order] INNER JOIN [StockOrder] ON [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND [dateSubmitted] BETWEEN CONVERT(date, '" + start + "', 103) AND CONVERT(date, '" + end + "', 103)";
             orderHistory.Merge(myHKeInvestData.getData(sql));
             orderHistory.Columns.Add("name");
+            orderHistory.Columns.Add("totalShares");
+            orderHistory.Columns.Add("totalAmount");
 
+            // apply filter
+            for (int i=0; i < orderHistory.Rows.Count; i++)
+            {
+                DataRow row = orderHistory.Rows[i];
+                if (ddlOrderFilter.SelectedValue != row["buyOrSell"].ToString().Trim() && ddlOrderFilter.SelectedValue != "0")
+                {
+                    row.Delete();
+                    continue;
+                }
+                if (ddlTypeFilter.SelectedValue != row["securityType"].ToString().Trim() && ddlTypeFilter.SelectedValue != "0")
+                {
+                    row.Delete();
+                    continue;
+                }
+                if (ddlStatusFilter.SelectedValue != row["status"].ToString().Trim() && ddlStatusFilter.SelectedValue != "0")
+                {
+                    row.Delete();
+                    continue;
+                }
+                if (codeFilter.Text != row["securityCode"].ToString().Trim() && codeFilter.Text != "")
+                {
+                    row.Delete();
+                    continue;
+                }
+            }
+
+            // commit changes to the datatable
+            orderHistory.AcceptChanges();
+
+            //get security name and transaction data
             string name, baseCurrency;          // baseCurrency is just a dummy variable
+            DataTable trasantionTable = new DataTable();
             foreach (DataRow row in orderHistory.Rows)
             {
                 // get name of security
@@ -295,16 +364,17 @@ namespace HKeInvestWebApplication.ClientOnly
                 else
                     myHKeInvestCode.getSecurityNameBase("stock", (string)row["securityCode"], out name, out baseCurrency);
                 row["name"] = name;
-            }
 
-            // calculate order statistics
-            orderHistory.Columns.Add("totalShares");
-            orderHistory.Columns.Add("totalAmount");
-            foreach (DataRow row in orderHistory.Rows)
-            {
+                // calculate order statistics
                 sql = "SELECT * FROM [Transaction] WHERE [orderNumber] = '" + row["orderNumber"].ToString().Trim() + "'";
                 DataTable transactions = myHKeInvestData.getData(sql);
+                if (transactions.Rows.Count < 1)
+                    continue;
 
+                // add extra transactions into the table
+                trasantionTable.Merge(transactions);
+
+                // get total shares and dollar amount
                 decimal shares = 0, price = 0;
                 foreach (DataRow transaction in transactions.Rows)
                 {
@@ -312,24 +382,16 @@ namespace HKeInvestWebApplication.ClientOnly
                     price += (decimal)transaction["executePrice"];
                 }
                 row["totalShares"] = shares;
-                row["executePrice"] = price;
+                row["totalAmount"] = price;
             }
 
             gvHistory.DataSource = orderHistory;
             gvHistory.DataBind();
             gvHistory.Visible = true;
 
-
-
-
-
-
-
-
-
-
-
-
+            gvTransaction.DataSource = trasantionTable;
+            gvTransaction.DataBind();
+            gvTransaction.Visible = true;
 
 
 

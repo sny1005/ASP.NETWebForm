@@ -368,6 +368,7 @@ namespace HKeInvestWebApplication
                         row.Delete();
                     }
                 }
+                transTable.AcceptChanges();
             }
         }
     }

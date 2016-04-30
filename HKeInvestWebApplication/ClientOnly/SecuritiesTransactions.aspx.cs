@@ -153,7 +153,7 @@ namespace HKeInvestWebApplication
             }
 
             //get datetime
-            orderPara[6] = DateTime.Now.ToString("MM/dd/yyyy");
+            orderPara[6] = DateTime.Now.ToString();
 
             // check if order is successfully submitted to External System, and display result
             if (orderNumber == null)
@@ -167,7 +167,7 @@ namespace HKeInvestWebApplication
 
             // set up sql to create a copy of Order from External System
             orderPara[0] = orderNumber;
-            string sql = string.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', NULL)", orderPara);
+            string sql = string.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', CONVERT(smalldatetime, '{6}', 103), NULL)", orderPara);
 
             SqlTransaction trans = myHKeInvestData.beginTransaction();
             myHKeInvestData.setData(sql, trans);    //insert into order
@@ -295,7 +295,10 @@ namespace HKeInvestWebApplication
                 DataTable Table = myHKeInvestData.getData(sql);
                 DataRow[] record = Table.Select();
                 if (record.Count() != 1)
-                    throw new Exception("Error! Returning more than 1 record or stock is not owned by account");
+                {
+                    args.IsValid = false;
+                    cvShares.ErrorMessage = "You do not own this stock.";
+                }
                 else
                 {
                     decimal ownedShares = Convert.ToDecimal(record[0]["shares"]);
@@ -414,7 +417,10 @@ namespace HKeInvestWebApplication
                 DataTable Table = myHKeInvestData.getData(sql);
                 DataRow[] record = Table.Select();
                 if (record.Count() != 1)
-                    throw new Exception("Error! Returning more than 1 record or stock is not owned by account");
+                {
+                    args.IsValid = false;
+                    cvBondAmount.ErrorMessage = "You do not own this bond/unit trust.";
+                }
                 else
                 {
                     decimal ownedShares = Convert.ToDecimal(record[0]["shares"]);

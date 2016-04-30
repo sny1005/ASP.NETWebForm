@@ -24,7 +24,7 @@ namespace HKeInvestWebApplication.Code_File
                 int n; decimal d; DateTime dt;
                 if (int.TryParse(value, out n)) { return "System.Int32"; }
                 else if (decimal.TryParse(value, out d)) { return "System.Decimal"; }
-                else if (DateTime.TryParse(value, out dt)) { return "System.DataTime"; }
+                else if (DateTime.TryParse(value, out dt)) { return "System.DateTime"; }
             }
             return "System.String";
         }
