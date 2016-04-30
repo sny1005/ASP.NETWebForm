@@ -3,25 +3,25 @@
     <h2>Profit and Loss Tracking</h2>
     <div class =" form-group">
     <div>
-        <asp:RadioButtonList ID="rbDisplayType" runat="server" RepeatDirection="Horizontal" AutoPostBack="True" CellPadding="5" CellSpacing="5">
+        <asp:RadioButtonList ID="rbDisplayType" runat="server" RepeatDirection="Horizontal" AutoPostBack="True" CellPadding="5" CellSpacing="5" OnSelectedIndexChanged="rbDisplayType_SelectedIndexChanged">
             <asp:ListItem>All Securities</asp:ListItem>
             <asp:ListItem>One Type of Securities</asp:ListItem>
             <asp:ListItem>Individual Security</asp:ListItem>
         </asp:RadioButtonList>
     </div>
     <div class =" col-md-4">
-        <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSecurityType_SelectedIndexChanged">
+        <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSecurityType_SelectedIndexChanged" Visible="False">
                 <asp:ListItem Value="0">Security type</asp:ListItem>
                 <asp:ListItem Value="bond">Bond</asp:ListItem>
                 <asp:ListItem Value="stock">Stock</asp:ListItem>
                 <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
             </asp:DropDownList>
-        <asp:Label runat="server" Text="Security Code" AssociatedControlID="SecurityCode" CssClass="col-md-4"></asp:Label>
-        <asp:TextBox ID="SecurityCode" runat="server" CssClass="text-danger" MaxLength="4"></asp:TextBox>
+        <asp:Label runat="server" Text="Security Code" AssociatedControlID="SecurityCode" CssClass="col-md-4" ID="lblSecurityCode" Visible="False"></asp:Label>
+        <asp:TextBox ID="txtSecurityCode" runat="server" CssClass="text-danger" MaxLength="4" Visible="False"></asp:TextBox>
     </div>
     </div>
     <div>
-        <asp:GridView ID="gvIndividual" runat="server" CellPadding="5" AutoGenerateColumns="False" Visible="False">
+        <asp:GridView ID="gvIndividual" runat="server" CellPadding="5" AutoGenerateColumns="False" Visible="False" OnSelectedIndexChanged="gvIndividual_SelectedIndexChanged">
             <Columns>
                 <asp:BoundField HeaderText="Type" ReadOnly="True" DataField="Type" SortExpression="Type" />
                 <asp:BoundField DataField="Code" HeaderText="Code" ReadOnly="True" SortExpression="Code" />
