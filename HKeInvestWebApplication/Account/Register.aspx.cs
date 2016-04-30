@@ -79,7 +79,7 @@ namespace HKeInvestWebApplication.Account
             }
         }
 
-        //LEGACY function
+        // 2 LEGACY function
 /*        protected void cvAcNo_ServerValidate(object source, ServerValidateEventArgs args)
         {
             string acn = AccountNumber.Text.Trim();
@@ -115,7 +115,6 @@ namespace HKeInvestWebApplication.Account
                 return;
             }
         }
-        */
 
         protected void cvDOB_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -134,6 +133,6 @@ namespace HKeInvestWebApplication.Account
             args.IsValid = false;
             cvDOB.ErrorMessage = "Date of Birth is not valid.";
             return;
-        }
+        }*/
     }
 }
