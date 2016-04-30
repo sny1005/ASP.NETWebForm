@@ -196,6 +196,9 @@
     <Content Include="App_Data\alert_log.ldf">
       <DependentUpon>alert.mdf</DependentUpon>
     </Content>
+    <Content Include="App_Data\ExternalDatabases_log.ldf">
+      <DependentUpon>ExternalDatabases.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\HKeInvestDBgoogle.mdf" />
     <Content Include="App_Data\HKeInvestDBgoogle_log.ldf">
       <DependentUpon>HKeInvestDBgoogle.mdf</DependentUpon>
@@ -228,9 +231,6 @@
       <DependentUpon>aspnet-HKeInvestWebApplication-20160205055552.mdf</DependentUpon>
     </Content>
     <Content Include="App_Data\ExternalDatabases.mdf" />
-    <Content Include="App_Data\ExternalDatabases_log.ldf">
-      <DependentUpon>ExternalDatabases.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\HKeInvestDB.mdf" />
     <Content Include="App_Themes\eInvestTheme\bootstrap.min.css" />
     <Content Include="Calendar.aspx" />
@@ -309,7 +309,6 @@
     <Content Include="Global.asax" />
     <Content Include="EmployeeOnly\SecurityHoldingDetails.aspx" />
     <Content Include="ClientOnly\SecuritiesTransactions.aspx" />
-    <Content Include="ServiceFees.aspx" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -618,13 +617,6 @@
     </Compile>
     <Compile Include="ClientOnly\SecuritiesTransactions.aspx.designer.cs">
       <DependentUpon>SecuritiesTransactions.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ServiceFees.aspx.cs">
-      <DependentUpon>ServiceFees.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ServiceFees.aspx.designer.cs">
-      <DependentUpon>ServiceFees.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

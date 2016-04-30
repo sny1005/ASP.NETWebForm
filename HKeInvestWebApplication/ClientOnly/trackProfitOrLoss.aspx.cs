@@ -42,7 +42,7 @@ namespace HKeInvestWebApplication.ClientOnly
                 string userName = User.Identity.Name;
                 string sql = "SELECT accountNumber FROM LoginAccount WHERE userName = '" + userName + "' ";
                 DataTable dtClient = myHKeInvestData.getData(sql);
-                string userAccountNumber = Convert.ToString( dtClient.Select("accountNumber"));
+                string userAccountNumber = dtClient.Rows[0].ToString();
 
                 //get buy amount
                 sql = "SELECT executePrice, executeShares FROM Transaction WHERE orderNumber = (SELECT orderNumber FROM Order WHERE buyOrSell = buy AND status = executed AND accountNumber = '"+userAccountNumber+"')";
@@ -92,12 +92,15 @@ namespace HKeInvestWebApplication.ClientOnly
 
         }
 
+        protected void ddlSecurityType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
 
         protected void gvIndividual_SelectedIndexChanged(object sender, EventArgs e)
         {
            
         }
 
-       
     }
 }

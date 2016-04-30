@@ -16,7 +16,7 @@
                 <asp:ListItem Value="stock">Stock</asp:ListItem>
                 <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
             </asp:DropDownList>
-        <asp:Label runat="server" Text="Security Code" AssociatedControlID="SecurityCode" CssClass="col-md-4" ID="lblSecurityCode" Visible="False"></asp:Label>
+        <asp:Label runat="server" Text="Security Code" AssociatedControlID="txtSecurityCode" CssClass="col-md-4" ID="lblSecurityCode" Visible="False"></asp:Label>
         <asp:TextBox ID="txtSecurityCode" runat="server" CssClass="text-danger" MaxLength="4" Visible="False"></asp:TextBox>
     </div>
     </div>
