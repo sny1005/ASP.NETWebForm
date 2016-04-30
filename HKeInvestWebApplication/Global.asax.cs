@@ -129,6 +129,10 @@ namespace HKeInvestWebApplication
                             totalExpenditure += expenditure;
                         }
 
+                        // store total fee charged for the order
+                        sql = "UPDATE [Order] SET [feeCharged] = " + feeCharged.Sum() + " WHERE [orderNumber] = '" + orderNumbers.First().Trim() + "'";
+                        myData.setData(sql, trans);
+
                         acBalance -= totalExpenditure;
                         sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
                         myData.setData(sql, trans);
@@ -174,6 +178,11 @@ namespace HKeInvestWebApplication
                             totalRevenue += revenue;
                         }
 
+                        // store total fee charged for the order
+                        sql = "UPDATE [Order] SET [feeCharged] = " + feeCharged.Sum() + " WHERE [orderNumber] = '" + orderNumbers.First().Trim() + "'";
+                        myData.setData(sql, trans);
+
+                        // update account balance
                         acBalance += totalRevenue;
                         sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
                         myData.setData(sql, trans);

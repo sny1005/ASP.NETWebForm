@@ -56,6 +56,11 @@ namespace HKeInvestWebApplication.ClientOnly
                 }
                 lblAccountNumber.Text = "account number: " + accountNumber;
                 lblAccountNumber.Visible = true;
+
+                // load current date into date range for 6d
+                string today = DateTime.Today.ToString("dd/MM/yyyy");
+                startDate.Text = today;
+                endDate.Text = today;
             }
         }
 
@@ -222,9 +227,115 @@ namespace HKeInvestWebApplication.ClientOnly
 
         }
 
-        protected void generate_Click(object sender, EventArgs e)
+        protected void generate6c_Click(object sender, EventArgs e)
         {
             // REQUIREMENT 6C IMPLEMENTATION
+            // Bond/Unit trust listings
+            lblActiveBond.Visible = true;
+            string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [status] <> 'completed' AND [accountNumber] = '" + accountNumber + "'";
+            DataTable activeBondOrder = myHKeInvestData.getData(sql);
+            sql = "SELECT [Order].*, [SellBondOrder].shares AS amount FROM [Order] INNER JOIN [SellBondOrder] ON [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [status] <> 'completed' AND [accountNumber] = '" + accountNumber + "'";
+            activeBondOrder.Merge(myHKeInvestData.getData(sql));
+            activeBondOrder.Columns.Add("name");
+
+            string name, baseCurrency;          // baseCurrency is just a dummy variable
+            foreach (DataRow row in activeBondOrder.Rows)
+            {
+                if (Convert.ToString(row["securityType"]).Trim() == "bond")
+                    myHKeInvestCode.getSecurityNameBase("bond", (string)row["securityCode"], out name, out baseCurrency);
+                else
+                    myHKeInvestCode.getSecurityNameBase("unit trust", (string)row["securityCode"], out name, out baseCurrency);
+                row["name"] = name;
+            }
+
+            gvActiveBond.DataSource = activeBondOrder;
+            gvActiveBond.DataBind();
+            gvActiveBond.Visible = true;
+
+            // Stock listings
+            lblActiveStock.Visible = true;
+            sql = "SELECT [Order].*, [StockOrder].shares, [StockOrder].orderType, [StockOrder].expiaryDay, [StockOrder].limitPrice, [StockOrder].stopPrice FROM [Order] INNER JOIN [StockOrder] ON [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [status] <> 'completed' AND [status] <> 'cancelled' AND [accountNumber] = '" + accountNumber + "'";
+            DataTable activeStockOrder = myHKeInvestData.getData(sql);
+            activeStockOrder.Columns.Add("name");
+
+            foreach (DataRow row in activeStockOrder.Rows)
+            {
+                myHKeInvestCode.getSecurityNameBase("stock", (string)row["securityCode"], out name, out baseCurrency);
+                row["name"] = name;
+            }
+
+            gvActiveStock.DataSource = activeStockOrder;
+            gvActiveStock.DataBind();
+            gvActiveStock.Visible = true;
+        }
+
+        protected void generate6d_Click(object sender, EventArgs e)
+        {
+            // REQUIREMENT 6D IMPLEMENTATION
+            System.Globalization.CultureInfo provider = System.Globalization.CultureInfo.InvariantCulture;
+            DateTime start = DateTime.ParseExact(startDate.Text, "dd/MM/yyyy", provider);
+            DateTime end = DateTime.ParseExact(endDate.Text, "dd/MM/yyyy", provider);
+
+            string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "'";
+            DataTable orderHistory = myHKeInvestData.getData(sql);
+            sql = "SELECT [Order].*, [SellBondOrder].shares AS amount FROM [Order] INNER JOIN [SellBondOrder] ON [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "'";
+            orderHistory.Merge(myHKeInvestData.getData(sql));
+            sql = "SELECT [Order].*, [StockOrder].shares AS amount FROM [Order] INNER JOIN [StockOrder] ON [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "'";
+            orderHistory.Merge(myHKeInvestData.getData(sql));
+            orderHistory.Columns.Add("name");
+
+            string name, baseCurrency;          // baseCurrency is just a dummy variable
+            foreach (DataRow row in orderHistory.Rows)
+            {
+                // get name of security
+                if (Convert.ToString(row["securityType"]).Trim() == "bond")
+                    myHKeInvestCode.getSecurityNameBase("bond", (string)row["securityCode"], out name, out baseCurrency);
+                else if (Convert.ToString(row["securityType"]).Trim() == "unit trust")
+                    myHKeInvestCode.getSecurityNameBase("unit trust", (string)row["securityCode"], out name, out baseCurrency);
+                else
+                    myHKeInvestCode.getSecurityNameBase("stock", (string)row["securityCode"], out name, out baseCurrency);
+                row["name"] = name;
+            }
+
+            // calculate order statistics
+            orderHistory.Columns.Add("totalShares");
+            orderHistory.Columns.Add("totalAmount");
+            foreach (DataRow row in orderHistory.Rows)
+            {
+                sql = "SELECT * FROM [Transaction] WHERE [orderNumber] = '" + row["orderNumber"].ToString().Trim() + "'";
+                DataTable transactions = myHKeInvestData.getData(sql);
+
+                decimal shares = 0, price = 0;
+                foreach (DataRow transaction in transactions.Rows)
+                {
+                    shares += (decimal)transaction["executeShares"];
+                    price += (decimal)transaction["executePrice"];
+                }
+                row["totalShares"] = shares;
+                row["executePrice"] = price;
+            }
+
+            gvHistory.DataSource = orderHistory;
+            gvHistory.DataBind();
+            gvHistory.Visible = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            /*
             // Bond/Unit trust listings
             lblActiveBond.Visible = true;
             string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [status] <> 'completed' AND [accountNumber] = '" + accountNumber + "'";
@@ -259,7 +370,7 @@ namespace HKeInvestWebApplication.ClientOnly
             }
 
             gvActiveStock.DataSource = activeStockOrder;
-            gvActiveStock.DataBind();
+            gvActiveStock.DataBind();*/
         }
     }
 }

@@ -45,7 +45,15 @@
                 <a class="btn btn-default" href="Calendar.aspx">View Now</a>
             </p>
         </div>
-
+                 <div class="col-md-4">
+            <h2>Service Fees</h2>
+            <p>
+              Check for HkeInvest Sevice Fees
+            </p>
+            <p>
+                <a class="btn btn-default" href="ServiceFees.aspx">View Now</a>
+            </p>
+        </div>
     </div>
 
 </asp:Content>
