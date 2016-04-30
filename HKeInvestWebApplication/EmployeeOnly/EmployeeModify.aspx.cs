@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using HKeInvestWebApplication.Code_File;
+using HKeInvestWebApplication.ExternalSystems.Code_File;
 
 namespace HKeInvestWebApplication.EmployeeOnly
 {
@@ -37,7 +39,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
         {
             if (PrimarySource.SelectedValue == "other" && args.Value == "") args.IsValid = false;
         }
-
+        /*
         protected void Register_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
@@ -335,7 +337,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
                 //    myHKeInvest.commitTransaction(myTransaction);
                 //}
             }
-        }
+        }*/
     }
 }
 

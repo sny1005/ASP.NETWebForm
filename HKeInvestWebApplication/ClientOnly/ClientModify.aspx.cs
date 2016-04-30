@@ -53,7 +53,7 @@ namespace HKeInvestWebApplication.ClientOnly
         {
             if (PrimarySource.SelectedValue == "other" && args.Value == "") args.IsValid = false;
         }
-
+        /*
         protected void Register_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
@@ -279,6 +279,6 @@ namespace HKeInvestWebApplication.ClientOnly
                 //    myHKeInvest.commitTransaction(myTransaction);
                 //}
             }
-        }
+        }*/
     }
 }
