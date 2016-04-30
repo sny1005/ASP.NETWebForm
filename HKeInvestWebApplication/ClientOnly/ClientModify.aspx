@@ -19,7 +19,6 @@
             <asp:Label AssociatedControlID="Email" runat="server" Text="Email" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="Email" runat="server" CssClass="form-control" MaxLength="30" TextMode="Email"></asp:TextBox>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="Email address is required." ControlToValidate="Email" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
             </div>
         </div>
 
@@ -55,21 +54,18 @@
                 <asp:Label runat="server" Text="Building" CssClass="control-label col-md-2" AssociatedControlID="Building"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="Building" runat="server" CssClass="form-control col-md-4" MaxLength="50"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ErrorMessage="Building is required." ControlToValidate="Building" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>
             </div>
             <div class="row col-md-12">
                 <asp:Label runat="server" Text="Street" CssClass="control-label col-md-2" AssociatedControlID="Street"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="Street" runat="server" CssClass="form-control col-md-4" MaxLength="35"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="Street is required." ControlToValidate="Street" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>
             </div>
             <div class="row col-md-12">
                 <asp:Label runat="server" Text="District" CssClass="control-label col-md-2" AssociatedControlID="District"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="District" runat="server" CssClass="form-control col-md-4" MaxLength="19"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ErrorMessage="District is required." ControlToValidate="District" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>
             </div>
         </div>
@@ -88,7 +84,6 @@
                     <asp:ListItem>Not Employed</asp:ListItem>
                     <asp:ListItem>Homemaker</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="Employment status is required." ControlToValidate="EmpStatus" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
             </div>
         </div>
 
@@ -139,7 +134,7 @@
                     <asp:ListItem Value="TRUE">Yes</asp:ListItem>
                     <asp:ListItem Value="FALSE">No</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="Employed by broker status is required." ControlToValidate="EmpByBroker" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="Employed by broker status is required." ControlToValidate="EmpByBroker" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>--%>
             </div>
             <asp:Label AssociatedControlID="CompanyDirector" runat="server" Text="Are you a director, 10% shareholder or policy-making officer of a publicly traded company?" CssClass="control-label col-md-4"></asp:Label>
             <div class="col-md-2">
@@ -147,7 +142,7 @@
                     <asp:ListItem Value="TRUE">Yes</asp:ListItem>
                     <asp:ListItem Value="FALSE">No</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="Shareholder status is required." ControlToValidate="CompanyDirector" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="Shareholder status is required." ControlToValidate="CompanyDirector" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>--%>
             </div>
         </div>
 
@@ -181,7 +176,6 @@
                 <asp:Label AssociatedControlID="Email2" runat="server" Text="Email" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="Email2" runat="server" CssClass="form-control" MaxLength="30" TextMode="Email"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ErrorMessage="Co-account holder email address is required." ControlToValidate="Email2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>
             </div>
 
@@ -218,21 +212,18 @@
                     <asp:Label runat="server" Text="Building" CssClass="control-label col-md-2" AssociatedControlID="Building2"></asp:Label>
                     <div class="col-md-4">
                         <asp:TextBox ID="Building2" runat="server" CssClass="form-control col-md-4" MaxLength="50"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator32" runat="server" ErrorMessage="Co-account holder building is required." ControlToValidate="Building2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="row col-md-12">
                     <asp:Label runat="server" Text="Street" CssClass="control-label col-md-2" AssociatedControlID="Street2"></asp:Label>
                     <div class="col-md-4">
                         <asp:TextBox ID="Street2" runat="server" CssClass="form-control col-md-4" MaxLength="35"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator33" runat="server" ErrorMessage="Co-account holder street is required." ControlToValidate="Street2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="row col-md-12">
                     <asp:Label runat="server" Text="District" CssClass="control-label col-md-2" AssociatedControlID="District2"></asp:Label>
                     <div class="col-md-4">
                         <asp:TextBox ID="District2" runat="server" CssClass="form-control col-md-4" MaxLength="19"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator34" runat="server" ErrorMessage="Co-account holder district is required." ControlToValidate="District2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                     </div>
                 </div>
             </div>
@@ -251,7 +242,6 @@
                         <asp:ListItem>Not Employed</asp:ListItem>
                         <asp:ListItem>Homemaker</asp:ListItem>
                     </asp:RadioButtonList>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator35" runat="server" ErrorMessage="Co-account holder's employment status is required." ControlToValidate="EmpStatus2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
                 </div>
             </div>
 
@@ -300,7 +290,7 @@
                         <asp:ListItem Value="TRUE">Yes</asp:ListItem>
                         <asp:ListItem Value="FALSE">No</asp:ListItem>
                     </asp:RadioButtonList>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" ErrorMessage="Co-account holder's employed by broker status is required." ControlToValidate="EmpByBroker2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" ErrorMessage="Co-account holder's employed by broker status is required." ControlToValidate="EmpByBroker2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>--%>
                 </div>
                 <asp:Label AssociatedControlID="CompanyDirector2" runat="server" Text="Are you a director, 10% shareholder or policy-making officer of a publicly traded company?" CssClass="control-label col-md-4"></asp:Label>
                 <div class="col-md-2">
@@ -308,7 +298,7 @@
                         <asp:ListItem Value="TRUE">Yes</asp:ListItem>
                         <asp:ListItem Value="FALSE">No</asp:ListItem>
                     </asp:RadioButtonList>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator37" runat="server" ErrorMessage="Co-account holder's shareholder status is required." ControlToValidate="CompanyDirector2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator37" runat="server" ErrorMessage="Co-account holder's shareholder status is required." ControlToValidate="CompanyDirector2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>--%>
                 </div>
             </div>
         </asp:Panel>
@@ -326,7 +316,6 @@
                     <asp:ListItem Value="growth">Growth</asp:ListItem>
                     <asp:ListItem Value="speculation">Speculation</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" ErrorMessage="Investment objective is required." ControlToValidate="Objective" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
             </div>
         </div>
 
@@ -339,7 +328,6 @@
                     <asp:ListItem Value="good">Good</asp:ListItem>
                     <asp:ListItem Value="extensive">Extensive</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ErrorMessage="Investment knowledge is required." ControlToValidate="Knowledge" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
             </div>
             <asp:Label AssociatedControlID="Experience" runat="server" Text="Investment experience" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
@@ -349,7 +337,6 @@
                     <asp:ListItem Value="good">Good</asp:ListItem>
                     <asp:ListItem Value="extensive">Extensive</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" ErrorMessage="Investment experience is required." ControlToValidate="Experience" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
             </div>
         </div>
 
@@ -361,8 +348,7 @@
                     <asp:ListItem Value=">20001">HK$20,001 - HK$200,000</asp:ListItem>
                     <asp:ListItem Value=">200001">HK$200,001 - HK$2,000,000</asp:ListItem>
                     <asp:ListItem Value=">2000000">more than HK$2,000,000</asp:ListItem>
-                </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" ErrorMessage="Annual income is required." ControlToValidate="Income" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+                </asp:RadioButtonList> 
             </div>
             <asp:Label AssociatedControlID="NetWorth" runat="server" Text="Approximate liquid net worth" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
@@ -372,7 +358,6 @@
                     <asp:ListItem Value=">1000001">HK$1,000,001 - HK$10,000,000</asp:ListItem>
                     <asp:ListItem Value=">10000000">more than HK$10,000,000</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ErrorMessage="Liquid net worth is required." ControlToValidate="NetWorth" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
             </div>
         </div>
 
