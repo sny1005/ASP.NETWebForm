@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HKeInvestWebApplication.ClientOnly {
+namespace HKeInvestWebApplication.EmployeeOnly {
     
     
-    public partial class ClientModify {
+    public partial class EmployeeModify {
         
         /// <summary>
         /// lblAccountNumber control.

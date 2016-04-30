@@ -194,6 +194,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="ClientOnly\ClientModify.aspx" />
+    <Content Include="EmployeeOnly\EmployeeModify.aspx" />
     <Content Include="SearchSecurties.aspx" />
     <Content Include="Account\AddPhoneNumber.aspx" />
     <Content Include="Account\Confirm.aspx" />
@@ -322,6 +323,13 @@
     </Compile>
     <Compile Include="ClientOnly\ClientModify.aspx.designer.cs">
       <DependentUpon>ClientModify.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeOnly\EmployeeModify.aspx.cs">
+      <DependentUpon>EmployeeModify.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployeeOnly\EmployeeModify.aspx.designer.cs">
+      <DependentUpon>EmployeeModify.aspx</DependentUpon>
     </Compile>
     <Compile Include="SearchSecurties.aspx.cs">
       <DependentUpon>SearchSecurties.aspx</DependentUpon>

@@ -1,6 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ClientModify.aspx.cs" Inherits="HKeInvestWebApplication.ClientOnly.ClientModify" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EmployeeModify.aspx.cs" Inherits="HKeInvestWebApplication.EmployeeOnly.EmployeeModify" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
- <h2>Modify Account Informations</h2>
+     <h2>Modify Account Informations - EMPLOYEE view</h2>
 
   
     <div class="form-horizontal">
@@ -375,3 +375,5 @@
     </div>
 </asp:Content>
 
+
+</asp:Content>
