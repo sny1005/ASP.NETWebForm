@@ -1,11 +1,10 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ClientModify.aspx.cs" Inherits="HKeInvestWebApplication.ClientOnly.ClientModify" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
- <h2>Modify Account Informations</h2>
+<h2>Modify Account Informations</h2>
 
-  
     <div class="form-horizontal">
         <asp:ValidationSummary runat="server" CssClass="text-danger" EnableClientScript="False" />
-         
+        
         <br />
         <h6>Primary Account Holder - Personal Information</h6>
 

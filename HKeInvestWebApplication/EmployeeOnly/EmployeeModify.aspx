@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EmployeeModify.aspx.cs" Inherits="HKeInvestWebApplication.EmployeeOnly.EmployeeModify" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-     <h2>Modify Account Informations - EMPLOYEE view</h2>
+<h2>Modify Account Informations - EMPLOYEE view</h2>
 
     <div class="form-horizontal">
         <asp:ValidationSummary runat="server" CssClass="text-danger" EnableClientScript="False" />
@@ -9,15 +9,62 @@
         <h6>Primary Account Holder - Personal Information</h6>
 
         <div class="form-group">
-            <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="col-md-3" ></asp:Label>
-            <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
-            <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>    
+            <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="control-label col-md-2" AssociatedControlID="txtAccountNumber"></asp:Label>
+            <asp:TextBox ID="txtAccountNumber" runat="server"></asp:TextBox>
+<%--            <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
+            <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>    --%>
+        </div>
+
+        <div class="form-group">
+            <asp:Label runat="server" Text="Title" CssClass="control-label col-md-2" AssociatedControlID="title"></asp:Label>
+            <div class="col-md-4">
+                <asp:RadioButtonList ID="title" runat="server">
+                    <asp:ListItem>Mr.</asp:ListItem>
+                    <asp:ListItem>Mrs.</asp:ListItem>
+                    <asp:ListItem>Ms.</asp:ListItem>
+                    <asp:ListItem>Dr.</asp:ListItem>
+                </asp:RadioButtonList>
+            </div>
+        </div>
+
+         <div class="form-group">
+            <asp:Label AssociatedControlID="FirstName" runat="server" Text="First Name" CssClass="control-label col-md-2"></asp:Label>
+            <div class="col-md-4">
+                <asp:TextBox ID="FirstName" runat="server" CssClass="form-control" MaxLength="35"></asp:TextBox>
+            </div>
+            <asp:Label AssociatedControlID="LastName" runat="server" Text="Last Name" CssClass="control-label col-md-2"></asp:Label>
+            <div class="col-md-4">
+                <asp:TextBox ID="LastName" runat="server" CssClass="form-control" MaxLength="35"></asp:TextBox>
+            </div>
         </div>
 
         <div class="form-group">
             <asp:Label AssociatedControlID="Email" runat="server" Text="Email" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="Email" runat="server" CssClass="form-control" MaxLength="30" TextMode="Email"></asp:TextBox>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <asp:Label AssociatedControlID="HKID" runat="server" Text="Passport#" CssClass="control-label col-md-2"></asp:Label>
+            <div class="col-md-4">
+                <asp:TextBox ID="HKID" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
+            </div>
+            <asp:Label AssociatedControlID="IssueCountry" runat="server" Text="Passport country of issue" CssClass="control-label col-md-2"></asp:Label>
+            <div class="col-md-4">
+                <asp:TextBox ID="IssueCountry" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
+                <asp:CustomValidator ID="cvIssueCountry" runat="server" ControlToValidate="IssueCountry" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvIssueCountry_ServerValidate" ValidateEmptyText="True">*</asp:CustomValidator>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <asp:Label AssociatedControlID="Citizen" runat="server" Text="Country of citizenship" CssClass="control-label col-md-2"></asp:Label>
+            <div class="col-md-4">
+                <asp:TextBox ID="Citizen" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
+            </div>
+            <asp:Label AssociatedControlID="Residence" runat="server" Text="Country of legal residence" CssClass="control-label col-md-2"></asp:Label>
+            <div class="col-md-4">
+                <asp:TextBox ID="Residence" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
             </div>
         </div>
 
@@ -172,9 +219,55 @@
             <h6>Co-Account holder - Personal Information</h6>
 
             <div class="form-group">
+                <asp:Label runat="server" Text="Co-account holder title" CssClass="control-label col-md-2" AssociatedControlID="title2"></asp:Label>
+                <div class="col-md-4">
+                    <asp:RadioButtonList ID="title2" runat="server">
+                        <asp:ListItem>Mr.</asp:ListItem>
+                        <asp:ListItem>Mrs.</asp:ListItem>
+                        <asp:ListItem>Ms.</asp:ListItem>
+                        <asp:ListItem>Dr.</asp:ListItem>
+                    </asp:RadioButtonList>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <asp:Label AssociatedControlID="FirstName2" runat="server" Text="First Name" CssClass="control-label col-md-2"></asp:Label>
+                <div class="col-md-4">
+                    <asp:TextBox ID="FirstName2" runat="server" CssClass="form-control" MaxLength="35"></asp:TextBox>
+                </div>
+                <asp:Label AssociatedControlID="LastName2" runat="server" Text="Last Name" CssClass="control-label col-md-2"></asp:Label>
+                <div class="col-md-4">
+                    <asp:TextBox ID="LastName2" runat="server" CssClass="form-control" MaxLength="35"></asp:TextBox>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <asp:Label AssociatedControlID="Email2" runat="server" Text="Email" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
-                    <asp:TextBox ID="Email2" runat="server" CssClass="form-control" MaxLength="30" TextMode="Email"></asp:TextBox>
+                    <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" MaxLength="30" TextMode="Email"></asp:TextBox>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <asp:Label AssociatedControlID="HKID2" runat="server" Text="Passport#" CssClass="control-label col-md-2"></asp:Label>
+                <div class="col-md-4">
+                    <asp:TextBox ID="HKID2" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
+                </div>
+                <asp:Label AssociatedControlID="IssueCountry2" runat="server" Text="Passport country of issue" CssClass="control-label col-md-2"></asp:Label>
+                <div class="col-md-4">
+                    <asp:TextBox ID="IssueCountry2" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
+                    <asp:CustomValidator ID="cvIssueCountry2" runat="server" ControlToValidate="IssueCountry2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvIssueCountry2_ServerValidate" ValidateEmptyText="True">*</asp:CustomValidator>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <asp:Label AssociatedControlID="Citizen2" runat="server" Text="Country of citizenship" CssClass="control-label col-md-2"></asp:Label>
+                <div class="col-md-4">
+                    <asp:TextBox ID="Citizen2" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
+                </div>
+                <asp:Label AssociatedControlID="Residence2" runat="server" Text="Country of legal residence" CssClass="control-label col-md-2"></asp:Label>
+                <div class="col-md-4">
+                    <asp:TextBox ID="Residence2" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
                 </div>
             </div>
 
@@ -375,4 +468,3 @@
 </asp:Content>
 
 
-</asp:Content>

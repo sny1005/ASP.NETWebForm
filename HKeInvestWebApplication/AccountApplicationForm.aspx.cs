@@ -167,6 +167,20 @@ namespace HKeInvestWebApplication
             if (Transfer.Checked)
                 if (decimal.TryParse(TransferV.Text, out transferV)) ;
 
+            if (chequeV <= 0 )
+            {
+                args.IsValid = false;
+                cvDeposit.ErrorMessage = "Please indicate the correct amount you would like to pay by cheque";
+                return;
+            }
+
+            if (transferV <= 0)
+            {
+                args.IsValid = false;
+                cvDeposit.ErrorMessage = "Please indicate the correct amount you would like to transfer";
+                return;
+            }
+
             decimal temp = chequeV + transferV;
                 if (temp >= 20000) return;
             

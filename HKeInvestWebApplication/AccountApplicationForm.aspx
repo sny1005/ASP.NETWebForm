@@ -37,15 +37,6 @@
         </div>
 
         <div class="form-group">
-            <asp:Label AssociatedControlID="AccountNumber" runat="server" Text="Account #" CssClass="control-label col-md-2"></asp:Label>
-            <div class="col-md-4">
-                <asp:TextBox ID="AccountNumber" runat="server" CssClass="form-control"></asp:TextBox>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Account Number is required." ControlToValidate="AccountNumber" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
-                <asp:CustomValidator ID="cvAcNo" runat="server" ErrorMessage="Invalid Account Number format" ControlToValidate="AccountNumber" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvAcNo_ServerValidate">*</asp:CustomValidator>                
-            </div>
-        </div>
-
-        <div class="form-group">
             <asp:Label AssociatedControlID="FirstName" runat="server" Text="First Name" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="FirstName" runat="server" CssClass="form-control" MaxLength="35"></asp:TextBox>
@@ -55,6 +46,15 @@
             <div class="col-md-4">
                 <asp:TextBox ID="LastName" runat="server" CssClass="form-control" MaxLength="35"></asp:TextBox>
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Last Name is required." ControlToValidate="LastName" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <asp:Label AssociatedControlID="AccountNumber" runat="server" Text="Account #" CssClass="control-label col-md-2"></asp:Label>
+            <div class="col-md-4">
+                <asp:TextBox ID="AccountNumber" runat="server" CssClass="form-control" MaxLength="10"></asp:TextBox>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Account Number is required." ControlToValidate="AccountNumber" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
+                <asp:CustomValidator ID="cvAcNo" runat="server" ErrorMessage="Invalid Account Number format" ControlToValidate="AccountNumber" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvAcNo_ServerValidate">*</asp:CustomValidator>                
             </div>
         </div>
 
