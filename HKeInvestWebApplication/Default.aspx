@@ -9,6 +9,15 @@
     </div>
 
     <div class="row">
+         <div class="col-md-4">
+            <h2>Application Form</h2>
+            <p>
+               For security account application, complete the form and either taken to or mailed to HKeInvest’s office for processing.
+            </p>
+            <p>
+                <a class="btn btn-default" href="Application Form.pdf">Download Form</a>
+            </p>
+        </div>
         <div class="col-md-4">
             <h2>Securities Transaction</h2>
             <p>
@@ -27,15 +36,16 @@
                 <a class="btn btn-default" href="ClientOnly/ClientSecurityHoldingDetails.aspx">View Now!</a>
             </p>
         </div>
-        <div class="col-md-4">
-            <h2>Web Hosting</h2>
+         <div class="col-md-4">
+            <h2>Important Event</h2>
             <p>
-                You can easily find a web hosting company that offers the right mix of features and price for your applications.
+              Check for important dates and events here.
             </p>
             <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
+                <a class="btn btn-default" href="Calendar.aspx">View Now</a>
             </p>
         </div>
+
     </div>
 
 </asp:Content>
