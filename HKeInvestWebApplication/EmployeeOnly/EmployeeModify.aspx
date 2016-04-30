@@ -213,7 +213,7 @@
         </div>
 
 
-        <%-- START OF CO-HOLDER SESSION --%>
+<%--        <%-- START OF CO-HOLDER SESSION
         <br />
         <asp:Panel ID="CoHolderPanel" runat="server" Visible="False">
             <h6>Co-Account holder - Personal Information</h6>
@@ -382,7 +382,7 @@
                         <asp:ListItem Value="TRUE">Yes</asp:ListItem>
                         <asp:ListItem Value="FALSE">No</asp:ListItem>
                     </asp:RadioButtonList>
-                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" ErrorMessage="Co-account holder's employed by broker status is required." ControlToValidate="EmpByBroker2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>--%>
+                   
                 </div>
                 <asp:Label AssociatedControlID="CompanyDirector2" runat="server" Text="Are you a director, 10% shareholder or policy-making officer of a publicly traded company?" CssClass="control-label col-md-4"></asp:Label>
                 <div class="col-md-2">
@@ -390,11 +390,10 @@
                         <asp:ListItem Value="TRUE">Yes</asp:ListItem>
                         <asp:ListItem Value="FALSE">No</asp:ListItem>
                     </asp:RadioButtonList>
-                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator37" runat="server" ErrorMessage="Co-account holder's shareholder status is required." ControlToValidate="CompanyDirector2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>--%>
+
                 </div>
             </div>
         </asp:Panel>
-
         <%-- END OF CO-HOLDER SESSION --%>
 
         <br />
