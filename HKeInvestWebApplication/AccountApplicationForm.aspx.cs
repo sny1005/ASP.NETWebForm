@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using HKeInvestWebApplication.Code_File;
 using System.Data.SqlClient;
 using System.Data;
+using System.Text;
 
 
 namespace HKeInvestWebApplication
@@ -209,6 +210,17 @@ namespace HKeInvestWebApplication
 
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
                 myHKeInvest.setData(sql, myTransaction);
+
+                //insert account number automactically
+                string lastname = LastName.Text;
+                string achead = "";
+                StringBuilder sb = new StringBuilder(achead);
+                sb[0] = lastname[0];
+                sb[1] = lastname[1];
+                achead = sb.ToString();
+              //sql = "Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'";
+                decimal count= myHKeInvest.getAggregateValue("Select count(*) From (Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "')");
+
 
                 //insert all required fields first
                 sql = "INSERT INTO [Client] (isPrimary, title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";
