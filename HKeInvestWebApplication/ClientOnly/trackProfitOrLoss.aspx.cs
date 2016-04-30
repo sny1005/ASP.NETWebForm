@@ -38,14 +38,18 @@ namespace HKeInvestWebApplication.ClientOnly
             }
             else    //all
             {
+                
                 //get account number
                 string userName = User.Identity.Name;
                 string sql = "SELECT accountNumber FROM LoginAccount WHERE userName = '" + userName + "' ";
                 DataTable dtClient = myHKeInvestData.getData(sql);
-                string userAccountNumber = dtClient.Rows[0].ToString();
+                string userAccountNumber = null;
+                foreach (DataRow row in dtClient.Rows)
+                    userAccountNumber = row["accountNumber"].ToString();
 
                 //get buy amount
                 sql = "SELECT executePrice, executeShares FROM Transaction WHERE orderNumber = (SELECT orderNumber FROM Order WHERE buyOrSell = buy AND status = executed AND accountNumber = '"+userAccountNumber+"')";
+                //sql = "SELECT executePrice, executeShares FROM Transaction WHERE orderNumber = 12345678";
                 DataTable dtBuy = myHKeInvestData.getData(sql);
                 decimal totalBuyAmount = 0;
                 foreach (DataRow row in dtBuy.Rows)

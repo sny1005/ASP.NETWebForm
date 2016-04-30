@@ -8,6 +8,8 @@
             <asp:ListItem>One Type of Securities</asp:ListItem>
             <asp:ListItem>Individual Security</asp:ListItem>
         </asp:RadioButtonList>
+        <br />
+        <asp:Label ID="lblName" runat="server" Visible="False"></asp:Label>
     </div>
     <div class =" col-md-4">
         <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSecurityType_SelectedIndexChanged" Visible="False">
