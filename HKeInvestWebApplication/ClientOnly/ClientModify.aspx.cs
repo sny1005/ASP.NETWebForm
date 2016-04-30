@@ -55,7 +55,7 @@ namespace HKeInvestWebApplication.ClientOnly
         }
 
 
-        protected void Register_Click(object sender, EventArgs e)
+/*        protected void Register_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
@@ -203,6 +203,7 @@ namespace HKeInvestWebApplication.ClientOnly
             }
         }
 
+
         protected void acType_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (acType.SelectedIndex == 0)
@@ -211,7 +212,7 @@ namespace HKeInvestWebApplication.ClientOnly
                 CoHolderPanel.Visible = true;
         }
     }
-
+*/
 
 
 
