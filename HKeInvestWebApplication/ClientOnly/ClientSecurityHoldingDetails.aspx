@@ -33,11 +33,12 @@
         </div>
     </div>
 
+    <br />
     <h5>Rrquirement 6c - listing of active orders</h5>
     <div class="form-horizontal">
         <asp:Label ID="lblActiveBond" runat="server" Text="Listing of active bond/unit trust order" Visible="False" CssClass="h6"></asp:Label>
         <div>
-            <asp:GridView ID="gvActiveBond" runat="server" Visible="true" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="True">
+            <asp:GridView ID="gvActiveBond" runat="server" Visible="false" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="True">
                 <Columns>
                     <asp:BoundField DataField="orderNumber" HeaderText="Order Reference Number" ReadOnly="True"/>
                     <asp:BoundField DataField="buyOrSell" HeaderText="Buy or Sell" ReadOnly="True"/>
@@ -54,7 +55,7 @@
 
         <asp:Label ID="lblActiveStock" runat="server" Text="Listing of active stock order" Visible="False" CssClass="h6"></asp:Label>
         <div>
-            <asp:GridView ID="gvActiveStock" runat="server" Visible="true" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="True">
+            <asp:GridView ID="gvActiveStock" runat="server" Visible="false" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="True">
                 <Columns>
                     <asp:BoundField DataField="orderNumber" HeaderText="Order Reference Number" ReadOnly="True"/>
                     <asp:BoundField DataField="buyOrSell" HeaderText="Buy or Sell" ReadOnly="True"/>
@@ -72,7 +73,43 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-3"><asp:Button ID="generate" runat="server" Text="Generate" CssClass="btn" OnClick="generate_Click"></asp:Button></div>
+            <div class="col-md-3"><asp:Button ID="generate" runat="server" Text="Generate 6c" CssClass="btn" OnClick="generate6c_Click"></asp:Button></div>
+        </div>
+    </div>
+
+    <br />
+    <h5>Rrquirement 6d - listing of order history</h5>
+    <div class="form-horizontal">
+        <div class="form-group">                
+            <asp:Label ID="Label1" runat="server" Text="From: " CssClass="control-label col-md-1"></asp:Label>
+            <div class="col-md-2">
+                <asp:TextBox ID="startDate" runat="server" CssClass="form-control"></asp:TextBox>
+            </div>
+            <asp:Label ID="Label2" runat="server" Text="To: " CssClass="control-label col-md-1"></asp:Label>
+            <div class="col-md-2">
+                <asp:TextBox ID="endDate" runat="server" CssClass="form-control"></asp:TextBox>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <asp:GridView ID="gvHistory" runat="server" Visible="false" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="True">
+                <Columns>
+                    <asp:BoundField DataField="orderNumber" HeaderText="Order Reference Number" ReadOnly="True"/>
+                    <asp:BoundField DataField="buyOrSell" HeaderText="Buy or Sell" ReadOnly="True"/>
+                    <asp:BoundField DataField="securityType" HeaderText="Security Type" ReadOnly="True"/>
+                    <asp:BoundField DataField="securityCode" HeaderText="Security Code" ReadOnly="True" />
+                    <asp:BoundField DataField="name" HeaderText="Security Name" ReadOnly="True" />
+                    <asp:BoundField DataField="dateSubmitted" HeaderText="Date Submitted" ReadOnly="True" SortExpression="date" />
+                    <asp:BoundField DataField="status" HeaderText="Current status" ReadOnly="True"/>
+                    <asp:BoundField DataField="amount" DataFormatString="{0:n2}" HeaderText="Dollar amount/Quantity of shares" ReadOnly="True"/>
+                </Columns>
+            </asp:GridView>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-3"><asp:Button ID="Button1" runat="server" Text="Generate 6d" CssClass="btn" OnClick="generate6d_Click"></asp:Button></div>
         </div>
     </div>
 </asp:Content>
