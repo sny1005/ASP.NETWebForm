@@ -301,6 +301,7 @@
     <Content Include="Global.asax" />
     <Content Include="EmployeeOnly\SecurityHoldingDetails.aspx" />
     <Content Include="ClientOnly\SecuritiesTransactions.aspx" />
+    <Content Include="ServiceFees.aspx" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -602,6 +603,13 @@
     </Compile>
     <Compile Include="ClientOnly\SecuritiesTransactions.aspx.designer.cs">
       <DependentUpon>SecuritiesTransactions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceFees.aspx.cs">
+      <DependentUpon>ServiceFees.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ServiceFees.aspx.designer.cs">
+      <DependentUpon>ServiceFees.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
