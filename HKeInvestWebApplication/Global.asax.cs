@@ -23,9 +23,9 @@ namespace HKeInvestWebApplication
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Add periordic task for system to check order and transaction information
-            Thread mythread = new Thread(PeriodicTasks);
-            mythread.IsBackground = true;
-            mythread.Start();
+            //Thread mythread = new Thread(PeriodicTasks);
+            //mythread.IsBackground = true;
+            //mythread.Start();
         }
 
         private void PeriodicTasks()
@@ -247,22 +247,22 @@ namespace HKeInvestWebApplication
             if (asset < 1000000)
             {
                 if (orderType.Equals("market"))
-                    fee = expenditure * (decimal)0.04;
+                    fee = expenditure * (decimal)0.004;
                 else if (orderType.Equals("stop limit"))
-                    fee = expenditure * (decimal)0.08;
+                    fee = expenditure * (decimal)0.008;
                 else
-                    fee = expenditure * (decimal)0.06;
+                    fee = expenditure * (decimal)0.006;
 
                 fee = Math.Max(150, fee);
             }
             else
             {
                 if (orderType.Equals("market"))
-                    fee = expenditure * (decimal)0.02;
+                    fee = expenditure * (decimal)0.002;
                 else if (orderType.Equals("stop limit"))
-                    fee = expenditure * (decimal)0.06;
+                    fee = expenditure * (decimal)0.006;
                 else
-                    fee = expenditure * (decimal)0.04;
+                    fee = expenditure * (decimal)0.004;
 
                 fee = Math.Max(100, fee);
             }
@@ -280,7 +280,7 @@ namespace HKeInvestWebApplication
             {
                 // new security bought by account
                 object[] para = { accountNumber, securityType, securityCode, name, shares, currency };
-                sql = string.Format("INSERT INTO [SecurityHolding] VALUES ( '{0}', '{1}', '{2}', '{3}', {4}, '{5}', NULL, NULL)", para);
+                sql = string.Format("INSERT INTO [SecurityHolding] VALUES ( '{0}', '{1}', '{2}', '{3}', {4}, '{5}')", para);
                 myData.setData(sql, trans);
             }
             else
@@ -377,7 +377,7 @@ namespace HKeInvestWebApplication
         {
             string sql = "SELECT * FROM [Alert]";
             DataTable dtAlert = myData.getData(sql);
-            if (dtAlert.Rows.Equals(0)) //no alert
+            if (dtAlert.Rows.Count == 0 || dtAlert == null) //no alert record
                 return;
             foreach(DataRow row in dtAlert.Rows)
             {

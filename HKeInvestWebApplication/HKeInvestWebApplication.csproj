@@ -207,6 +207,7 @@
       <DependentUpon>HKeInvestDB.mdf</DependentUpon>
     </Content>
     <Content Include="ClientOnly\ClientModify.aspx" />
+    <Content Include="ClientOnly\ClientSecurityHoldingDetails.aspx" />
     <Content Include="EmployeeOnly\EmployeeModify.aspx" />
     <Content Include="SearchSecurties.aspx" />
     <Content Include="Account\AddPhoneNumber.aspx" />
@@ -234,7 +235,6 @@
     <Content Include="App_Data\HKeInvestDB.mdf" />
     <Content Include="App_Themes\eInvestTheme\bootstrap.min.css" />
     <Content Include="Calendar.aspx" />
-    <Content Include="ClientOnly\ClientSecurityHoldingDetails.aspx" />
     <Content Include="ClientOnly\SetAlert.aspx" />
     <Content Include="ClientOnly\trackProfitOrLoss.aspx" />
     <Content Include="Contact.aspx" />
@@ -331,6 +331,13 @@
     </Compile>
     <Compile Include="ClientOnly\ClientModify.aspx.designer.cs">
       <DependentUpon>ClientModify.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientOnly\ClientSecurityHoldingDetails.aspx.cs">
+      <DependentUpon>ClientSecurityHoldingDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientOnly\ClientSecurityHoldingDetails.aspx.designer.cs">
+      <DependentUpon>ClientSecurityHoldingDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="EmployeeOnly\EmployeeModify.aspx.cs">
       <DependentUpon>EmployeeModify.aspx</DependentUpon>
@@ -475,13 +482,6 @@
     </Compile>
     <Compile Include="Calendar.aspx.designer.cs">
       <DependentUpon>Calendar.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ClientOnly\ClientSecurityHoldingDetails.aspx.cs">
-      <DependentUpon>ClientSecurityHoldingDetails.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ClientOnly\ClientSecurityHoldingDetails.aspx.designer.cs">
-      <DependentUpon>ClientSecurityHoldingDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="ClientOnly\SetAlert.aspx.cs">
       <DependentUpon>SetAlert.aspx</DependentUpon>
