@@ -50,8 +50,6 @@ namespace HKeInvestWebApplication
                 balance = myHKeInvestCode.getAccountBalance(accountNumber);
                 lblAccountBalance.Text = "Account balance: " + Convert.ToString(balance);
             }
-
-
         }
 
         //UI change
@@ -335,7 +333,7 @@ namespace HKeInvestWebApplication
             }
             else if (rblTransType.SelectedValue == "sell" && (rblOrderType.SelectedValue == "stop" || rblOrderType.SelectedValue == "stop limit"))
             {
-                if (hPrice.Text != "")
+                if (hPrice.Text == "")
                 {
                     args.IsValid = false;
                     cvhPrice.ErrorMessage = "Highest selling price is needed.";

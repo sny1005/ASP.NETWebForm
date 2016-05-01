@@ -16,17 +16,18 @@ namespace HKeInvestWebApplication.ClientOnly
         HKeInvestData myHKeInvestData = new HKeInvestData();
         HKeInvestCode myHKeInvestCode = new HKeInvestCode();
         ExternalFunctions myExternalFunctions = new ExternalFunctions();
+        static string accountNumber;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            accountNumber = myHKeInvestCode.getAccountNumber(User.Identity.Name);
         }
 
         protected void cvSecurityCode_ServerValidate(object source, ServerValidateEventArgs args)
         {
             string securityType = ddlSecurityType.SelectedItem.Text.Trim();
             string input = SecurityCode.Text.Trim();
-            string sql = "SELECT code FROM securityHolding WHERE type = securityType AND accountNumber = (SELECT accountNumber FROM Account WHERE userName ='" + User.Identity.Name + "')";
+            string sql = "SELECT code FROM securityHolding WHERE type = '" + securityType + "' AND accountNumber = '" + accountNumber + "'";
            
             DataTable dtSecurity = myHKeInvestData.getData(sql);
             if (dtSecurity == null) { return; } // If the DataSet is null, a SQL error occurred.
@@ -47,7 +48,7 @@ namespace HKeInvestWebApplication.ClientOnly
         protected void cvSet_ServerValidate(object source, ServerValidateEventArgs args)
         {
             string alerttype = AlertType_RadioButtonList.SelectedItem.Text.Trim();
-            string sql = "SELECT alertType FROM Alert WHERE accountNumber = (SELECT accountNumber FROM Account WHERE userName ='" + User.Identity.Name + "')";
+            string sql = "SELECT alertType FROM Alert WHERE accountNumber = '" + accountNumber + "'";
             DataTable dtAlert = myHKeInvestData.getData(sql);
             args.IsValid = false;
             foreach (DataRow row in dtAlert.Rows)
@@ -67,7 +68,7 @@ namespace HKeInvestWebApplication.ClientOnly
             string input = SecurityCode.Text.Trim();
             string value = AlertValue.Text.Trim();
 
-            string sql = "SELECT alertType FROM Alert WHERE accountNumber = (SELECT accountNumber FROM Account WHERE userName ='" + User.Identity.Name + "')";
+            string sql = "SELECT alertType FROM Alert WHERE accountNumber = '" + accountNumber + "'";
             DataTable dtAlert = myHKeInvestData.getData(sql);
            
             foreach (DataRow row in dtAlert.Rows)
