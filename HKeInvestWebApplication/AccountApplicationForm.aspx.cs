@@ -205,15 +205,7 @@ namespace HKeInvestWebApplication
                 else                                            //only chequeV contain value
                     initialBalance = Convert.ToDecimal(ChequeV.Text);
 
-                //the account will be successfully updated
-                string sql = "INSERT INTO [LoginAccount] VALUES ('" + acNo + "', '" + acType.SelectedValue + "', " + initialBalance + ", NULL)";
-
-                SqlTransaction myTransaction = myHKeInvest.beginTransaction();
-                myHKeInvest.setData(sql, myTransaction);
-                myHKeInvest.commitTransaction(myTransaction);
-
                 //insert account number automactically
-                
                 string lastname = LastName.Text;
                 string achead = lastname.Substring(0, 2);
                 /*StringBuilder sb = new StringBuilder(achead);
@@ -225,8 +217,17 @@ namespace HKeInvestWebApplication
                 string acnew = achead + count;
                 //SqlTransaction trans = myHKeInvest.beginTransaction();
                 //myHKeInvest.setData("Insert Into LoginAccount(accountNumber) Values('" + achead + count + "')", myTransaction);
-               // myHKeInvest.commitTransaction(trans);
+                // myHKeInvest.commitTransaction(trans);
+
+
+                //the account will be successfully updated
+                string sql = "INSERT INTO [LoginAccount] VALUES ('" + acnew + "', '" + acType.SelectedValue + "', " + initialBalance + ", NULL)";
+
+                SqlTransaction myTransaction = myHKeInvest.beginTransaction();
+                myHKeInvest.setData(sql, myTransaction);
                 
+
+
                 //insert all required fields first
                 sql = "INSERT INTO [Client] (isPrimary, title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";
                 sql = sql + "VALUES ('true', '" + title.SelectedValue + "', '" + acnew + "', '" + FirstName.Text + "', '" + LastName.Text + "', CONVERT(date, '" + DateOfBirth.Text + "', 103), '" + Email.Text + "', '" + HKID.Text + "', '" + Citizen.Text + "', '" + Residence.Text + "', '" + Building.Text + "', '" + Street.Text + "', '" + District.Text + "', '" + EmpStatus.SelectedValue + "', '" + EmpByBroker.SelectedValue + "', '" + CompanyDirector.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
