@@ -4,8 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data;
 using HKeInvestWebApplication.Code_File;
 using HKeInvestWebApplication.ExternalSystems.Code_File;
+using System.Text.RegularExpressions;
+using System.Data.SqlClient;
+using System.Text;
+
 
 namespace HKeInvestWebApplication.EmployeeOnly
 {
@@ -28,6 +33,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
                 if (args.Value == "") args.IsValid = false;
             }
         }
+
         //protected void cvOccupation2_ServerValidate(object source, ServerValidateEventArgs args)
         //{
         //    if (EmpStatus2.SelectedValue == "Employed")
@@ -35,17 +41,20 @@ namespace HKeInvestWebApplication.EmployeeOnly
         //        if (args.Value == "") args.IsValid = false;
         //    }
         //}
+
         protected void cvSpecificSource_ServerValidate(object source, ServerValidateEventArgs args)
         {
             if (PrimarySource.SelectedValue == "other" && args.Value == "") args.IsValid = false;
         }
-        /*
+
         protected void Register_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
                 HKeInvestData myHKeInvest = new HKeInvestData();
-                string acNo = AccountNumber.Text;
+                string acNo = txtAccountNumber.Text;
+                string sql;
+                SqlTransaction myTransaction = myHKeInvest.beginTransaction();
 
                 if (title.SelectedValue != null)
                 {
@@ -206,9 +215,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
                 //end of primary account holder infomation
                 myHKeInvest.commitTransaction(myTransaction);
 
-
                 ////INSERT CO HOLDER'S INFORMATION
-                ////
                 //if (acType.SelectedIndex != 0)
                 //{
                 //    myTransaction = myHKeInvest.beginTransaction();
@@ -337,7 +344,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
                 //    myHKeInvest.commitTransaction(myTransaction);
                 //}
             }
-        }*/
+        }
     }
 }
 

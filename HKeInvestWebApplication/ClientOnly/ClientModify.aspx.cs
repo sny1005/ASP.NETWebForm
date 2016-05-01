@@ -7,6 +7,10 @@ using System.Web.UI.WebControls;
 using System.Data;
 using HKeInvestWebApplication.Code_File;
 using HKeInvestWebApplication.ExternalSystems.Code_File;
+using System.Text.RegularExpressions;
+using System.Data.SqlClient;
+using System.Text;
+
 
 namespace HKeInvestWebApplication.ClientOnly
 {
@@ -53,13 +57,15 @@ namespace HKeInvestWebApplication.ClientOnly
         {
             if (PrimarySource.SelectedValue == "other" && args.Value == "") args.IsValid = false;
         }
-        /*
+        
         protected void Register_Click(object sender, EventArgs e)
         {
+            string sql;
             if (Page.IsValid)
             {
                 HKeInvestData myHKeInvest = new HKeInvestData();
-                string acNo = AccountNumber.Text;
+                SqlTransaction myTransaction = myHKeInvest.beginTransaction();
+                string acNo = lblAccountNumber.Text;
 
                 if (Email.Text != null) {
                     sql = "UPDATE [Client] SET email = '" + Email.Text + "' WHERE accountNumber = '" + acNo + "'";
@@ -138,7 +144,7 @@ namespace HKeInvestWebApplication.ClientOnly
                     myHKeInvest.setData(sql, myTransaction);
                 }
 
-                if (Fund.Checked != null)
+                if (Fund.Checked)
                 {
                     sql = "UPDATE [Client] SET freeBalanceToFund = '" + Fund.Checked + "' WHERE accountNumber = '" + acNo + "'";
                     myHKeInvest.setData(sql, myTransaction);
@@ -183,10 +189,8 @@ namespace HKeInvestWebApplication.ClientOnly
                 //end of primary account holder infomation
                 myHKeInvest.commitTransaction(myTransaction);
 
-
                 //
                 //INSERT CO HOLDER'S INFORMATION
-                //
                 //if (acType.SelectedIndex != 0)
                 //{
                 //    myTransaction = myHKeInvest.beginTransaction();
@@ -243,7 +247,6 @@ namespace HKeInvestWebApplication.ClientOnly
 
                 //    myHKeInvest.setData(sql, myTransaction);
                 //    myHKeInvest.commitTransaction(myTransaction);       //need to commit transaction before being able to retreive information from the database
-
                 //    myTransaction = myHKeInvest.beginTransaction();
 
                 //    //insert phone numbers
@@ -279,6 +282,6 @@ namespace HKeInvestWebApplication.ClientOnly
                 //    myHKeInvest.commitTransaction(myTransaction);
                 //}
             }
-        }*/
+        }
     }
 }
