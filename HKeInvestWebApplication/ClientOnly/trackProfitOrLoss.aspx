@@ -39,10 +39,10 @@
     <div>
          <asp:GridView ID="gvSecurity" runat="server" CellPadding="5" AutoGenerateColumns="False">
             <Columns>
-                <asp:BoundField DataField="Total Dollar Amount for Buying" HeaderText="Total Dollar Amount for Buying" ReadOnly="True" SortExpression="Total Dollar Amount for Buying"></asp:BoundField>
-                <asp:BoundField DataField="Total Dollar Amount for Selling" HeaderText="Total Dollar Amount for Selling" ReadOnly="True" SortExpression="Total Dollar Amount for Selling" />
-                <asp:BoundField DataField="Total Fee Paid" HeaderText="Total Fee Paid" ReadOnly="True" SortExpression="Total Fee Paid" />
-                <asp:BoundField DataField="Profit/Loss" HeaderText="Profit/Loss" ReadOnly="True" SortExpression="Profit/Loss" />
+                <asp:BoundField DataField="buyAmount" HeaderText="Total Dollar Amount for Buying" ReadOnly="True" SortExpression="Total Dollar Amount for Buying"></asp:BoundField>
+                <asp:BoundField DataField="sellAmount" HeaderText="Total Dollar Amount for Selling" ReadOnly="True" SortExpression="Total Dollar Amount for Selling" />
+                <asp:BoundField DataField="fee" HeaderText="Total Fee Paid" ReadOnly="True" SortExpression="Total Fee Paid" />
+                <asp:BoundField DataField="profit" HeaderText="Profit/Loss" ReadOnly="True" SortExpression="Profit/Loss" />
             </Columns>
         </asp:GridView>
 

@@ -56,7 +56,7 @@ namespace HKeInvestWebApplication.ClientOnly
                 //get buy amount
                 // string sql = "SELECT executePrice, executeShares FROM [Transaction] WHERE orderNumber = (SELECT orderNumber FROM [Order] WHERE buyOrSell = 'buy' AND status = 'completed' AND accountNumber = '"+userAccountNumber+"')";
                 //SELECT "executePrice", "executeShares" FROM "Transaction" WHERE "orderNumber" = (SELECT "orderNumber" FROM 'Order' WHERE buyOrSell = 'buy' AND "status" = 'executed' AND "accountNumber" = 'PO00000001')
-                string sql = "SELECT orderNumber FROM [Order] WHERE buyOrSell = 'buy' AND status = 'completed' AND accountNumber = '" + userAccountNumber + "'";
+                string sql = "SELECT orderNumber, securityType, securityCode FROM [Order] WHERE buyOrSell = 'buy' AND status = 'completed' AND accountNumber = '" + userAccountNumber + "'";
                 DataTable dtOrder = myHKeInvestData.getData(sql);
                 decimal totalBuyAmount = 0;
                 if (dtOrder.Rows.Count != 0)
@@ -64,12 +64,20 @@ namespace HKeInvestWebApplication.ClientOnly
                     foreach (DataRow row in dtOrder.Rows)
                     {
                         string orderNumber = row["orderNumber"].ToString();
+                        string type = row["securityType"].ToString();
+                        string code = row["securityCode"].ToString();
+
                         string find = "SELECT executePrice, executeShares FROM [Transaction] WHERE orderNumber = '" + orderNumber + "'";
                         DataTable dtBuy = myHKeInvestData.getData(find);
                         foreach (DataRow Row in dtBuy.Rows)
                         {
                             // need to convert back to HKD!!!!!!!!!!
-
+                           /* string sql2 = "SELECT base FROM [SecurityHolding] WHERE type = '"+type+"' AND code = '"+code+ "'AND accountNumber = '" + userAccountNumber + "' ";
+                            DataTable dtBase = myHKeInvestData.getData(sql2);
+                            string currency = dtBase.Rows[0].ToString();
+                            decimal fromRate = myExternalFunctions.getCurrencyRate(currency);
+                            decimal executePriceHKD = myHKeInvestCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", Convert.ToDecimal(Row["executePrice"]));
+                           */
                             totalBuyAmount = totalBuyAmount + (Convert.ToDecimal(Row["executePrice"]) * Convert.ToDecimal(Row["executeShares"]));
                         }
                     }
