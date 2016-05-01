@@ -20,7 +20,7 @@ namespace HKeInvestWebApplication
 
         }
 
-        protected void cvAcNo_ServerValidate(object source, ServerValidateEventArgs args)
+        /*protected void cvAcNo_ServerValidate(object source, ServerValidateEventArgs args)
         {
             string acn = AccountNumber.Text.Trim();
             string lastname = LastName.Text.Trim();
@@ -54,7 +54,7 @@ namespace HKeInvestWebApplication
                 cvAcNo.ErrorMessage = "Account Number must be followed by 8 digits";
                 return;
             }
-        }
+        }/*
 
         //LEGACY function
 /*        protected void cvDOB_ServerValidate(object source, ServerValidateEventArgs args)
@@ -213,13 +213,13 @@ namespace HKeInvestWebApplication
 
                 //insert account number automactically
                 string lastname = LastName.Text;
-                string achead = "";
-                StringBuilder sb = new StringBuilder(achead);
+                string achead = lastname.Substring(0, 2);
+                /*StringBuilder sb = new StringBuilder(achead);
                 sb[0] = lastname[0];
                 sb[1] = lastname[1];
-                achead = sb.ToString();
+                achead = sb.ToString();*/
                 //sql = "Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'";
-                decimal count = myHKeInvest.getAggregateValue("Select count(*) From (Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "')");
+                decimal count = myHKeInvest.getAggregateValue("Select count(*) From [Client] WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'");
                 SqlTransaction trans = myHKeInvest.beginTransaction();
                 myHKeInvest.setData("Insert Into Client (accountNumber) Values('" + achead + count + "')", trans);
                 myHKeInvest.commitTransaction(trans);
