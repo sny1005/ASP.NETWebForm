@@ -45,7 +45,7 @@ namespace HKeInvestWebApplication
             } while (true);
         }
 
-        private static void buySellUpdate(ExternalFunctions myExternal, ref HKeInvestData myData, ref HKeInvestCode myCode, Queue<string> orderNumbers)
+       private static void buySellUpdate(ExternalFunctions myExternal, ref HKeInvestData myData, ref HKeInvestCode myCode, Queue<string> orderNumbers)
         {
             while (orderNumbers.Count != 0)
             {
@@ -238,7 +238,7 @@ namespace HKeInvestWebApplication
                 orderNumbers.Dequeue();
             }
         }
-
+       
         private static decimal stockFee(HKeInvestCode myCode, string orderNumber, decimal expenditure, decimal asset)
         {
             decimal fee;

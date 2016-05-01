@@ -19,7 +19,7 @@
                 <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
             </asp:DropDownList>
         <asp:Label runat="server" Text="Security Code" AssociatedControlID="txtSecurityCode" CssClass="col-md-4" ID="lblSecurityCode" Visible="False"></asp:Label>
-        <asp:TextBox ID="txtSecurityCode" runat="server" CssClass="text-danger" MaxLength="4" Visible="False"></asp:TextBox>
+        <asp:TextBox ID="txtSecurityCode" runat="server" CssClass="text-danger" MaxLength="4" OnTextChanged="txtSecurityCode_TextChanged" Visible="False"></asp:TextBox>
     </div>
     </div>
     <div>
@@ -37,7 +37,7 @@
         </asp:GridView>
     </div>
     <div>
-         <asp:GridView ID="gvSecurity" runat="server" CellPadding="5" AutoGenerateColumns="False" Visible="False">
+         <asp:GridView ID="gvSecurity" runat="server" CellPadding="5" AutoGenerateColumns="False">
             <Columns>
                 <asp:BoundField DataField="Total Dollar Amount for Buying" HeaderText="Total Dollar Amount for Buying" ReadOnly="True" SortExpression="Total Dollar Amount for Buying"></asp:BoundField>
                 <asp:BoundField DataField="Total Dollar Amount for Selling" HeaderText="Total Dollar Amount for Selling" ReadOnly="True" SortExpression="Total Dollar Amount for Selling" />
