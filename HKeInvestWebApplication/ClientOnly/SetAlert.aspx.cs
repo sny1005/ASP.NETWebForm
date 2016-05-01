@@ -49,6 +49,40 @@ namespace HKeInvestWebApplication.ClientOnly
             }
         }
 
+        protected void cvAlertValue_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            decimal value;
+            if (!decimal.TryParse(args.Value, out value)) { return; }
+
+            string alertType = AlertType_RadioButtonList.SelectedValue;
+            string securityType = ddlSecurityType.SelectedValue;
+            string code = SecurityCode.Text.Trim();
+
+            string sql = "SELECT [value] FROM [Alert] WHERE alertType <> '" + alertType + "' AND type = '" + securityType + "' AND accountNumber = '" + accountNumber + "' AND code = '" + code + "'";
+            DataTable dtAlert = myHKeInvestData.getData(sql);
+
+            if (dtAlert.Rows.Count == 0 || dtAlert == null) { return; }
+            //if itself is low value
+            if (alertType == "lowValue")
+            {
+                if( (decimal)dtAlert.Rows[0]["value"] < value)
+                {
+                    cvAlertValue.ErrorMessage = "Low value is greater than high value";
+                    args.IsValid = false;
+                    return;
+                }
+            }
+            else
+            {
+                if ((decimal)dtAlert.Rows[0]["value"] > value)
+                {
+                    cvAlertValue.ErrorMessage = "High value is smaller than low value";
+                    args.IsValid = false;
+                    return;
+                }
+            }
+        }
+        
         // any validation for only 1 high and 1 low for a security?
         protected void cvSet_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -67,12 +101,10 @@ namespace HKeInvestWebApplication.ClientOnly
 
         protected void Set_Click(object sender, EventArgs e)
         {
+            lblmsg.Visible = false;
+
             if (Page.IsValid)
             {
-                //WHAT ABOUT THE CASE THAT THE USER WANT TO CHANGE THE ALERT VALUE????
-
-
-
                 string alerttype = AlertType_RadioButtonList.SelectedValue;
                 string securityType = ddlSecurityType.SelectedValue;
                 string input = SecurityCode.Text.Trim();
@@ -96,19 +128,21 @@ namespace HKeInvestWebApplication.ClientOnly
 
         protected void Cancel_Click(object sender, EventArgs e)
         {
-            if (Page.IsValid)
+            if (SecurityCode.Text.Trim() != "")
             {
                 string alerttype = AlertType_RadioButtonList.SelectedValue;
                 string securityType = ddlSecurityType.SelectedValue;
                 string code = SecurityCode.Text.Trim();
-                string value = AlertValue.Text.Trim();
 
                 string sql = "DELETE FROM Alert WHERE accountNumber = '" + accountNumber + "' AND type = '" + securityType + "' AND code = '" + code + "' AND alerttype = '" + alerttype + "'";
 
                 SqlTransaction trans = myHKeInvestData.beginTransaction();
                 myHKeInvestData.setData(sql, trans);
                 myHKeInvestData.commitTransaction(trans);
+                return;
             }
+            lblmsg.Visible = true;
+            lblmsg.Text = "SecurityCode is required";
         }
     }
 }

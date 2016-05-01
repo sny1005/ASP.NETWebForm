@@ -332,15 +332,15 @@ namespace HKeInvestWebApplication.Code_File
             subject = subject.Trim();
             body = body.Trim();
             MailMessage mail = new MailMessage();
-            SmtpClient emailServer = new SmtpClient("smtp.ust.hk");
-            mail.From = new MailAddress("comp3111_team109@connect.ust.hk", "InvestPro");
+            SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
+            mail.From = new MailAddress("comp3111_team109@cse.ust.hk", "InvestPro");
             mail.To.Add(target);
             mail.Subject = subject;
             mail.Body = body;
             // Specify login credentials
             emailServer.UseDefaultCredentials = false;
             emailServer.EnableSsl = true;
-            NetworkCredential myCredentials = new NetworkCredential("comp3111_team109@connect.ust.hk", "team109#");
+            NetworkCredential myCredentials = new NetworkCredential("comp3111_team109@cse.ust.hk", "team109#");
             emailServer.Credentials = myCredentials;
             // Send the message.
             emailServer.Send(mail);
