@@ -15,9 +15,9 @@ namespace HKeInvestWebApplication
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            HKeInvestData myHKeInvestData = new HKeInvestData();
-            decimal count = myHKeInvestData.getAggregateValue("Select count(*) From [Client]");
-            Label1.Text = count.ToString();
+            decimal count = 10;
+            string result = count.ToString().PadLeft(8, '0');
+            Label1.Text = result;
         }
     }
 }

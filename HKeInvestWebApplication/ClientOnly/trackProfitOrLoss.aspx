@@ -25,24 +25,24 @@
     <div>
         <asp:GridView ID="gvIndividual" runat="server" CellPadding="5" AutoGenerateColumns="False" Visible="False" OnSelectedIndexChanged="gvIndividual_SelectedIndexChanged">
             <Columns>
-                <asp:BoundField HeaderText="Type" ReadOnly="True" DataField="Type" SortExpression="Type" />
-                <asp:BoundField DataField="Code" HeaderText="Code" ReadOnly="True" SortExpression="Code" />
-                <asp:BoundField DataField="Name" HeaderText="Name" ReadOnly="True" SortExpression="Name" />
-                <asp:BoundField DataField="Number of Shares" HeaderText="Number of Shares" ReadOnly="True" SortExpression="Number of Shares" />
-                <asp:BoundField DataField="Total Dollar Amount for Buying" HeaderText="Total Dollar Amount for Buying" ReadOnly="True" SortExpression="Total Dollar Amount for Buying"></asp:BoundField>
-                <asp:BoundField DataField="Total Dollar Amount for Selling" HeaderText="Total Dollar Amount for Selling" ReadOnly="True" SortExpression="Total Dollar Amount for Selling" />
-                <asp:BoundField DataField="Total Fee Paid" HeaderText="Total Fee Paid" ReadOnly="True" SortExpression="Total Fee Paid" />
-                <asp:BoundField DataField="Profit/Loss" HeaderText="Profit/Loss" ReadOnly="True" SortExpression="Profit/Loss" />
+                <asp:BoundField HeaderText="Type" ReadOnly="True" DataField="type" SortExpression="Type" />
+                <asp:BoundField DataField="code" HeaderText="Code" ReadOnly="True" SortExpression="Code" />
+                <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="Name" />
+                <asp:BoundField DataField="shares" HeaderText="Number of Shares" ReadOnly="True" SortExpression="Number of Shares" />
+                <asp:BoundField DataField="buyAmount" HeaderText="Total Dollar Amount for Buying" ReadOnly="True" SortExpression="Total Dollar Amount for Buying"></asp:BoundField>
+                <asp:BoundField DataField="sellAmount" HeaderText="Total Dollar Amount for Selling" ReadOnly="True" SortExpression="Total Dollar Amount for Selling" />
+                <asp:BoundField DataField="fee" HeaderText="Total Fee Paid" ReadOnly="True" SortExpression="Total Fee Paid" />
+                <asp:BoundField DataField="profit" HeaderText="Profit/Loss" ReadOnly="True" SortExpression="Profit/Loss" />
             </Columns>
         </asp:GridView>
     </div>
     <div>
          <asp:GridView ID="gvSecurity" runat="server" CellPadding="5" AutoGenerateColumns="False">
             <Columns>
-                <asp:BoundField DataField="buyAmount" HeaderText="Total Dollar Amount for Buying" ReadOnly="True" SortExpression="Total Dollar Amount for Buying"></asp:BoundField>
-                <asp:BoundField DataField="sellAmount" HeaderText="Total Dollar Amount for Selling" ReadOnly="True" SortExpression="Total Dollar Amount for Selling" />
-                <asp:BoundField DataField="fee" HeaderText="Total Fee Paid" ReadOnly="True" SortExpression="Total Fee Paid" />
-                <asp:BoundField DataField="profit" HeaderText="Profit/Loss" ReadOnly="True" SortExpression="Profit/Loss" />
+                <asp:BoundField DataField="Total Dollar Amount for Buying" HeaderText="Total Dollar Amount for Buying" ReadOnly="True" SortExpression="Total Dollar Amount for Buying"></asp:BoundField>
+                <asp:BoundField DataField="Total Dollar Amount for Selling" HeaderText="Total Dollar Amount for Selling" ReadOnly="True" SortExpression="Total Dollar Amount for Selling" />
+                <asp:BoundField DataField="Total Fee Paid" HeaderText="Total Fee Paid" ReadOnly="True" SortExpression="Total Fee Paid" />
+                <asp:BoundField DataField="Profit/Loss" HeaderText="Profit/Loss" ReadOnly="True" SortExpression="Profit/Loss" />
             </Columns>
         </asp:GridView>
 
