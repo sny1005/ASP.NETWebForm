@@ -208,16 +208,10 @@ namespace HKeInvestWebApplication
                 //insert account number automactically
                 string lastname = LastName.Text;
                 string achead = lastname.Substring(0, 2);
-                /*StringBuilder sb = new StringBuilder(achead);
-                sb[0] = lastname[0];
-                sb[1] = lastname[1];
-                achead = sb.ToString();*/
-                //sql = "Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'";
                 decimal count = myHKeInvest.getAggregateValue("Select count(*) From [Client] WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'");
-                string acnew = achead + count;
-                //SqlTransaction trans = myHKeInvest.beginTransaction();
-                //myHKeInvest.setData("Insert Into LoginAccount(accountNumber) Values('" + achead + count + "')", myTransaction);
-                // myHKeInvest.commitTransaction(trans);
+                count = count + 1;
+                string acnew = achead.ToUpper() + count.ToString().PadLeft(8,'0');
+
 
 
                 //the account will be successfully updated

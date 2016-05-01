@@ -19,7 +19,7 @@
             <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>
         </div>
         <div>
-            <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="true">
+            <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="true" OnSelectedIndexChanged="gvSecurityHolding_SelectedIndexChanged">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="name" />
@@ -38,7 +38,7 @@
     <div class="form-horizontal">
         <asp:Label ID="lblActiveBond" runat="server" Text="Listing of active bond/unit trust order" Visible="False" CssClass="h6"></asp:Label>
         <div>
-            <asp:GridView ID="gvActiveBond" runat="server" Visible="false" AutoGenerateColumns="False" OnSorting="gvActive_Sorting" CellPadding="5" AllowSorting="True">
+            <asp:GridView ID="gvActiveBond" runat="server" Visible="false" AutoGenerateColumns="False" OnSorting="gvActive_Sorting" CellPadding="5" AllowSorting="True" OnSelectedIndexChanged="gvActiveBond_SelectedIndexChanged">
                 <Columns>
                     <asp:BoundField DataField="orderNumber" HeaderText="Order Reference Number" ReadOnly="True"/>
                     <asp:BoundField DataField="buyOrSell" HeaderText="Buy or Sell" ReadOnly="True"/>

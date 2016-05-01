@@ -434,5 +434,15 @@ namespace HKeInvestWebApplication.ClientOnly
             gvActiveStock.DataSource = activeStockOrder;
             gvActiveStock.DataBind();*/
         }
+
+        protected void gvSecurityHolding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void gvActiveBond_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
