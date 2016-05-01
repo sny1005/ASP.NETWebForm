@@ -371,5 +371,61 @@ namespace HKeInvestWebApplication
                 transTable.AcceptChanges();
             }
         }
+
+        private static void triggerAlert(ExternalFunctions myExternal, ref HKeInvestData myData, ref HKeInvestCode myCode, ref SqlTransaction trans)
+        {
+            string sql = "SELECT * FROM [Alert]";
+            DataTable dtAlert = myData.getData(sql);
+            if (dtAlert.Rows.Equals(0)) //no alert
+                return;
+            foreach(DataRow row in dtAlert.Rows)
+            {
+                string accountNumber = row["accountNumber"].ToString();
+                string alertType = row["alertType"].ToString();
+                string type = row["type"].ToString();
+                string code = row["code"].ToString();
+                decimal value = Convert.ToDecimal(row["value"]);
+                string date = row["dateOfTrigger"].ToString();
+                decimal lastPrice = Convert.ToDecimal(row["lastUpdate"]);
+
+                string findEmail = "SELECT email FROM [Client] WHERE accountNumber = '"+accountNumber+"' AND isPrimary = 'true'";
+                DataTable dtEmail = myData.getData(findEmail);
+                string email = dtEmail.Rows[0].ToString();
+              
+                string current = DateTime.Now.ToShortDateString();
+                if (date == current) //alerted
+                    continue;
+
+                string subject = "Alert From HKeInvest";
+                string body = "Dear Customer," + Environment.NewLine + "The price of the following security passes/reaches '"+value+"': " + Environment.NewLine + "Security Type: '"+type+"' " + Environment.NewLine + "Secuirty Code: '"+code+"'";
+
+                decimal currentPrice = myExternal.getSecuritiesPrice(type, code);
+
+                //low value
+                if (alertType == "Low Value Alert")
+                {
+                    if (value == currentPrice || (currentPrice < value && value < lastPrice)) // reach or pass
+                    {
+                        myCode.sendemail(email, subject, body);
+                        string insert = "INSERT INTO [Alert](dateOfTrigger) VALUE ('" + current + "')"; //record date
+                        myData.setData(insert, trans);
+                    }
+                }
+                //high value
+                if (alertType == "High Value Alert")
+                {
+                    if (value == currentPrice || (currentPrice > value && value > lastPrice)) // reach or pass
+                    {
+                        myCode.sendemail(email, subject, body);
+                        string insert = "INSERT INTO [Alert](dateOfTrigger) VALUE ('" + current + "')"; //record date
+                        myData.setData(insert, trans);
+                    }
+                }
+
+                sql = "INSERT INTO [Alert] (lastUpdate) VALUE ('" + currentPrice + "')"; //update lastest price
+                myData.setData(sql, trans);
+            }
+        }
+
     }
 }
