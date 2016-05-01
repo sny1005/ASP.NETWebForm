@@ -23,12 +23,19 @@ namespace HKeInvestWebApplication.ClientOnly
             accountNumber = myHKeInvestCode.getAccountNumber(User.Identity.Name);
         }
 
-        // any validation for only 1 high and 1 low for a security?
         protected void cvSecurityCode_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            string securityType = ddlSecurityType.SelectedItem.Text.Trim();
-            string input = SecurityCode.Text.Trim();
-            string sql = "SELECT code FROM securityHolding WHERE type = '" + securityType + "' AND accountNumber = '" + accountNumber + "'";
+            string securityType = ddlSecurityType.SelectedValue;
+
+            //check if such security exists
+            if (!myHKeInvestCode.securityCodeIsValid(securityType, args.Value))
+            {
+                cvSecurityCode.ErrorMessage = "Security code invalid";
+                args.IsValid = false;
+                return;
+            }
+
+            string sql = "SELECT code FROM securityHolding WHERE type = '" + securityType + "' AND accountNumber = '" + accountNumber + "' AND code = '" + args.Value + "'";
            
             DataTable dtSecurity = myHKeInvestData.getData(sql);
             if (dtSecurity == null) { return; } // If the DataSet is null, a SQL error occurred.
@@ -36,51 +43,72 @@ namespace HKeInvestWebApplication.ClientOnly
             // If no result is returned by the SQL statement, then display a message.
             if (dtSecurity.Rows.Count == 0)
             {
+                args.IsValid = false;
                 cvSecurityCode.ErrorMessage = "You do not own this security.";
-                return;
-            }
-            else
-            {
-                args.IsValid = true;
                 return;
             }
         }
 
+        // any validation for only 1 high and 1 low for a security?
         protected void cvSet_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            string alerttype = AlertType_RadioButtonList.SelectedItem.Text.Trim();
-            string sql = "SELECT alertType FROM Alert WHERE accountNumber = '" + accountNumber + "'";
+            string alerttype = AlertType_RadioButtonList.SelectedValue;
+            string sql = "SELECT alertType FROM Alert WHERE alertType = '" + alerttype + "' AND type = '" + ddlSecurityType.SelectedValue + "' AND accountNumber = '" + accountNumber + "' AND code = '" + SecurityCode.Text + "'";
             DataTable dtAlert = myHKeInvestData.getData(sql);
-            args.IsValid = false;
-            foreach (DataRow row in dtAlert.Rows)
+
+            if(dtAlert == null) { return; }
+            if (dtAlert.Rows.Count == 1)
             {
-                if (row["alertType"].ToString() == alerttype)
-                {
-                    args.IsValid = true;
-                    return;
-                }
+                args.IsValid = false;
+                cvSet.ErrorMessage = "You have already set a " + AlertType_RadioButtonList.SelectedItem.Text.Trim() + " for this security.";
+                return;
             }
         }
 
         protected void Set_Click(object sender, EventArgs e)
         {
-            string alerttype = AlertType_RadioButtonList.SelectedItem.Text.Trim();
-            string securityType = ddlSecurityType.SelectedItem.Text.Trim();
-            string input = SecurityCode.Text.Trim();
-            string value = AlertValue.Text.Trim();
-
-            string sql = "SELECT alertType FROM Alert WHERE accountNumber = '" + accountNumber + "'";
-            DataTable dtAlert = myHKeInvestData.getData(sql);
-           
-            foreach (DataRow row in dtAlert.Rows)
+            if (Page.IsValid)
             {
-                if (row["alertType"].ToString() == alerttype)
-                    return;
-            }
+                //WHAT ABOUT THE CASE THAT THE USER WANT TO CHANGE THE ALERT VALUE????
 
-            string sql2 = "INSERT INTO [Alert] VALUES ('" + accountNumber + "', '" + alerttype + "', '" + securityType + "', '" + input + "', " + value + ", NULL, NULL)";
-            SqlTransaction trans = myHKeInvestData.beginTransaction();
-            myHKeInvestData.setData(sql2, trans);
+
+
+                string alerttype = AlertType_RadioButtonList.SelectedValue;
+                string securityType = ddlSecurityType.SelectedValue;
+                string input = SecurityCode.Text.Trim();
+                string value = AlertValue.Text.Trim();
+
+                string sql = "SELECT alertType FROM Alert WHERE accountNumber = '" + accountNumber + "'";
+                DataTable dtAlert = myHKeInvestData.getData(sql);
+
+                foreach (DataRow row in dtAlert.Rows)
+                {
+                    if (row["alertType"].ToString() == alerttype)
+                        return;
+                }
+
+                string sql2 = "INSERT INTO [Alert] ([accountNumber], [type], [code], [alertType], [value], [dateOfTrigger], [lastUpdate]) VALUES ('" + accountNumber + "', '" + securityType + "', '" + input + "', '" + alerttype + "', " + value + ", NULL, NULL)";
+                SqlTransaction trans = myHKeInvestData.beginTransaction();
+                myHKeInvestData.setData(sql2, trans);
+                myHKeInvestData.commitTransaction(trans);
+            }
+        }
+
+        protected void Cancel_Click(object sender, EventArgs e)
+        {
+            if (Page.IsValid)
+            {
+                string alerttype = AlertType_RadioButtonList.SelectedValue;
+                string securityType = ddlSecurityType.SelectedValue;
+                string code = SecurityCode.Text.Trim();
+                string value = AlertValue.Text.Trim();
+
+                string sql = "DELETE FROM Alert WHERE accountNumber = '" + accountNumber + "' AND type = '" + securityType + "' AND code = '" + code + "' AND alerttype = '" + alerttype + "'";
+
+                SqlTransaction trans = myHKeInvestData.beginTransaction();
+                myHKeInvestData.setData(sql, trans);
+                myHKeInvestData.commitTransaction(trans);
+            }
         }
     }
 }

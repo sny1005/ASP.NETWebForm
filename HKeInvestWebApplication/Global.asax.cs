@@ -403,7 +403,7 @@ namespace HKeInvestWebApplication
                 decimal currentPrice = myExternal.getSecuritiesPrice(type, code);
 
                 //low value
-                if (alertType == "Low Value Alert")
+                if (alertType == "lowAlert")
                 {
                     if (value == currentPrice || (currentPrice < value && value < lastPrice)) // reach or pass
                     {
@@ -414,7 +414,7 @@ namespace HKeInvestWebApplication
                     }
                 }
                 //high value
-                if (alertType == "High Value Alert")
+                if (alertType == "highAlert")
                 {
                     if (value == currentPrice || (currentPrice > value && value > lastPrice)) // reach or pass
                     {

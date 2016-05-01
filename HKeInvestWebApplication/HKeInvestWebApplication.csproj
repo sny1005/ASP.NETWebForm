@@ -309,7 +309,9 @@
     <Content Include="Global.asax" />
     <Content Include="EmployeeOnly\SecurityHoldingDetails.aspx" />
     <Content Include="ClientOnly\SecuritiesTransactions.aspx" />
+    <Content Include="ServiceFees.aspx" />
     <Content Include="Site.Master" />
+    <Content Include="Test aggrevate.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -618,6 +620,13 @@
     <Compile Include="ClientOnly\SecuritiesTransactions.aspx.designer.cs">
       <DependentUpon>SecuritiesTransactions.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ServiceFees.aspx.cs">
+      <DependentUpon>ServiceFees.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ServiceFees.aspx.designer.cs">
+      <DependentUpon>ServiceFees.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -633,6 +642,13 @@
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="Test aggrevate.aspx.cs">
+      <DependentUpon>Test aggrevate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Test aggrevate.aspx.designer.cs">
+      <DependentUpon>Test aggrevate.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
