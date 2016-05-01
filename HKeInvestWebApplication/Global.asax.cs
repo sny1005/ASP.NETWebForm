@@ -41,6 +41,7 @@ namespace HKeInvestWebApplication
                 Queue<string> orderNumbers = myCode.getIncompleteOrder();
 
                 buySellUpdate(myExternal, ref myData, ref myCode, orderNumbers);
+                triggerAlert(myExternal, ref myData, ref myCode);
 
             } while (true);
         }
@@ -372,7 +373,7 @@ namespace HKeInvestWebApplication
             }
         }
 
-        private static void triggerAlert(ExternalFunctions myExternal, ref HKeInvestData myData, ref HKeInvestCode myCode, ref SqlTransaction trans)
+        private static void triggerAlert(ExternalFunctions myExternal, ref HKeInvestData myData, ref HKeInvestCode myCode)
         {
             string sql = "SELECT * FROM [Alert]";
             DataTable dtAlert = myData.getData(sql);
@@ -408,6 +409,7 @@ namespace HKeInvestWebApplication
                     {
                         myCode.sendemail(email, subject, body);
                         string insert = "INSERT INTO [Alert](dateOfTrigger) VALUE ('" + current + "')"; //record date
+                        SqlTransaction trans = myData.beginTransaction();
                         myData.setData(insert, trans);
                     }
                 }
@@ -418,12 +420,14 @@ namespace HKeInvestWebApplication
                     {
                         myCode.sendemail(email, subject, body);
                         string insert = "INSERT INTO [Alert](dateOfTrigger) VALUE ('" + current + "')"; //record date
+                        SqlTransaction trans = myData.beginTransaction();
                         myData.setData(insert, trans);
                     }
                 }
 
                 sql = "INSERT INTO [Alert] (lastUpdate) VALUE ('" + currentPrice + "')"; //update lastest price
-                myData.setData(sql, trans);
+                SqlTransaction tran = myData.beginTransaction();
+                myData.setData(sql, tran);
             }
         }
 
