@@ -23,6 +23,7 @@ namespace HKeInvestWebApplication.ClientOnly
             accountNumber = myHKeInvestCode.getAccountNumber(User.Identity.Name);
         }
 
+        // any validation for only 1 high and 1 low for a security?
         protected void cvSecurityCode_ServerValidate(object source, ServerValidateEventArgs args)
         {
             string securityType = ddlSecurityType.SelectedItem.Text.Trim();
