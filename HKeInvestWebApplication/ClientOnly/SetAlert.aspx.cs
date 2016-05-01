@@ -78,7 +78,7 @@ namespace HKeInvestWebApplication.ClientOnly
                     return;
             }
 
-            string sql2 = "INSERT INTO [Alert]('(SELECT accountNumber FROM Account WHERE userName ='" + User.Identity.Name + "')', '"+alerttype+"', '"+securityType+"', '"+input+"', '"+value+"')";
+            string sql2 = "INSERT INTO [Alert] VALUES ('" + accountNumber + "', '" + alerttype + "', '" + securityType + "', '" + input + "', '" + value + "')";
             SqlTransaction trans = myHKeInvestData.beginTransaction();
             myHKeInvestData.setData(sql2, trans);   
         }
