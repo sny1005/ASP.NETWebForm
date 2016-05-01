@@ -15,10 +15,11 @@ namespace HKeInvestWebApplication.ClientOnly
         HKeInvestData myHKeInvestData = new HKeInvestData();
         HKeInvestCode myHKeInvestCode = new HKeInvestCode();
         ExternalFunctions myExternalFunctions = new ExternalFunctions();
+        static string accountNumber;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            accountNumber = myHKeInvestCode.getAccountNumber(User.Identity.Name);
         }
 
         protected void rbDisplayType_SelectedIndexChanged(object sender, EventArgs e)
@@ -53,18 +54,42 @@ namespace HKeInvestWebApplication.ClientOnly
                 //SELECT "executePrice", "executeShares" FROM "Transaction" WHERE "orderNumber" = (SELECT "orderNumber" FROM 'Order' WHERE buyOrSell = 'buy' AND "status" = 'executed' AND "accountNumber" = 'PO00000001')
                 DataTable dtBuy = myHKeInvestData.getData(sql);
                 decimal totalBuyAmount = 0;
-                if(dtBuy.Rows.Count != 0) { 
-                foreach (DataRow row in dtBuy.Rows)
-                    totalBuyAmount = totalBuyAmount + (Convert.ToDecimal(row["executePrice"])*Convert.ToDecimal(row["executeShares"]));
+                if(dtBuy.Rows.Count != 0)
+                { 
+                    foreach (DataRow row in dtBuy.Rows)
+                    {
+                        // need to convert back to HKD!!!!!!!!!!
+
+
+
+
+
+
+
+                        totalBuyAmount = totalBuyAmount + (Convert.ToDecimal(row["executePrice"])*Convert.ToDecimal(row["executeShares"]));
+
+                    }
                 }
 
                 //get sell amount
                 sql = "SELECT executePrice, executeShares FROM [Transaction] WHERE orderNumber = (SELECT orderNumber FROM [Order] WHERE buyOrSell = 'sell' AND status = 'completed' AND accountNumber = '" + userAccountNumber + "')";
                 DataTable dtSell = myHKeInvestData.getData(sql);
                 decimal totalSellAmount = 0;
-                if(dtSell.Rows.Count != 0) { 
-                foreach (DataRow row in dtSell.Rows)
-                    totalSellAmount = totalSellAmount + (Convert.ToDecimal(row["executePrice"]) * Convert.ToDecimal(row["executeShares"]));
+                if(dtSell.Rows.Count != 0)
+                { 
+                    foreach (DataRow row in dtSell.Rows)
+                    {
+                        // need to convert back to HKD!!!!!!!!!!
+
+
+
+
+
+
+
+
+                        totalSellAmount = totalSellAmount + (Convert.ToDecimal(row["executePrice"]) * Convert.ToDecimal(row["executeShares"]));
+                    }
                 }
 
                 //fee
@@ -81,7 +106,7 @@ namespace HKeInvestWebApplication.ClientOnly
                 DataTable dtValue = myHKeInvestData.getData(sql);
                 decimal currentValue = 0;
                 if (dtValue.Rows.Count != 0) { 
-                foreach(DataRow row in dtValue.Rows)
+                foreach(DataRow row in dtValue.Rows)  //NEED TO HANDLE NULL VALUES
                     currentValue = currentValue + Convert.ToDecimal(row["shares"]) * myExternalFunctions.getSecuritiesPrice(row["type"].ToString(), row["code"].ToString());
                 }
 
@@ -89,15 +114,22 @@ namespace HKeInvestWebApplication.ClientOnly
 
                 //view result
                 DataTable source = new DataTable();
-                source.Columns.Add(); source.Columns.Add(); source.Columns.Add(); source.Columns.Add(); source.Columns.Add();
-                //source.Rows.Add(totalBuyAmount, totalSellAmount, totalFeeCharged, profitOrLoss);
-                DataRow newRow = source.NewRow();
-                newRow[0] = totalBuyAmount;
-                newRow[1] = totalSellAmount;
-                newRow[2] = totalFeeCharged;
-                newRow[3] = profitOrLoss;
+                source.Columns.Add("buyAmount");
+                source.Columns.Add("sellAmount");
+                source.Columns.Add("fee");
+                source.Columns.Add("profit");
+
+                DataRow record = source.NewRow();
+                record["buyAmount"] = totalBuyAmount;
+                record["sellAmount"] = totalSellAmount;
+                record["fee"] = totalFeeCharged;
+                record["profit"] = profitOrLoss;
+
+                source.Rows.Add(record);
+                source.AcceptChanges();
 
                 gvSecurity.DataSource = source;
+                gvSecurity.DataBind();
                 gvSecurity.Visible = true;
             }
 
