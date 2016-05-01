@@ -20,10 +20,15 @@
             <asp:Label runat="server" Text="Secutity Code : " CssClass="control-label col-md-2" AssociatedControlID="SecCode"></asp:Label>
             <asp:TextBox ID="SecCode" runat="server" CssClass="form-control"></asp:TextBox>
         </div>
-       
+     
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10"><asp:Button ID="Search" runat="server" Text="SEARCH" CssClass="btn" OnClick="Search_Click"></asp:Button></div>
+            <asp:CustomValidator ID="CVSearch" runat="server" ErrorMessage="Please fill in your searching information."></asp:CustomValidator>
+        </div>
+          
         <div class="form-group">
          <div>
-            <asp:GridView ID="StockGV" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="StockGV_Sorting" CellPadding="5">
+            <asp:GridView ID="StockGV" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="StockGV_Sorting" CellPadding="5" OnSelectedIndexChanged="StockGV_Sorting_SelectedIndexChanged">
                 <Columns>
                     <asp:BoundField DataField="StockCode" HeaderText="Stock code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="StockName" HeaderText="Stock Name" ReadOnly="True" SortExpression="name" />
