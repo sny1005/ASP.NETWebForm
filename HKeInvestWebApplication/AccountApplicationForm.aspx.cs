@@ -210,8 +210,10 @@ namespace HKeInvestWebApplication
 
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
                 myHKeInvest.setData(sql, myTransaction);
+                myHKeInvest.commitTransaction(myTransaction);
 
                 //insert account number automactically
+                
                 string lastname = LastName.Text;
                 string achead = lastname.Substring(0, 2);
                 /*StringBuilder sb = new StringBuilder(achead);
@@ -220,60 +222,60 @@ namespace HKeInvestWebApplication
                 achead = sb.ToString();*/
                 //sql = "Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'";
                 decimal count = myHKeInvest.getAggregateValue("Select count(*) From [Client] WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'");
-                SqlTransaction trans = myHKeInvest.beginTransaction();
-                myHKeInvest.setData("Insert Into Client (accountNumber) Values('" + achead + count + "')", trans);
-                myHKeInvest.commitTransaction(trans);
-
-
+                string acnew = achead + count;
+                //SqlTransaction trans = myHKeInvest.beginTransaction();
+                //myHKeInvest.setData("Insert Into LoginAccount(accountNumber) Values('" + achead + count + "')", myTransaction);
+               // myHKeInvest.commitTransaction(trans);
+                
                 //insert all required fields first
                 sql = "INSERT INTO [Client] (isPrimary, title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";
-                sql = sql + "VALUES ('true', '" + title.SelectedValue + "', '" + acNo + "', '" + FirstName.Text + "', '" + LastName.Text + "', CONVERT(date, '" + DateOfBirth.Text + "', 103), '" + Email.Text + "', '" + HKID.Text + "', '" + Citizen.Text + "', '" + Residence.Text + "', '" + Building.Text + "', '" + Street.Text + "', '" + District.Text + "', '" + EmpStatus.SelectedValue + "', '" + EmpByBroker.SelectedValue + "', '" + CompanyDirector.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
+                sql = sql + "VALUES ('true', '" + title.SelectedValue + "', '" + acnew + "', '" + FirstName.Text + "', '" + LastName.Text + "', CONVERT(date, '" + DateOfBirth.Text + "', 103), '" + Email.Text + "', '" + HKID.Text + "', '" + Citizen.Text + "', '" + Residence.Text + "', '" + Building.Text + "', '" + Street.Text + "', '" + District.Text + "', '" + EmpStatus.SelectedValue + "', '" + EmpByBroker.SelectedValue + "', '" + CompanyDirector.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
                 myHKeInvest.setData(sql, myTransaction);
 
                 //insert optional fields
                 //insert passport number if needed
                 if (ID_PP.SelectedValue == "Passport Number")
                 {
-                    sql = "UPDATE [Client] SET passportIssueCountry = '" + IssueCountry.Text + "' WHERE accountNumber = '" + acNo + "'";
+                    sql = "UPDATE [Client] SET passportIssueCountry = '" + IssueCountry.Text + "' WHERE accountNumber = '" + acnew + "'";
                     myHKeInvest.setData(sql, myTransaction);
                 }
 
                 //insert phone numbers
                 if (hPhone.Text != "")
                 {
-                    sql = "UPDATE [Client] SET homePhone = '" + hPhone.Text + "' WHERE accountNumber = '" + acNo + "'";
+                    sql = "UPDATE [Client] SET homePhone = '" + hPhone.Text + "' WHERE accountNumber = '" + acnew + "'";
                     myHKeInvest.setData(sql, myTransaction);
                 }
                 if (hFax.Text != "")
                 {
-                    sql = "UPDATE [Client] SET homeFax = '" + hFax.Text + "' WHERE accountNumber = '" + acNo + "'";
+                    sql = "UPDATE [Client] SET homeFax = '" + hFax.Text + "' WHERE accountNumber = '" + acnew + "'";
                     myHKeInvest.setData(sql, myTransaction);
                 }
                 if (bPhone.Text != "")
                 {
-                    sql = "UPDATE [Client] SET businessPhone = '" + bPhone.Text + "' WHERE accountNumber = '" + acNo + "'";
+                    sql = "UPDATE [Client] SET businessPhone = '" + bPhone.Text + "' WHERE accountNumber = '" + acnew + "'";
                     myHKeInvest.setData(sql, myTransaction);
                 }
                 if (bFax.Text != "")
                 {
-                    sql = "UPDATE [Client] SET businessFax = '" + bFax.Text + "' WHERE accountNumber = '" + acNo + "'";
+                    sql = "UPDATE [Client] SET businessFax = '" + bFax.Text + "' WHERE accountNumber = '" + acnew + "'";
                     myHKeInvest.setData(sql, myTransaction);
                 }
 
                 //insert employmeny information
                 if(EmpStatus.SelectedValue == "Employed")
                 {
-                    sql = "UPDATE [Client] SET occupation = '" + Occupation.Text + "', yearsWithEmployer = '" + yrWithEmp.Text + "', employerName = '" + Employer.Text + "', employerPhone = '" + EmployerPhone.Text + "', businessNature = '" + Business.Text + "' WHERE accountNumber = '" + acNo + "'";
+                    sql = "UPDATE [Client] SET occupation = '" + Occupation.Text + "', yearsWithEmployer = '" + yrWithEmp.Text + "', employerName = '" + Employer.Text + "', employerPhone = '" + EmployerPhone.Text + "', businessNature = '" + Business.Text + "' WHERE accountNumber = '" + acnew + "'";
                     myHKeInvest.setData(sql, myTransaction);
                 }
 
                 //insert specific primary source fof fund
                 if (PrimarySource.SelectedValue == "other")
                 {
-                    sql = "UPDATE [Client] SET specificSource = '" + SpecificSource.Text + "' WHERE accountNumber = '" + acNo + "'";
+                    sql = "UPDATE [Client] SET specificSource = '" + SpecificSource.Text + "' WHERE accountNumber = '" + acnew + "'";
                     myHKeInvest.setData(sql, myTransaction);
                 }
-
+                
                 //end of primary account holder infomation
                 myHKeInvest.commitTransaction(myTransaction);
 
@@ -287,13 +289,13 @@ namespace HKeInvestWebApplication
                     
                     //insert all required fields first
                     sql = "INSERT INTO [Client] (isPrimary, title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";
-                    sql = sql + "VALUES ('false', '" + title2.SelectedValue + "', '" + acNo + "', '" + FirstName2.Text + "', '" + LastName2.Text + "', CONVERT(date, '" + DateOfBirth2.Text + "', 103), '" + Email2.Text + "', '" + HKID2.Text + "', '" + Citizen2.Text + "', '" + Residence2.Text + "', '" + Building2.Text + "', '" + Street2.Text + "', '" + District2.Text + "', '" + EmpStatus2.SelectedValue + "', '" + EmpByBroker2.SelectedValue + "', '" + CompanyDirector2.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
+                    sql = sql + "VALUES ('false', '" + title2.SelectedValue + "', '" + acnew + "', '" + FirstName2.Text + "', '" + LastName2.Text + "', CONVERT(date, '" + DateOfBirth2.Text + "', 103), '" + Email2.Text + "', '" + HKID2.Text + "', '" + Citizen2.Text + "', '" + Residence2.Text + "', '" + Building2.Text + "', '" + Street2.Text + "', '" + District2.Text + "', '" + EmpStatus2.SelectedValue + "', '" + EmpByBroker2.SelectedValue + "', '" + CompanyDirector2.SelectedValue + "', '" + PrimarySource.SelectedValue + "', '" + Objective.SelectedValue + "', '" + Knowledge.SelectedValue + "', '" + Experience.SelectedValue + "', '" + Income.SelectedValue + "', '" + NetWorth.SelectedValue + "', '" + Fund.Checked + "')";
                     myHKeInvest.setData(sql, myTransaction);
                     myHKeInvest.commitTransaction(myTransaction);       //need to commit transaction before being able to retreive information from the database
 
 
                     //get co-ac holder's clientNumber
-                    sql = "SELECT clientNumber from Client WHERE accountNumber = '" + acNo + "' AND firstName = '" + FirstName2.Text + "'";
+                    sql = "SELECT clientNumber from Client WHERE accountNumber = '" + acnew + "' AND firstName = '" + FirstName2.Text + "'";
                     DataTable dtClient = myHKeInvest.getData(sql);
                     string cNo = "";
                     foreach(DataRow row in dtClient.Rows)
