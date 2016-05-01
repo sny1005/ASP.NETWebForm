@@ -218,8 +218,11 @@ namespace HKeInvestWebApplication
                 sb[0] = lastname[0];
                 sb[1] = lastname[1];
                 achead = sb.ToString();
-              //sql = "Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'";
-                decimal count= myHKeInvest.getAggregateValue("Select count(*) From (Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "')");
+                //sql = "Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "'";
+                decimal count = myHKeInvest.getAggregateValue("Select count(*) From (Select accountNumber from Client WHERE SUBSTRING(accountNumber,1,2)='" + achead + "')");
+                SqlTransaction trans = myHKeInvest.beginTransaction();
+                myHKeInvest.setData("Insert Into Client (accountNumber) Values('" + achead + count + "')", trans);
+                myHKeInvest.commitTransaction(trans);
 
 
                 //insert all required fields first
