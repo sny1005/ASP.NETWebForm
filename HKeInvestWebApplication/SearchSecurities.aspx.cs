@@ -23,6 +23,39 @@ namespace HKeInvestWebApplication
             UTGV.Visible = false;
         }
 
+        protected void BondGV_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            switch (e.SortExpression)
+            {
+                case "code":
+                    if (e.SortDirection == SortDirection.Ascending)
+                    {
+                        //BondGV.DataSource = // Asc query 
+                        //BondGV.DataBind();
+                    }
+                    else
+                    {
+                        //BondGV.DataSource = // Desc query 
+                        //BondGV.DataBind();
+                    }
+                    break;
+
+                case "name":
+                    if (e.SortDirection == SortDirection.Ascending)
+                    {
+                        //BondGV.DataSource = // Asc query 
+                        //BondGV.DataBind();
+                    }
+                    else
+                    {
+                        //BondGV.DataSource = // Desc query 
+                        //BondGV.DataBind();
+                    }
+                    break;
+            }
+        }
+
+
         protected void Search_Click(object sender, EventArgs e)
         {
 
