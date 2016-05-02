@@ -25,12 +25,12 @@
             <asp:Label AssociatedControlID="hPhone" runat="server" Text="Home Phone" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="hPhone" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
-                <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ErrorMessage="Phone number must contain 8 digits" ControlToValidate="hPhone" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="\d{8}">*</asp:RegularExpressionValidator>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ErrorMessage="Phone number must contain 8 digits" ControlToValidate="hPhone" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="^\d{8}$">*</asp:RegularExpressionValidator>
             </div>
             <asp:Label AssociatedControlID="hFax" runat="server" Text="Home Fax" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="hFax" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
-                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ErrorMessage="Home fax must contain 8 digits" ControlToValidate="hFax" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="\d{8}">*</asp:RegularExpressionValidator>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ErrorMessage="Home fax must contain 8 digits" ControlToValidate="hFax" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="^\d{8}">*</asp:RegularExpressionValidator>
             </div>
         </div>
 
@@ -38,12 +38,12 @@
             <asp:Label AssociatedControlID="bPhone" runat="server" Text="Business Phone" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="bPhone" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
-                <asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" ErrorMessage="Business phone must contain 8 digits" ControlToValidate="bPhone" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="\d{8}">*</asp:RegularExpressionValidator>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" ErrorMessage="Business phone must contain 8 digits" ControlToValidate="bPhone" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="^\d{8}">*</asp:RegularExpressionValidator>
             </div>
             <asp:Label AssociatedControlID="bFax" runat="server" Text="Business Fax" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="bFax" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
-                <asp:RegularExpressionValidator ID="RegularExpressionValidator5" runat="server" ErrorMessage="Business fax must contain 8 digits" ControlToValidate="bFax" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="\d{8}">*</asp:RegularExpressionValidator>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator5" runat="server" ErrorMessage="Business fax must contain 8 digits" ControlToValidate="bFax" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="^\d{8}">*</asp:RegularExpressionValidator>
             </div>
         </div>
 
@@ -152,7 +152,6 @@
                     <asp:ListItem Value="family">family/relatives/inheritance</asp:ListItem>
                     <asp:ListItem Value="other">other</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" ErrorMessage="Primary source of fund is required." ControlToValidate="PrimarySource" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
             </div>
             <div class="row col-md-12">
                 <asp:Label AssociatedControlID="SpecificSource" runat="server" Text="Please specify" CssClass="control-label col-md-4"></asp:Label>

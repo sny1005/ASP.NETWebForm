@@ -65,7 +65,7 @@ namespace HKeInvestWebApplication.ClientOnly
             {
                 HKeInvestData myHKeInvest = new HKeInvestData();
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
-                string acNo = lblAccountNumber.Text;
+                string acNo = accountNumber;
 
                 if (Email.Text != null) {
                     sql = "UPDATE [Client] SET email = '" + Email.Text + "' WHERE accountNumber = '" + acNo + "'";
