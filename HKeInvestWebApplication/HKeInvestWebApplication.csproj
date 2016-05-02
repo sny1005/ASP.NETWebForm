@@ -246,7 +246,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Email Test.aspx" />
     <Content Include="EmployeeOnly\AddEvents.aspx" />
     <Content Include="ExternalSystems\BondOrder.aspx" />
     <Content Include="ExternalSystems\ControlCenter.aspx" />
@@ -269,7 +268,6 @@
     <Content Include="ExternalSystems\ExternalSite.Master" />
     <Content Include="EmployeeOnly\Web.config" />
     <Content Include="ClientOnly\Web.config" />
-    <Content Include="ClassDiagram1.cd" />
     <Content Include="Application Form.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
@@ -507,13 +505,6 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Email Test.aspx.cs">
-      <DependentUpon>Email Test.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Email Test.aspx.designer.cs">
-      <DependentUpon>Email Test.aspx</DependentUpon>
     </Compile>
     <Compile Include="EmployeeOnly\AddEvents.aspx.cs">
       <DependentUpon>AddEvents.aspx</DependentUpon>

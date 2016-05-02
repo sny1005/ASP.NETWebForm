@@ -19,7 +19,16 @@
             </p>
         </div>
         <div class="col-md-4">
-            <h2>Securities Transaction</h2>
+            <h2>Search Securities</h2>
+            <p>
+                Start searching for investment opportunities!
+            </p>
+            <p>
+                <a class="btn btn-default" href="SearchSecurities.aspx">GO!</a>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2>Securities Transaction (Client Only)</h2>
             <p>
                 Start trading bond, unit trust and stock here!
             </p>
@@ -28,12 +37,39 @@
             </p>
         </div>
         <div class="col-md-4">
-            <h2>Check Current Security Holdings</h2>
+            <h2>Check Current Security Holdings (Client Only)</h2>
             <p>
                 Start viewing bond, unit trust and stock in your account!
             </p>
             <p>
                 <a class="btn btn-default" href="ClientOnly/ClientSecurityHoldingDetails.aspx">View Now!</a>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2>Track Profit and Loss (Client Only)</h2>
+            <p>
+                View the current status of your account!
+            </p>
+            <p>
+                <a class="btn btn-default" href="ClientOnly/trackProfitOrLoss.aspx">Try!</a>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2>Set Alert (Client Only)</h2>
+            <p>
+                Remind yourself!
+            </p>
+            <p>
+                <a class="btn btn-default" href="ClientOnly/SetAlert.aspx">Set Now!</a>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2>Modify account information (Client Only)</h2>
+            <p>
+                Remind yourself!
+            </p>
+            <p>
+                <a class="btn btn-default" href="ClientOnly/ClientModify.aspx">Modify Now!</a>
             </p>
         </div>
          <div class="col-md-4">
@@ -42,7 +78,7 @@
               Check for important dates and events here.
             </p>
             <p>
-                <a class="btn btn-default" href="Calendar.aspx">View Now</a>
+                <a class="btn btn-default" href="Calendar.aspx">View Here</a>
             </p>
         </div>
                  <div class="col-md-4">
@@ -51,7 +87,7 @@
               Check for HkeInvest Sevice Fees
             </p>
             <p>
-                <a class="btn btn-default" href="ServiceFees.aspx">View Now</a>
+                <a class="btn btn-default" href="ServiceFees.aspx">View Here</a>
             </p>
         </div>
     </div>
