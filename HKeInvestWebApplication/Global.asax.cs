@@ -425,7 +425,7 @@ namespace HKeInvestWebApplication
                 // date and last update can be null
                 // will cause exception here
                 // need fix
-                string date = row["dateOfTrigger"].ToString();
+                DateTime date = Convert.ToDateTime( row["dateOfTrigger"]);
                 //decimal lastPrice = Convert.ToDecimal(row["lastUpdate"]);
 
                 //temp fix
@@ -436,7 +436,7 @@ namespace HKeInvestWebApplication
                 DataTable dtEmail = myData.getData(findEmail);
                 string email = dtEmail.Rows[0].ToString();
               
-                string current = DateTime.Now.ToShortDateString();
+                DateTime current = DateTime.Now;
                 if (date == current) //already sent email today
                     continue;
 
@@ -454,11 +454,8 @@ namespace HKeInvestWebApplication
                     if (value == currentPrice || (currentPrice < value && value < lastPrice)) // reach or pass
                     {
                         myCode.sendemail(email, subject, body);
-
-                        //
-                        //invalid sql
-                        //
-                        string insert = "INSERT INTO [Alert](dateOfTrigger) VALUES ('" + current + "')"; //record date
+                        
+                        string insert = "UPDATE [Alert] SET dateOfTrigger = '" + current + "' WHERE accountNumber='" + accountNumber + "' AND alertType = '" + alertType + "' AND type = '" + type + "' AND code = '" + code + "' AND value = '" + value + "'"; //record date
                         myData.setData(insert, trans);
                     }
 
@@ -477,11 +474,7 @@ namespace HKeInvestWebApplication
                     if (value == currentPrice || (currentPrice > value && value > lastPrice)) // reach or pass
                     {
                         myCode.sendemail(email, subject, body);
-
-                        //
-                        //invalid sql
-                        //
-                        string insert = "INSERT INTO [Alert](dateOfTrigger) VALUES ('" + current + "')"; //record date
+                        string insert = "UPDATE [Alert] SET dateOfTrigger = '" + current + "' WHERE accountNumber='" + accountNumber + "' AND alertType = '" + alertType + "' AND type = '" + type + "' AND code = '" + code + "' AND value = '" + value + "'"; //record date
                         myData.setData(insert, trans);
                     }
 
@@ -492,11 +485,8 @@ namespace HKeInvestWebApplication
 
 
                 }
-
-                //
-                //invalid sql
-                //
-                sql = "INSERT INTO [Alert] (lastUpdate) VALUES ('" + currentPrice + "')"; //update lastest price
+                
+                sql = "UPDATE [Alert] SET lastUpdate = '"+currentPrice+"' WHERE accountNumber='"+accountNumber+"' AND alertType = '"+alertType+"' AND type = '"+type+"' AND code = '"+code+"' AND value = '"+value+"'"; //update lastest price
                 myData.setData(sql, trans);
                 myData.commitTransaction(trans);
             }
