@@ -17,6 +17,8 @@ namespace HKeInvestWebApplication.ClientOnly
         ExternalFunctions myExternalFunctions = new ExternalFunctions();
         static string accountNumber;
 
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             accountNumber = myHKeInvestCode.getAccountNumber(User.Identity.Name);
@@ -158,18 +160,39 @@ namespace HKeInvestWebApplication.ClientOnly
                 source.Columns.Add("fee");
                 source.Columns.Add("profit");
 
-                DataRow record = source.NewRow();
-                record["buyAmount"] = totalBuyAmount;
-                record["sellAmount"] = totalSellAmount;
-                record["fee"] = totalFeeCharged;
-                record["profit"] = profitOrLoss;
+                if(viewIn.SelectedIndex==0) //dollar
+                {
+                    DataRow record = source.NewRow();
+                    record["buyAmount"] = totalBuyAmount;
+                    record["sellAmount"] = totalSellAmount;
+                    record["fee"] = totalFeeCharged;
+                    record["profit"] = profitOrLoss;
 
-                source.Rows.Add(record);
-                source.AcceptChanges();
+                    source.Rows.Add(record);
+                    source.AcceptChanges();
 
-                gvSecurity.DataSource = source;
-                gvSecurity.DataBind();
-                gvSecurity.Visible = true;
+                    gvSecurity.DataSource = source;
+                    gvSecurity.DataBind();
+                    gvSecurity.Visible = true;
+                }
+                else if(viewIn.SelectedIndex==1) //percentage
+                {
+                    DataRow record = source.NewRow();
+                    record["buyAmount"] = totalBuyAmount;
+                    record["sellAmount"] = totalSellAmount;
+                    record["fee"] = totalFeeCharged;
+                    if (profitOrLoss == 0)
+                        record["profit"] = 0 + "%";
+                    else record["profit"] = (profitOrLoss/(totalBuyAmount+totalFeeCharged)*100)+"%";
+
+                    source.Rows.Add(record);
+                    source.AcceptChanges();
+
+                    gvSecurity.DataSource = source;
+                    gvSecurity.DataBind();
+                    gvSecurity.Visible = true;
+
+                }
             }
 
         }
@@ -307,18 +330,39 @@ namespace HKeInvestWebApplication.ClientOnly
                 source.Columns.Add("fee");
                 source.Columns.Add("profit");
 
-                DataRow record = source.NewRow();
-                record["buyAmount"] = totalBuyAmount;
-                record["sellAmount"] = totalSellAmount;
-                record["fee"] = totalFeeCharged;
-                record["profit"] = profitOrLoss;
+                if (viewIn.SelectedIndex == 0) //dollar
+                {
+                    DataRow record = source.NewRow();
+                    record["buyAmount"] = totalBuyAmount;
+                    record["sellAmount"] = totalSellAmount;
+                    record["fee"] = totalFeeCharged;
+                    record["profit"] = profitOrLoss;
 
-                source.Rows.Add(record);
-                source.AcceptChanges();
+                    source.Rows.Add(record);
+                    source.AcceptChanges();
 
-                gvSecurity.DataSource = source;
-                gvSecurity.DataBind();
-                gvSecurity.Visible = true;
+                    gvSecurity.DataSource = source;
+                    gvSecurity.DataBind();
+                    gvSecurity.Visible = true;
+                }
+                else if (viewIn.SelectedIndex == 1) //percentage
+                {
+                    DataRow record = source.NewRow();
+                    record["buyAmount"] = totalBuyAmount;
+                    record["sellAmount"] = totalSellAmount;
+                    record["fee"] = totalFeeCharged;
+                    if (profitOrLoss == 0)
+                        record["profit"] = 0 + "%";
+                    else record["profit"] = (profitOrLoss / (totalBuyAmount + totalFeeCharged) * 100) + "%";
+
+                    source.Rows.Add(record);
+                    source.AcceptChanges();
+
+                    gvSecurity.DataSource = source;
+                    gvSecurity.DataBind();
+                    gvSecurity.Visible = true;
+
+                }
             }
         }
 
@@ -464,7 +508,13 @@ namespace HKeInvestWebApplication.ClientOnly
             record["buyAmount"] = totalBuyAmount;
             record["sellAmount"] = totalSellAmount;
             record["fee"] = totalFeeCharged;
-            record["profit"] = profitOrLoss;
+
+            if (viewIn.SelectedIndex == 0)//dollar
+                record["profit"] = profitOrLoss;
+            else if (viewIn.SelectedIndex == 1)//percentage
+                if (profitOrLoss == 0)
+                    record["profit"] = 0 + "%";
+                else record["profit"] = (profitOrLoss/(totalBuyAmount+totalFeeCharged))*100 +"%";
 
             source.Rows.Add(record);
             source.AcceptChanges();
@@ -480,6 +530,14 @@ namespace HKeInvestWebApplication.ClientOnly
            
         }
 
-        
+        protected void viewIn_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (rbDisplayType.SelectedIndex == 0)//all
+                rbDisplayType_SelectedIndexChanged(sender, e);
+            else if (rbDisplayType.SelectedIndex == 1)//type
+                ddlSecurityType_SelectedIndexChanged(sender, e);
+            else if (rbDisplayType.SelectedIndex == 2)
+                txtSecurityCode_TextChanged(sender, e);
+        }
     }
 }

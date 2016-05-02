@@ -54,6 +54,28 @@
                 <a class="btn btn-default" href="ServiceFees.aspx">View Now</a>
             </p>
         </div>
+   
+        <div class="col-md-4">
+            <h2>Track Profit or Loss</h2>
+            <p>
+              Check for Profit/Loss of securities in your account
+            </p>
+            <p>
+                <a class="btn btn-default" href="ClientOnly/trackProfitOrLoss.aspx">View Now</a>
+            </p>
+        </div>
+        </div>
+           <div class="row">
+               <div class="col-md-4">
+            <h2>Set Alert</h2>
+            <p>
+              Set Alert for the securities in your account!
+            </p>
+            <p>
+                <a class="btn btn-default" href="ClientOnly/SetAlert.aspx">View Now</a>
+            </p>
+        </div>
+               </div>      
     </div>
 
 </asp:Content>

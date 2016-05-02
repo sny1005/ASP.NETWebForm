@@ -2,16 +2,16 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Profit and Loss Tracking</h2>
     <div class =" form-group">
-    <div>
+        
+        <div>
         <asp:RadioButtonList ID="rbDisplayType" runat="server" RepeatDirection="Horizontal" AutoPostBack="True" CellPadding="5" CellSpacing="5" OnSelectedIndexChanged="rbDisplayType_SelectedIndexChanged">
             <asp:ListItem>All Securities</asp:ListItem>
             <asp:ListItem>One Type of Securities</asp:ListItem>
             <asp:ListItem>Individual Security</asp:ListItem>
         </asp:RadioButtonList>
         <br />
-        <asp:Label ID="lblName" runat="server" Visible="False"></asp:Label>
-    </div>
-    <div class =" col-md-4">
+        </div>
+         <div class =" col-md-4">
         <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSecurityType_SelectedIndexChanged" Visible="False">
                 <asp:ListItem Value="0">Security type</asp:ListItem>
                 <asp:ListItem Value="bond">Bond</asp:ListItem>
@@ -21,7 +21,15 @@
         <asp:Label runat="server" Text="Security Code" AssociatedControlID="txtSecurityCode" CssClass="col-md-4" ID="lblSecurityCode" Visible="False"></asp:Label>
         <asp:TextBox ID="txtSecurityCode" runat="server" CssClass="text-danger" MaxLength="4" OnTextChanged="txtSecurityCode_TextChanged" Visible="False"></asp:TextBox>
     </div>
+        <div>
+            <asp:Label runat="server" Text="View In:" AssociatedControlID="viewIn"></asp:Label><asp:RadioButtonList ID="viewIn" runat="server" AutoPostBack="True" OnSelectedIndexChanged="viewIn_SelectedIndexChanged" >
+                <asp:ListItem>Absolute Dollar Amount</asp:ListItem>
+                <asp:ListItem>Percentage</asp:ListItem>
+            </asp:RadioButtonList>
+        </div>
+
     </div>
+
     <div>
         <asp:GridView ID="gvIndividual" runat="server" CellPadding="5" AutoGenerateColumns="False" Visible="False" OnSelectedIndexChanged="gvIndividual_SelectedIndexChanged">
             <Columns>
