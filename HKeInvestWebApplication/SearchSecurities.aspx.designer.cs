@@ -10,7 +10,7 @@
 namespace HKeInvestWebApplication {
     
     
-    public partial class SearchSecurties {
+    public partial class SearchSecurities1 {
         
         /// <summary>
         /// ddlSecurityType control.

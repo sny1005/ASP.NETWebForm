@@ -209,7 +209,6 @@
     <Content Include="ClientOnly\ClientModify.aspx" />
     <Content Include="ClientOnly\ClientSecurityHoldingDetails.aspx" />
     <Content Include="EmployeeOnly\EmployeeModify.aspx" />
-    <Content Include="SearchSecurties.aspx" />
     <Content Include="Account\AddPhoneNumber.aspx" />
     <Content Include="Account\Confirm.aspx" />
     <Content Include="Account\Forgot.aspx" />
@@ -309,6 +308,7 @@
     <Content Include="Global.asax" />
     <Content Include="EmployeeOnly\SecurityHoldingDetails.aspx" />
     <Content Include="ClientOnly\SecuritiesTransactions.aspx" />
+    <Content Include="SearchSecurities.aspx" />
     <Content Include="ServiceFees.aspx" />
     <Content Include="Site.Master" />
     <Content Include="Test aggrevate.aspx" />
@@ -347,13 +347,6 @@
     </Compile>
     <Compile Include="EmployeeOnly\EmployeeModify.aspx.designer.cs">
       <DependentUpon>EmployeeModify.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SearchSecurties.aspx.cs">
-      <DependentUpon>SearchSecurties.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SearchSecurties.aspx.designer.cs">
-      <DependentUpon>SearchSecurties.aspx</DependentUpon>
     </Compile>
     <Compile Include="Account\AddPhoneNumber.aspx.cs">
       <DependentUpon>AddPhoneNumber.aspx</DependentUpon>
@@ -619,6 +612,13 @@
     </Compile>
     <Compile Include="ClientOnly\SecuritiesTransactions.aspx.designer.cs">
       <DependentUpon>SecuritiesTransactions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SearchSecurities.aspx.cs">
+      <DependentUpon>SearchSecurities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SearchSecurities.aspx.designer.cs">
+      <DependentUpon>SearchSecurities.aspx</DependentUpon>
     </Compile>
     <Compile Include="ServiceFees.aspx.cs">
       <DependentUpon>ServiceFees.aspx</DependentUpon>
