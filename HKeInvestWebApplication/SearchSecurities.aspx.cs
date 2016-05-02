@@ -20,21 +20,10 @@ namespace HKeInvestWebApplication
             StockGV.Visible = false;
             BondGV.Visible = false;
             UnitTrustGV.Visible = false;
-            //StockGV.Visible = true;
-            //BondGV.Visible = true;
-            //UnitTrustGV.Visible = true;
         }
 
         protected void Search_Click(object sender, EventArgs e)
         {
-            //// Type Nothing and Search
-            if (ddlSecurityType.SelectedValue == "0" && SecName.Text == null && SecCode.Text == null){
-                //why the F you are doing validation when you click a button?????  
-                // D: to confirm that u choose ur item
-                //args.IsValid = false;
-                CVSearch.ErrorMessage = "Please fill in your searching information.";
-            }
-
             // ALL Bond
             if (ddlSecurityType.SelectedValue == "bond" && SecName.Text == null && SecCode.Text == null)
             {
@@ -121,8 +110,6 @@ namespace HKeInvestWebApplication
                 UnitTrustGV.DataBind();
                 UnitTrustGV.Visible = true;
             }
-
-
         }
     }
 }

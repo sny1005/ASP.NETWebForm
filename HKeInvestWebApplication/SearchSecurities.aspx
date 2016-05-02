@@ -5,12 +5,13 @@
     <div class="form-horizontal">
         <div class="form-group">
             <asp:Label runat="server" Text="Security Type : " CssClass="control-label col-md-2" ></asp:Label>
-            <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True">
+            <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" ControlToValidate="ddlSecurityType">
                 <asp:ListItem Value="0">Security type</asp:ListItem>
                 <asp:ListItem Value="bond">Bond</asp:ListItem>
                 <asp:ListItem Value="stock">Stock</asp:ListItem>
                 <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
             </asp:DropDownList>
+            <asp:RequiredFieldValidator ID="RVST" runat="server" ErrorMessage="* Please fill in your searching information." ControlToValidate="ddlSecurityType" CssClass="text-danger" Display="Dynamic" EnableClientScript="False" Text="* Please fill in your searching information." InitialValue="0"></asp:RequiredFieldValidator>
         </div>
 
         <div class="form-group">
@@ -18,12 +19,11 @@
             <asp:TextBox ID="SecName" runat="server" CssClass="form-control"></asp:TextBox>
             <asp:Label runat="server" Text="Secutity Code : " CssClass="control-label col-md-2" AssociatedControlID="SecCode"></asp:Label>
             <asp:TextBox ID="SecCode" runat="server" CssClass="form-control" MaxLength="4"></asp:TextBox>
-            <asp:RangeValidator ID="RVSecCode" runat="server" ErrorMessage="Only Integer is accepted." MaximumValue="9999" Text="* Only Integer is accepted in searching Security Code" ControlToValidate="SecCode"></asp:RangeValidator>
+            <asp:RangeValidator ID="RAVSecCode" runat="server" ErrorMessage="Only Integer is accepted." MaximumValue="9999" Text="* Only Integer is accepted in searching Security Code" ControlToValidate="SecCode" CssClass="text-danger" EnableClientScript="False"></asp:RangeValidator>
         </div>
      
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10"><asp:Button ID="Search" runat="server" Text="SEARCH" CssClass="btn" OnClick="Search_Click"></asp:Button></div>
-            <asp:CustomValidator ID="CVSearch" runat="server" ErrorMessage="Please fill in your searching information." Text="* Please fill in your searching information." Display="Dynamic"></asp:CustomValidator>
+            <div class="col-md-offset-2 col-md-10"><asp:Button ID="Search" runat="server" Text="SEARCH" CssClass="btn" OnClick="Search_Click" ControlToValidate="Search"></asp:Button></div>
         </div>
           
         <div class="form-group">

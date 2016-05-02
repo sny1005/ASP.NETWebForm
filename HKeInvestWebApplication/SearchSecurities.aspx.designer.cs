@@ -22,6 +22,15 @@ namespace HKeInvestWebApplication {
         protected global::System.Web.UI.WebControls.DropDownList ddlSecurityType;
         
         /// <summary>
+        /// RVST control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RVST;
+        
+        /// <summary>
         /// SecName control.
         /// </summary>
         /// <remarks>
@@ -40,13 +49,13 @@ namespace HKeInvestWebApplication {
         protected global::System.Web.UI.WebControls.TextBox SecCode;
         
         /// <summary>
-        /// RVSecCode control.
+        /// RAVSecCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RangeValidator RVSecCode;
+        protected global::System.Web.UI.WebControls.RangeValidator RAVSecCode;
         
         /// <summary>
         /// Search control.
@@ -56,15 +65,6 @@ namespace HKeInvestWebApplication {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Search;
-        
-        /// <summary>
-        /// CVSearch control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CVSearch;
         
         /// <summary>
         /// StockGV control.
