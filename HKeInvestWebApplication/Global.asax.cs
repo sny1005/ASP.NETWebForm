@@ -268,7 +268,7 @@ namespace HKeInvestWebApplication
                         }
 
                         // TODO: send the invoice
-                        System.Windows.Forms.MessageBox.Show(mailBody);
+                        //System.Windows.Forms.MessageBox.Show(mailBody);
                         //sql = "SELECT [email] from [Client] WHERE [isPrimary] = 'true' AND [accountNumber] = '" + accountNumber + "'";
                         //DataTable Table = myData.getData(sql);
                         //record = Table.Select();
@@ -276,7 +276,7 @@ namespace HKeInvestWebApplication
                         //    throw new Exception("Error! Returning non-single record!");
                         //else
                         //{
-                        //    string mailTo = (string)record[0]["email"];
+                        //    string mailTo = record[0]["email"].ToString().Trim();
                         //    string subject = "Order Invoice";
                         //    myCode.sendemail(mailTo, subject, mailBody);
                         //}
