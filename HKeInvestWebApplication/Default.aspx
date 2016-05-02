@@ -37,7 +37,7 @@
             </p>
         </div>
         <div class="col-md-4">
-            <h2>Check Current Security Holdings (Client Only)</h2>
+            <h2>View report (Client Only)</h2>
             <p>
                 Start viewing bond, unit trust and stock in your account!
             </p>
@@ -48,7 +48,7 @@
         <div class="col-md-4">
             <h2>Track Profit and Loss (Client Only)</h2>
             <p>
-                View the current status of your account!
+                Monitor the situation of your investments!
             </p>
             <p>
                 <a class="btn btn-default" href="ClientOnly/trackProfitOrLoss.aspx">Try!</a>
@@ -66,7 +66,7 @@
         <div class="col-md-4">
             <h2>Modify account information (Client Only)</h2>
             <p>
-                Remind yourself!
+                Something's change? Change them here!
             </p>
             <p>
                 <a class="btn btn-default" href="ClientOnly/ClientModify.aspx">Modify Now!</a>
@@ -81,7 +81,7 @@
                 <a class="btn btn-default" href="Calendar.aspx">View Here</a>
             </p>
         </div>
-                 <div class="col-md-4">
+        <div class="col-md-4">
             <h2>Service Fees</h2>
             <p>
               Check for HkeInvest Sevice Fees
@@ -90,6 +90,22 @@
                 <a class="btn btn-default" href="ServiceFees.aspx">View Here</a>
             </p>
         </div>
+
+        <%-- LINKS FOR EMPLOYEE --%>
+        <div class="col-md-4">
+            <h2>View report (Employee Only)</h2>
+            <p>
+                <a class="btn btn-default" href="EmployeeOnly/SecurityHoldingDetails.aspx">View Now!</a>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2>Modify account information (Employee Only)</h2>
+            <p>
+                <a class="btn btn-default" href="EmployeeOnly/EmployeeModify.aspx">Modify Now!</a>
+            </p>
+        </div>
     </div>
+
+
 
 </asp:Content>
