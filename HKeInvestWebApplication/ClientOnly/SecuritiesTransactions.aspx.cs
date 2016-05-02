@@ -418,6 +418,7 @@ namespace HKeInvestWebApplication
                 {
                     args.IsValid = false;
                     cvBondAmount.ErrorMessage = "You do not own this bond/unit trust.";
+                    cvUnitAmount.ErrorMessage = "You do not own this bond/unit trust.";
                 }
                 else
                 {

@@ -72,7 +72,7 @@ namespace HKeInvestWebApplication.ClientOnly
                         foreach (DataRow Row in dtBuy.Rows)
                         {
                             // need to convert back to HKD!!!!!!!!!!
-                           string sql2 = "SELECT base FROM [SecurityHolding] WHERE type = '"+type+"' AND code = '"+code+ "'AND accountNumber = '" + userAccountNumber + "' ";
+                            string sql2 = "SELECT base FROM [SecurityHolding] WHERE type = '"+type+"' AND code = '"+code+ "'AND accountNumber = '" + userAccountNumber + "' ";
                             DataTable dtBase = myHKeInvestData.getData(sql2);
                             string currency = dtBase.Rows[0]["base"].ToString();
                             decimal fromRate = myExternalFunctions.getCurrencyRate(currency);
@@ -119,8 +119,14 @@ namespace HKeInvestWebApplication.ClientOnly
                 decimal totalFeeCharged = 0;
                 DataTable dtFee = myHKeInvestData.getData(sql);
                 if(dtFee.Rows.Count != 0) { 
-                foreach (DataRow row in dtFee.Rows)
-                    totalFeeCharged = totalFeeCharged + Convert.ToDecimal(row["feeCharged"]);
+                    foreach (DataRow row in dtFee.Rows)
+                    {
+                        // remember to handle null values
+                        decimal fee;
+                        if (!decimal.TryParse(row["feeCharged"].ToString().Trim(), out fee))
+                            continue;
+                        totalFeeCharged += fee;
+                    }
                 }
 
                 //current value
@@ -128,8 +134,19 @@ namespace HKeInvestWebApplication.ClientOnly
                 DataTable dtValue = myHKeInvestData.getData(sql);
                 decimal currentValue = 0;
                 if (dtValue.Rows.Count != 0) { 
-                foreach(DataRow row in dtValue.Rows)  //NEED TO HANDLE NULL VALUES
-                    currentValue = currentValue + Convert.ToDecimal(row["shares"]) * myExternalFunctions.getSecuritiesPrice(row["type"].ToString(), row["code"].ToString());
+                    foreach(DataRow row in dtValue.Rows)
+                    {
+                        string type = row["type"].ToString().Trim();
+                        string code = row["code"].ToString().Trim();
+                        string name, currency;  //name is dummy variable
+
+                        //convert to HKD
+                        myHKeInvestCode.getSecurityNameBase(type, code, out name, out currency);
+                        decimal fromRate = myExternalFunctions.getCurrencyRate(currency);
+                        decimal currentPrice = myHKeInvestCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", myExternalFunctions.getSecuritiesPrice(type, code));
+
+                        currentValue = currentValue + Convert.ToDecimal(row["shares"]) * currentPrice;
+                    }
                 }
 
                 decimal profitOrLoss = currentValue + totalSellAmount - totalBuyAmount - totalFeeCharged; ;
@@ -168,7 +185,7 @@ namespace HKeInvestWebApplication.ClientOnly
                 string userAccountNumber = myHKeInvestCode.getAccountNumber(userName);
 
                 //get chosen type
-                string type = ddlSecurityType.SelectedItem.ToString();
+                string type = ddlSecurityType.SelectedValue;
 
                 //get buy amount of one type
                 /*string sql = "SELECT executePrice, executeShares FROM [Transaction] WHERE orderNumber = (SELECT orderNumber FROM [Order] WHERE securityType = '"+type+"' AND buyOrSell = 'buy' AND status = 'completed' AND accountNumber = '" + userAccountNumber + "')";
@@ -252,7 +269,13 @@ namespace HKeInvestWebApplication.ClientOnly
                 if (dtFee.Rows.Count != 0)
                 {
                     foreach (DataRow row in dtFee.Rows)
-                        totalFeeCharged = totalFeeCharged + Convert.ToDecimal(row["feeCharged"]);
+                    {
+                        // remember to handle null values
+                        decimal fee;
+                        if (!decimal.TryParse(row["feeCharged"].ToString().Trim(), out fee))
+                            continue;
+                        totalFeeCharged += fee;
+                    }
                 }
 
                 //current value of one type
@@ -262,7 +285,17 @@ namespace HKeInvestWebApplication.ClientOnly
                 if (dtValue.Rows.Count != 0)
                 {
                     foreach (DataRow row in dtValue.Rows)
-                        currentValue = currentValue + Convert.ToDecimal(row["shares"]) * myExternalFunctions.getSecuritiesPrice(row["type"].ToString(), row["code"].ToString());
+                    {
+                        string code = row["code"].ToString().Trim();
+                        string name, currency;  //name is dummy variable
+
+                        //convert to HKD
+                        myHKeInvestCode.getSecurityNameBase(type, code, out name, out currency);
+                        decimal fromRate = myExternalFunctions.getCurrencyRate(currency);
+                        decimal currentPrice = myHKeInvestCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", myExternalFunctions.getSecuritiesPrice(type, code));
+
+                        currentValue = currentValue + Convert.ToDecimal(row["shares"]) * currentPrice;
+                    }
                 }
 
                 decimal profitOrLoss = currentValue + totalSellAmount - totalBuyAmount - totalFeeCharged; ;
@@ -296,7 +329,7 @@ namespace HKeInvestWebApplication.ClientOnly
             string userAccountNumber = myHKeInvestCode.getAccountNumber(userName);
 
             //get chosen type and code
-            string type = ddlSecurityType.SelectedItem.ToString();
+            string type = ddlSecurityType.SelectedValue;
             string code = txtSecurityCode.Text.Trim();
 
             //get buy amount of one security
@@ -380,11 +413,17 @@ namespace HKeInvestWebApplication.ClientOnly
             if (dtFee.Rows.Count != 0)
             {
                 foreach (DataRow row in dtFee.Rows)
-                    totalFeeCharged = totalFeeCharged + Convert.ToDecimal(row["feeCharged"]);
+                {
+                    // remember to handle null values
+                    decimal fee;
+                    if (!decimal.TryParse(row["feeCharged"].ToString().Trim(), out fee))
+                        continue;
+                    totalFeeCharged += fee;
+                }
             }
 
             //current value of one security
-            sql = "SELECT type, code, shares, name FROM [SecurityHolding] WHERE code = '" + code + "' AND type = '" + type + "' AND accountNumber = '" + userAccountNumber + "'";
+            sql = "SELECT type, code, shares, name, base FROM [SecurityHolding] WHERE code = '" + code + "' AND type = '" + type + "' AND accountNumber = '" + userAccountNumber + "'";
             DataTable dtValue = myHKeInvestData.getData(sql);
             decimal shares = 0;
             decimal currentValue = 0;
@@ -393,11 +432,17 @@ namespace HKeInvestWebApplication.ClientOnly
             {
                 foreach (DataRow row in dtValue.Rows)
                 {
-                    currentValue = currentValue + Convert.ToDecimal(row["shares"]) * myExternalFunctions.getSecuritiesPrice(row["type"].ToString(), row["code"].ToString());
-                    shares = shares + Convert.ToDecimal(row["shares"]);
-                    name = row["name"].ToString();
+                    string currency = row["base"].ToString().Trim();
+                    name = row["name"].ToString().Trim();
+
+                    //convert to HKD
+                    decimal fromRate = myExternalFunctions.getCurrencyRate(currency);
+                    decimal currentPrice = myHKeInvestCode.convertCurrency(currency, Convert.ToString(fromRate).Trim(), "HKD", "1", myExternalFunctions.getSecuritiesPrice(type, code));
+
+                    currentValue = currentValue + Convert.ToDecimal(row["shares"]) * currentPrice;
                 }
             }
+
             decimal profitOrLoss = currentValue + totalSellAmount - totalBuyAmount - totalFeeCharged; ;
 
             //view result

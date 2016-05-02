@@ -23,9 +23,9 @@ namespace HKeInvestWebApplication
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Add periordic task for system to check order and transaction information
-            //Thread mythread = new Thread(PeriodicTasks);
-            //mythread.IsBackground = true;
-            //mythread.Start();
+            Thread mythread = new Thread(PeriodicTasks);
+            mythread.IsBackground = true;
+            mythread.Start();
         }
 
         private void PeriodicTasks()
@@ -41,7 +41,7 @@ namespace HKeInvestWebApplication
                 Queue<string> orderNumbers = myCode.getIncompleteOrder();
 
                 buySellUpdate(myExternal, ref myData, ref myCode, orderNumbers);
-                triggerAlert(myExternal, ref myData, ref myCode);
+                //triggerAlert(myExternal, ref myData, ref myCode);
 
             } while (true);
         }
@@ -51,6 +51,7 @@ namespace HKeInvestWebApplication
             while (orderNumbers.Count != 0)
             {
                 string status = myExternal.getOrderStatus(orderNumbers.First()).Trim();
+                //if (!status.Equals("pending"))      // if the order is still pending in external system, there is no update on that order
                 if (status.Equals("completed") || status.Equals("cancelled"))      // if the order is still pending in external system, there is no update on that order
                 {
                     string sql;
@@ -62,9 +63,14 @@ namespace HKeInvestWebApplication
 
                     // update transaction table
                     DataTable transTable = myExternal.getOrderTransaction(orderNumbers.First());
-                    updateTransaction(ref transTable, myData, myCode, orderNumbers.First(), trans);
 
-                    myData.commitTransaction(trans);
+                    if (transTable == null) //there is no transaction for that order (i.e. cancelled)
+                    {
+                        myData.commitTransaction(trans);
+                        return;
+                    }
+
+                    updateTransaction(ref transTable, myData, myCode, orderNumbers.First(), trans);
 
                     // setup for updating SecurityHolding
                     string accountNumber, securityType, securityCode, name, currency;
@@ -134,6 +140,7 @@ namespace HKeInvestWebApplication
                         sql = "UPDATE [Order] SET [feeCharged] = " + feeCharged.Sum() + " WHERE [orderNumber] = '" + orderNumbers.First().Trim() + "'";
                         myData.setData(sql, trans);
 
+                        // TODO: fee should only be charged when the order is finished
                         acBalance -= totalExpenditure;
                         sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
                         myData.setData(sql, trans);
@@ -183,6 +190,7 @@ namespace HKeInvestWebApplication
                         sql = "UPDATE [Order] SET [feeCharged] = " + feeCharged.Sum() + " WHERE [orderNumber] = '" + orderNumbers.First().Trim() + "'";
                         myData.setData(sql, trans);
 
+                        // TODO: fee should only be charged when the order is finished
                         // update account balance
                         acBalance += totalRevenue;
                         sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
@@ -190,51 +198,64 @@ namespace HKeInvestWebApplication
                     }
                     myData.commitTransaction(trans);
 
-                    // prepares mail body
-                    // general information
-                    char nl = '\n';
-                    string mailBody = "Order number: " + orderNumbers.First() + nl;
-                    mailBody += "Account number: " + accountNumber + nl;
-                    mailBody += "Buy/Sell: " + isBuyOrder + nl;
-                    mailBody += "Security code: " + securityCode + nl;
-                    mailBody += "Security name: " + name + nl;
-
-                    // if the security is a stock
-                    mailBody += nl;
-                    if (securityType == "stock")
+                    //send email and charge fee if order is finished
+                    if (status.Equals("completed") || status.Equals("cancelled"))
                     {
-                        string orderType = myCode.getOrderType(orderNumbers.First());
-                        DateTime date = myCode.getSubmittedDate(orderNumbers.First());
-                        mailBody += "Order type: " + orderType + nl;
-                        mailBody += "Submitted date: " + date + nl;
-                        mailBody += "Total shares bought/sold: " + executeShares.Sum() + nl;
-                        mailBody += "Total dollar amount: " + dollarAmount.Sum() + nl;
-                        mailBody += "Total fee charged: " + feeCharged.Sum() + nl;
-                    }
+                        // update transaction table
+                        DataTable dtTrans = myExternal.getOrderTransaction(orderNumbers.First());
 
-                    // for each transaction
-                    mailBody += nl;
-                    for (int i = 0; i < executeShares.Count(); i++)
-                    {
-                        mailBody += "Transaction number: " + transTable.Rows[i]["transactionNumber"] + nl;
-                        mailBody += "Quantity of shares: " + executeShares[i] + nl;
-                        mailBody += "Price per share: " + executePrice[i] + nl;
+                        // update account balance
+                        //decimal acBalance = myCode.getAccountBalance(accountNumber);
+                        //acBalance += totalRevenue;
+                        //sql = "UPDATE [LoginAccount] SET [balance] = " + acBalance + " WHERE [accountNumber] = '" + accountNumber + "'";
+                        //myData.setData(sql, trans);
+
+                        // prepares mail body
+                        // general information
+                        char nl = '\n';
+                        string mailBody = "Order number: " + orderNumbers.First() + nl;
+                        mailBody += "Account number: " + accountNumber + nl;
+                        mailBody += "Buy/Sell: " + isBuyOrder + nl;
+                        mailBody += "Security code: " + securityCode + nl;
+                        mailBody += "Security name: " + name + nl;
+
+                        // if the security is a stock
                         mailBody += nl;
-                    }
+                        if (securityType == "stock")
+                        {
+                            string orderType = myCode.getOrderType(orderNumbers.First());
+                            DateTime date = myCode.getSubmittedDate(orderNumbers.First());
+                            mailBody += "Order type: " + orderType + nl;
+                            mailBody += "Submitted date: " + date + nl;
+                            mailBody += "Total shares bought/sold: " + executeShares.Sum() + nl;
+                            mailBody += "Total dollar amount: " + dollarAmount.Sum() + nl;
+                            mailBody += "Total fee charged: " + feeCharged.Sum() + nl;
+                        }
 
-                    // TODO: send the invoice
-                    //System.Windows.Forms.MessageBox.Show(mailBody);
-                    //sql = "SELECT [email] from [Client] WHERE [isPrimary] = 'true' AND [accountNumber] = '" + accountNumber + "'";
-                    //DataTable Table = myData.getData(sql);
-                    //record = Table.Select();
-                    //if (record.Count() != 1)
-                    //    throw new Exception("Error! Returning non-single record!");
-                    //else
-                    //{
-                    //    string mailTo = (string)record[0]["email"];
-                    //    string subject = "Order Invoice";
-                    //    myCode.sendemail(mailTo, subject, mailBody);
-                    //}
+                        // for each transaction
+                        mailBody += nl;
+                        for (int i = 0; i < executeShares.Count(); i++)
+                        {
+                            mailBody += "Transaction number: " + transTable.Rows[i]["transactionNumber"] + nl;
+                            mailBody += "Quantity of shares: " + executeShares[i] + nl;
+                            mailBody += "Price per share: " + executePrice[i] + nl;
+                            mailBody += nl;
+                        }
+
+                        // TODO: send the invoice
+                        //System.Windows.Forms.MessageBox.Show(mailBody);
+                        //sql = "SELECT [email] from [Client] WHERE [isPrimary] = 'true' AND [accountNumber] = '" + accountNumber + "'";
+                        //DataTable Table = myData.getData(sql);
+                        //record = Table.Select();
+                        //if (record.Count() != 1)
+                        //    throw new Exception("Error! Returning non-single record!");
+                        //else
+                        //{
+                        //    string mailTo = (string)record[0]["email"];
+                        //    string subject = "Order Invoice";
+                        //    myCode.sendemail(mailTo, subject, mailBody);
+                        //}
+                    }
                 }
                 orderNumbers.Dequeue();
             }
@@ -340,8 +361,8 @@ namespace HKeInvestWebApplication
         // the transaction table will be modified and the transTable is reduced to holding new transaction records only
         private static void updateTransaction(ref DataTable transTable, HKeInvestData myData, HKeInvestCode myCode, string orderNumber, SqlTransaction trans)
         {
-            if (transTable == null)
-                throw new Exception("Database error! Cannot retrieve records!");
+            if (transTable == null) //there is no transaction for that order
+                return;
             else if (transTable.Rows.Count == 1)
             {
                 DataRow[] record = transTable.Select();
@@ -353,7 +374,7 @@ namespace HKeInvestWebApplication
             }
             else
             {
-                for (int i=0; i<transTable.Rows.Count; i++)
+                for (int i = 0; i < transTable.Rows.Count; i++)
                 {
                     //if it is a stock need to check if adding partial transaction is needed
                     DataRow row = transTable.Rows[i];
@@ -365,9 +386,7 @@ namespace HKeInvestWebApplication
                         myData.setData(sql, trans);
                     }
                     else
-                    {
                         row.Delete();
-                    }
                 }
                 transTable.AcceptChanges();
             }
@@ -386,15 +405,23 @@ namespace HKeInvestWebApplication
                 string type = row["type"].ToString();
                 string code = row["code"].ToString();
                 decimal value = Convert.ToDecimal(row["value"]);
+
+                // date and last update can be null
+                // will cause exception here
+                // need fix
                 string date = row["dateOfTrigger"].ToString();
-                decimal lastPrice = Convert.ToDecimal(row["lastUpdate"]);
+                //decimal lastPrice = Convert.ToDecimal(row["lastUpdate"]);
+
+                //temp fix
+                decimal lastPrice;
+                decimal.TryParse(row["lastUpdate"].ToString().Trim(), out lastPrice);
 
                 string findEmail = "SELECT email FROM [Client] WHERE accountNumber = '"+accountNumber+"' AND isPrimary = 'true'";
                 DataTable dtEmail = myData.getData(findEmail);
                 string email = dtEmail.Rows[0].ToString();
               
                 string current = DateTime.Now.ToShortDateString();
-                if (date == current) //alerted
+                if (date == current) //already sent email today
                     continue;
 
                 string subject = "Alert From HKeInvest";
@@ -402,34 +429,61 @@ namespace HKeInvestWebApplication
 
                 decimal currentPrice = myExternal.getSecuritiesPrice(type, code);
 
+                //begin transaction
+                SqlTransaction trans = myData.beginTransaction();
+
                 //low value
                 if (alertType == "lowAlert")
                 {
                     if (value == currentPrice || (currentPrice < value && value < lastPrice)) // reach or pass
                     {
                         myCode.sendemail(email, subject, body);
-                        string insert = "INSERT INTO [Alert](dateOfTrigger) VALUE ('" + current + "')"; //record date
-                        SqlTransaction trans = myData.beginTransaction();
+
+                        //
+                        //invalid sql
+                        //
+                        string insert = "INSERT INTO [Alert](dateOfTrigger) VALUES ('" + current + "')"; //record date
                         myData.setData(insert, trans);
                     }
+
+                    // lastUpdate is always null since no sql to update it
+                    // TODO: update lastUpdate
+
+
+
+
+
+
                 }
                 //high value
-                if (alertType == "highAlert")
+               else if (alertType == "highAlert")
                 {
                     if (value == currentPrice || (currentPrice > value && value > lastPrice)) // reach or pass
                     {
                         myCode.sendemail(email, subject, body);
-                        string insert = "INSERT INTO [Alert](dateOfTrigger) VALUE ('" + current + "')"; //record date
-                        SqlTransaction trans = myData.beginTransaction();
+
+                        //
+                        //invalid sql
+                        //
+                        string insert = "INSERT INTO [Alert](dateOfTrigger) VALUES ('" + current + "')"; //record date
                         myData.setData(insert, trans);
                     }
+
+                    // lastUpdate is always null since no sql to update it
+                    // TODO: update lastUpdate
+
+
+
+
                 }
 
-                sql = "INSERT INTO [Alert] (lastUpdate) VALUE ('" + currentPrice + "')"; //update lastest price
-                SqlTransaction tran = myData.beginTransaction();
-                myData.setData(sql, tran);
+                //
+                //invalid sql
+                //
+                sql = "INSERT INTO [Alert] (lastUpdate) VALUES ('" + currentPrice + "')"; //update lastest price
+                myData.setData(sql, trans);
+                myData.commitTransaction(trans);
             }
         }
-
     }
 }

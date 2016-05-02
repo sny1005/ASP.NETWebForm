@@ -278,8 +278,16 @@ namespace HKeInvestWebApplication.Code_File
 
         public void getSecurityNameBase(string securityType, string securityCode, out string name, out string baseCurrency)
         {
+            securityType.Trim();
+            securityCode.Trim();
             ExternalFunctions myExternal = new ExternalFunctions();
             DataTable Table = myExternal.getSecuritiesByCode(securityType, securityCode);
+            if (Table == null)
+            {
+                name = "";
+                baseCurrency = "";
+                return;
+            }
             DataRow[] record = Table.Select();
             if (record.Count() != 1)       //should never happen
                 throw new Exception("Error! Returning non-single record!");
