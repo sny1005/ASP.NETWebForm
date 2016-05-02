@@ -163,7 +163,7 @@
             </div>
         </div>
 
-<%--        <%-- START OF CO-HOLDER SESSION -
+        <%-- START OF CO-HOLDER SESSION --%>
         <br />
         <asp:Panel ID="CoHolderPanel" runat="server" Visible="False">
             <h6>Co-Account holder - Personal Information</h6>

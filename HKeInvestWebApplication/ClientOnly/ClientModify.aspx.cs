@@ -20,6 +20,9 @@ namespace HKeInvestWebApplication.ClientOnly
         HKeInvestCode myHKeInvestCode = new HKeInvestCode();
         ExternalFunctions myExternalFunctions = new ExternalFunctions();
         static string accountNumber;
+        int i = 1;
+        static string last1;
+        static string last2;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -36,6 +39,47 @@ namespace HKeInvestWebApplication.ClientOnly
             }
             lblAccountNumber.Text = "account number: " + accountNumber;
             lblAccountNumber.Visible = true;
+
+            string userName = User.Identity.Name;
+            sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = (SELECT accountNumber FROM LoginAccount WHERE userName ='" + userName + "')"; // Complete the SQL statement.
+
+            DataTable dtClient = myHKeInvestData.getData(sql);
+            if (dtClient == null) { return; } // If the DataSet is null, a SQL error occurred.
+
+            // If no result is returned by the SQL statement, then display a message.
+            if (dtClient.Rows.Count == 0)
+            {
+                lblResultMessage.Text = "No such account number.";
+                lblResultMessage.Visible = true;
+                lblClientName.Visible = false;
+                return;
+            }
+
+            // Show the client name(s) on the web page.
+            string clientName = "Client(s): ";
+            foreach (DataRow row in dtClient.Rows)
+            {
+                clientName = clientName + row["lastName"] + ", " + row["firstName"];
+                if (last1 == null)
+                {
+                    last1 = last1 + row["lastName"];
+                }
+                else if(last2 == null)
+                {
+                    last2 = last2 + row["lastName"];
+                }
+                else
+                {
+
+                }
+                if (dtClient.Rows.Count != i)
+                {
+                    clientName = clientName + "and ";
+                }
+                i = i + 1;
+            }
+            lblClientName.Text = clientName;
+            lblClientName.Visible = true;
         }
 
         protected void cvOccupation_ServerValidate(object source, ServerValidateEventArgs args)
@@ -45,13 +89,13 @@ namespace HKeInvestWebApplication.ClientOnly
                 if (args.Value == "") args.IsValid = false;
             }
         }
-        //protected void cvOccupation2_ServerValidate(object source, ServerValidateEventArgs args)
-        //{
-        //    if (EmpStatus2.SelectedValue == "Employed")
-        //    {
-        //        if (args.Value == "") args.IsValid = false;
-        //    }
-        //}
+        protected void cvOccupation2_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (EmpStatus2.SelectedValue == "Employed")
+            {
+                if (args.Value == "") args.IsValid = false;
+            }
+        }
 
         protected void cvSpecificSource_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -189,98 +233,99 @@ namespace HKeInvestWebApplication.ClientOnly
                 //end of primary account holder infomation
                 myHKeInvest.commitTransaction(myTransaction);
 
-                //
+                
                 //INSERT CO HOLDER'S INFORMATION
-                //if (acType.SelectedIndex != 0)
-                //{
-                //    myTransaction = myHKeInvest.beginTransaction();
-                //         //get co-ac holder's clientNumber
-                //    sql = "SELECT clientNumber from Client WHERE accountNumber = '" + acNo + "' AND firstName = '" + FirstName2.Text + "'";
-                //    DataTable dtClient = myHKeInvest.getData(sql);
-                //    string cNo = "";
-                //    foreach (DataRow row in dtClient.Rows)
-                //    {
-                //        cNo = Convert.ToString(row["clientNumber"]);
-                //    }
+                if (i != 0)
+                {
+                    CoHolderPanel.Visible = true;
+                    myTransaction = myHKeInvest.beginTransaction();
+                         //get co-ac holder's clientNumber
+                    sql = "SELECT clientNumber from Client WHERE accountNumber = '" + acNo + "' AND lastName = '" + last2 + "'";
+                    DataTable dtClient = myHKeInvest.getData(sql);
+                    string cNo = "";
+                    foreach (DataRow row in dtClient.Rows)
+                    {
+                        cNo = Convert.ToString(row["clientNumber"]);
+                    }
 
-                //    if (Email2.Text != null)
-                //    {
-                //        sql = "UPDATE [Client] SET email = '" + Email2.Text + "' WHERE accountNumber = '" + acNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    if (Email2.Text != null)
+                    {
+                        sql = "UPDATE [Client] SET email = '" + Email2.Text + "' WHERE accountNumber = '" + acNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    if (Building2.Text != null)
-                //    {
-                //        sql = "UPDATE [Client] SET building = '" + Building2.Text + "' WHERE accountNumber = '" + acNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    if (Building2.Text != null)
+                    {
+                        sql = "UPDATE [Client] SET building = '" + Building2.Text + "' WHERE accountNumber = '" + acNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    if (Street2.Text != null)
-                //    {
-                //        sql = "UPDATE [Client] SET street = '" + Street2.Text + "' WHERE accountNumber = '" + acNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    if (Street2.Text != null)
+                    {
+                        sql = "UPDATE [Client] SET street = '" + Street2.Text + "' WHERE accountNumber = '" + acNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    if (District2.Text != null)
-                //    {
-                //        sql = "UPDATE [Client] SET district = '" + District2.Text + "' WHERE accountNumber = '" + acNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    if (District2.Text != null)
+                    {
+                        sql = "UPDATE [Client] SET district = '" + District2.Text + "' WHERE accountNumber = '" + acNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    if (EmpStatus2.SelectedValue != null)
-                //    {
-                //        sql = "UPDATE [Client] SET employmentStatus = '" + EmpStatus2.SelectedValue + "' WHERE accountNumber = '" + acNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    if (EmpStatus2.SelectedValue != null)
+                    {
+                        sql = "UPDATE [Client] SET employmentStatus = '" + EmpStatus2.SelectedValue + "' WHERE accountNumber = '" + acNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    if (EmpByBroker2.SelectedValue != null)
-                //    {
-                //        sql = "UPDATE [Client] SET employByBroker = '" + EmpByBroker2.SelectedValue + "' WHERE accountNumber = '" + acNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    if (EmpByBroker2.SelectedValue != null)
+                    {
+                        sql = "UPDATE [Client] SET employByBroker = '" + EmpByBroker2.SelectedValue + "' WHERE accountNumber = '" + acNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    if (CompanyDirector2.SelectedValue != null)
-                //    {
-                //        sql = "UPDATE [Client] SET publiclyTradedCompany = '" + CompanyDirector2.SelectedValue + "' WHERE accountNumber = '" + acNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    if (CompanyDirector2.SelectedValue != null)
+                    {
+                        sql = "UPDATE [Client] SET publiclyTradedCompany = '" + CompanyDirector2.SelectedValue + "' WHERE accountNumber = '" + acNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    myHKeInvest.setData(sql, myTransaction);
-                //    myHKeInvest.commitTransaction(myTransaction);       //need to commit transaction before being able to retreive information from the database
-                //    myTransaction = myHKeInvest.beginTransaction();
+                    myHKeInvest.setData(sql, myTransaction);
+                    myHKeInvest.commitTransaction(myTransaction);       //need to commit transaction before being able to retreive information from the database
+                    myTransaction = myHKeInvest.beginTransaction();
 
-                //    //insert phone numbers
-                //    if (hPhone2.Text != "")
-                //    {
-                //        sql = "UPDATE [Client] SET homePhone = '" + hPhone2.Text + "' WHERE clientNumber = '" + cNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
-                //    if (hFax2.Text != "")
-                //    {
-                //        sql = "UPDATE [Client] SET homeFax = '" + hFax2.Text + "' WHERE clientNumber = '" + cNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
-                //    if (bPhone2.Text != "")
-                //    {
-                //        sql = "UPDATE [Client] SET businessPhone = '" + bPhone2.Text + "' WHERE clientNumber = '" + cNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
-                //    if (bFax2.Text != "")
-                //    {
-                //        sql = "UPDATE [Client] SET businessFax = '" + bFax2.Text + "' WHERE clientNumber = '" + cNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    //insert phone numbers
+                    if (hPhone2.Text != "")
+                    {
+                        sql = "UPDATE [Client] SET homePhone = '" + hPhone2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+                    if (hFax2.Text != "")
+                    {
+                        sql = "UPDATE [Client] SET homeFax = '" + hFax2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+                    if (bPhone2.Text != "")
+                    {
+                        sql = "UPDATE [Client] SET businessPhone = '" + bPhone2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+                    if (bFax2.Text != "")
+                    {
+                        sql = "UPDATE [Client] SET businessFax = '" + bFax2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    //insert employmeny information
-                //    if (EmpStatus2.SelectedValue == "Employed")
-                //    {
-                //        sql = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE clientNumber = '" + cNo + "'";
-                //        myHKeInvest.setData(sql, myTransaction);
-                //    }
+                    //insert employmeny information
+                    if (EmpStatus2.SelectedValue == "Employed")
+                    {
+                        sql = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
 
-                //    //END of optional fields for co-ac holder
-                //    myHKeInvest.commitTransaction(myTransaction);
-                //}
+                    //END of optional fields for co-ac holder
+                    myHKeInvest.commitTransaction(myTransaction);
+                }
 
                 lblmsg.Visible = true;
                 lblmsg.Text = "Account info updated successfully!";
