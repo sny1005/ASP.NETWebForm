@@ -13,6 +13,15 @@ namespace HKeInvestWebApplication.ClientOnly {
     public partial class ClientModify {
         
         /// <summary>
+        /// lblmsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblmsg;
+        
+        /// <summary>
         /// lblAccountNumber control.
         /// </summary>
         /// <remarks>

@@ -281,7 +281,12 @@ namespace HKeInvestWebApplication.ClientOnly
                 //    //END of optional fields for co-ac holder
                 //    myHKeInvest.commitTransaction(myTransaction);
                 //}
+
+                lblmsg.Visible = true;
+                lblmsg.Text = "Account info updated successfully!";
+                return;
             }
+            lblmsg.Visible = false;
         }
     }
 }
