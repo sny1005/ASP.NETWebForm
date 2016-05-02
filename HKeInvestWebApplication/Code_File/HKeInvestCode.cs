@@ -325,6 +325,24 @@ namespace HKeInvestWebApplication.Code_File
             return asset;
         }
 
+        public decimal getFeeCharged(string orderNumber)
+        {
+            decimal fee;
+            orderNumber = orderNumber.Trim();
+            HKeInvestData myData = new HKeInvestData();
+            string sql = "SELECT [feeCharged] FROM [Order] WHERE [orderNumber] = '" + orderNumber + "'";
+
+            DataTable Table = myData.getData(sql);
+            DataRow[] record = Table.Select();
+
+            if (record.Count() == 0)
+                throw new Exception("Error! No record retrieved!");
+            else
+                decimal.TryParse(record[0]["feeCharged"].ToString().Trim(), out fee);
+
+            return fee;
+        }
+
         public bool securityCodeIsValid(string securityType, string securityCode)
         {
             ExternalFunctions myExternal = new ExternalFunctions();
