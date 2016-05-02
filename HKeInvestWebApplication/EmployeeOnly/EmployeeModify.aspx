@@ -2,19 +2,24 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <h2>Modify Account Informations - EMPLOYEE view</h2>
 
-    <div class="form-horizontal">
+     <div class="form-horizontal">
         <asp:ValidationSummary runat="server" CssClass="text-danger" EnableClientScript="False" />
          
-        <br />
-        <h6>Primary Account Holder - Personal Information</h6>
-
         <div class="form-group">
             <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="control-label col-md-2" AssociatedControlID="txtAccountNumber"></asp:Label>
             <asp:TextBox ID="txtAccountNumber" runat="server"></asp:TextBox>
-<%--            <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
-            <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>    --%>
+            <asp:Button ID="Check" runat="server" Text="Check Account Exist" CssClass="btn" OnClick="Check_Click" />
         </div>
 
+        <div class="form-group">
+            <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
+            <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>  
+        </div>
+
+
+       <asp:Panel ID="Primary1" runat="server" Visible="False">
+        <br />
+        <h6>Primary Account Holder - Personal Information</h6>
         <div class="form-group">
             <asp:Label runat="server" Text="Title" CssClass="control-label col-md-2" AssociatedControlID="title"></asp:Label>
             <div class="col-md-4">
@@ -53,7 +58,7 @@
             <asp:Label AssociatedControlID="IssueCountry" runat="server" Text="Passport country of issue" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="IssueCountry" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
-                <asp:CustomValidator ID="cvIssueCountry" runat="server" ControlToValidate="IssueCountry" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvIssueCountry_ServerValidate" ValidateEmptyText="True">*</asp:CustomValidator>
+                <%--<asp:CustomValidator ID="cvIssueCountry" runat="server" ControlToValidate="IssueCountry" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvIssueCountry_ServerValidate" ValidateEmptyText="True">*</asp:CustomValidator>--%>
             </div>
         </div>
 
@@ -211,11 +216,12 @@
                 </div>
             </div>
         </div>
+      </asp:Panel>
 
 
-<%--        <%-- START OF CO-HOLDER SESSION
-        <br />
+       <%-- START OF CO-HOLDER SESSION --%>
         <asp:Panel ID="CoHolderPanel" runat="server" Visible="False">
+            <br />
             <h6>Co-Account holder - Personal Information</h6>
 
             <div class="form-group">
@@ -244,7 +250,7 @@
             <div class="form-group">
                 <asp:Label AssociatedControlID="Email2" runat="server" Text="Email" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
-                    <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" MaxLength="30" TextMode="Email"></asp:TextBox>
+                    <asp:TextBox ID="Email2" runat="server" CssClass="form-control" MaxLength="30" TextMode="Email"></asp:TextBox>
                 </div>
             </div>
 
@@ -256,7 +262,7 @@
                 <asp:Label AssociatedControlID="IssueCountry2" runat="server" Text="Passport country of issue" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="IssueCountry2" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
-                    <asp:CustomValidator ID="cvIssueCountry2" runat="server" ControlToValidate="IssueCountry2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvIssueCountry2_ServerValidate" ValidateEmptyText="True">*</asp:CustomValidator>
+                    <%--<asp:CustomValidator ID="cvIssueCountry2" runat="server" ControlToValidate="IssueCountry2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvIssueCountry2_ServerValidate" ValidateEmptyText="True">*</asp:CustomValidator>--%>
                 </div>
             </div>
 
@@ -275,7 +281,6 @@
                 <asp:Label AssociatedControlID="hPhone2" runat="server" Text="Home Phone" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="hPhone2" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
-                    <asp:CustomValidator ID="cvPhone2" runat="server" Text="*" OnServerValidate="cvPhone_ServerValidate" ControlToValidate="hPhone2" ValidateEmptyText="True" CssClass="text-danger" Display="Dynamic" EnableClientScript="False"></asp:CustomValidator>
                     <asp:RegularExpressionValidator ID="RegularExpressionValidator9" runat="server" ErrorMessage="Co-account holder home phone must contain 8 digits" ControlToValidate="hPhone2" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="\d{8}">*</asp:RegularExpressionValidator>
                 </div>
                 <asp:Label AssociatedControlID="hFax2" runat="server" Text="Home Fax" CssClass="control-label col-md-2"></asp:Label>
@@ -396,6 +401,7 @@
         </asp:Panel>
         <%-- END OF CO-HOLDER SESSION --%>
 
+        <asp:Panel ID="Primary2" runat="server" Visible="False">
         <br />
         <h6>Investment Profile</h6>
         <div class="form-group">
@@ -463,7 +469,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10"><asp:Button ID="Register" runat="server" Text="UPDATE INFORMATION" CssClass="btn" OnClick="Register_Click"></asp:Button></div>
         </div>
+
+        </asp:Panel>
     </div>
 </asp:Content>
-
-

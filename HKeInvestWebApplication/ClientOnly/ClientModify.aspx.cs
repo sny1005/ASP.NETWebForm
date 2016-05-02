@@ -21,7 +21,6 @@ namespace HKeInvestWebApplication.ClientOnly
         ExternalFunctions myExternalFunctions = new ExternalFunctions();
         static string accountNumber;
         int i = 1;
-        static string last1;
         static string last2;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -60,17 +59,9 @@ namespace HKeInvestWebApplication.ClientOnly
             foreach (DataRow row in dtClient.Rows)
             {
                 clientName = clientName + row["lastName"] + ", " + row["firstName"];
-                if (last1 == null)
-                {
-                    last1 = last1 + row["lastName"];
-                }
-                else if(last2 == null)
+                if (dtClient.Rows.Count != 1 && dtClient.Rows.Count == i)
                 {
                     last2 = last2 + row["lastName"];
-                }
-                else
-                {
-
                 }
                 if (dtClient.Rows.Count != i)
                 {
@@ -101,7 +92,7 @@ namespace HKeInvestWebApplication.ClientOnly
         {
             if (PrimarySource.SelectedValue == "other" && args.Value == "") args.IsValid = false;
         }
-        
+
         protected void Register_Click(object sender, EventArgs e)
         {
             string sql;
@@ -111,7 +102,8 @@ namespace HKeInvestWebApplication.ClientOnly
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
                 string acNo = accountNumber;
 
-                if (Email.Text != null) {
+                if (Email.Text != null)
+                {
                     sql = "UPDATE [Client] SET email = '" + Email.Text + "' WHERE accountNumber = '" + acNo + "'";
                     myHKeInvest.setData(sql, myTransaction);
                 }
@@ -233,20 +225,20 @@ namespace HKeInvestWebApplication.ClientOnly
                 //end of primary account holder infomation
                 myHKeInvest.commitTransaction(myTransaction);
 
-                
+
                 //INSERT CO HOLDER'S INFORMATION
                 if (i != 0)
                 {
                     CoHolderPanel.Visible = true;
                     myTransaction = myHKeInvest.beginTransaction();
-                         //get co-ac holder's clientNumber
-                    sql = "SELECT clientNumber from Client WHERE accountNumber = '" + acNo + "' AND lastName = '" + last2 + "'";
-                    DataTable dtClient = myHKeInvest.getData(sql);
-                    string cNo = "";
-                    foreach (DataRow row in dtClient.Rows)
-                    {
-                        cNo = Convert.ToString(row["clientNumber"]);
-                    }
+                    ////get co-ac holder's clientNumber
+                    //sql = "SELECT clientNumber from Client WHERE accountNumber = '" + acNo + "' AND lastName = '" + last2 + "'";
+                    //DataTable dtClient = myHKeInvest.getData(sql);
+                    //string cNo = "";
+                    //foreach (DataRow row in dtClient.Rows)
+                    //{
+                    //    cNo = Convert.ToString(row["clientNumber"]);
+                    //}
 
                     if (Email2.Text != null)
                     {
@@ -290,36 +282,36 @@ namespace HKeInvestWebApplication.ClientOnly
                         myHKeInvest.setData(sql, myTransaction);
                     }
 
-                    myHKeInvest.setData(sql, myTransaction);
-                    myHKeInvest.commitTransaction(myTransaction);       //need to commit transaction before being able to retreive information from the database
-                    myTransaction = myHKeInvest.beginTransaction();
+                    // myHKeInvest.setData(sql, myTransaction);
+                    // myHKeInvest.commitTransaction(myTransaction);       //need to commit transaction before being able to retreive information from the database
+                    // myTransaction = myHKeInvest.beginTransaction();
 
                     //insert phone numbers
                     if (hPhone2.Text != "")
                     {
-                        sql = "UPDATE [Client] SET homePhone = '" + hPhone2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET homePhone = '" + hPhone2.Text + "' WHERE accountNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
                     if (hFax2.Text != "")
                     {
-                        sql = "UPDATE [Client] SET homeFax = '" + hFax2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET homeFax = '" + hFax2.Text + "' WHERE accountNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
                     if (bPhone2.Text != "")
                     {
-                        sql = "UPDATE [Client] SET businessPhone = '" + bPhone2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET businessPhone = '" + bPhone2.Text + "' WHERE accountNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
                     if (bFax2.Text != "")
                     {
-                        sql = "UPDATE [Client] SET businessFax = '" + bFax2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET businessFax = '" + bFax2.Text + "' WHERE accountNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
 
                     //insert employmeny information
                     if (EmpStatus2.SelectedValue == "Employed")
                     {
-                        sql = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE accountNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
 

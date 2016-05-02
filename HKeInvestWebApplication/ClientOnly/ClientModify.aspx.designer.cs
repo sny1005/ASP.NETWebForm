@@ -346,15 +346,6 @@ namespace HKeInvestWebApplication.ClientOnly {
         protected global::System.Web.UI.WebControls.TextBox hPhone2;
         
         /// <summary>
-        /// cvPhone2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvPhone2;
-        
-        /// <summary>
         /// RegularExpressionValidator9 control.
         /// </summary>
         /// <remarks>

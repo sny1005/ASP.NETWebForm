@@ -179,7 +179,6 @@
                 <asp:Label AssociatedControlID="hPhone2" runat="server" Text="Home Phone" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="hPhone2" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
-                    <asp:CustomValidator ID="cvPhone2" runat="server" Text="*" OnServerValidate="cvPhone_ServerValidate" ControlToValidate="hPhone2" ValidateEmptyText="True" CssClass="text-danger" Display="Dynamic" EnableClientScript="False"></asp:CustomValidator>
                     <asp:RegularExpressionValidator ID="RegularExpressionValidator9" runat="server" ErrorMessage="Co-account holder home phone must contain 8 digits" ControlToValidate="hPhone2" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="\d{8}">*</asp:RegularExpressionValidator>
                 </div>
                 <asp:Label AssociatedControlID="hFax2" runat="server" Text="Home Fax" CssClass="control-label col-md-2"></asp:Label>
@@ -368,5 +367,7 @@
             <div class="col-md-offset-2 col-md-10"><asp:Button ID="Register" runat="server" Text="UPDATE INFORMATION" CssClass="btn" OnClick="Register_Click"></asp:Button></div>
         </div>
     </div>
+
+
 </asp:Content>
 
