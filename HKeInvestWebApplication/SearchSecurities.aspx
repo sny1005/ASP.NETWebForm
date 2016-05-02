@@ -4,7 +4,7 @@
     <h10>Search Securites</h10>
     <div class="form-horizontal">
         <div class="form-group">
-            <asp:Label runat="server" Text="Security Type : " CssClass="control-label col-md-2" ></asp:Label>
+            <asp:Label runat="server" Text="Security Type : " CssClass="control-label col-md-2" AssociatedControlID="ddlSecurityType" ></asp:Label>
             <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" ControlToValidate="ddlSecurityType">
                 <asp:ListItem Value="0">Security type</asp:ListItem>
                 <asp:ListItem Value="bond">Bond</asp:ListItem>
@@ -26,9 +26,13 @@
             <div class="col-md-offset-2 col-md-10"><asp:Button ID="Search" runat="server" Text="SEARCH" CssClass="btn" OnClick="Search_Click" ControlToValidate="Search"></asp:Button></div>
         </div>
           
+      <%--  <div class="form-group">
+             <asp:Label ID="test" runat="server" CssClass="control-label col-md-2" ></asp:Label>
+        </div>--%>
+
         <div class="form-group">
         <div>
-            <asp:GridView ID="BondGV" runat="server" Visible="False" AutoGenerateColumns="False" CellPadding="5">
+            <asp:GridView ID="BondGV" runat="server" Visible="False" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Bond Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Bond Name" ReadOnly="True" SortExpression="name" />
@@ -45,7 +49,7 @@
          </div>
             
         <div>
-            <asp:GridView ID="StockGV" runat="server" Visible="False" AutoGenerateColumns="False" CellPadding="5">
+            <asp:GridView ID="StockGV" runat="server" Visible="False" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Stock code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Stock Name" ReadOnly="True" SortExpression="name" />
@@ -62,7 +66,7 @@
         </div>
 
          <div>
-            <asp:GridView ID="UnitTrustGV" runat="server" Visible="False" AutoGenerateColumns="False" CellPadding="5">
+            <asp:GridView ID="UTGV" runat="server" Visible="False" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="name" />

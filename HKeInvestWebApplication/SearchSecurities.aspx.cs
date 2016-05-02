@@ -16,99 +16,144 @@ namespace HKeInvestWebApplication
         HKeInvestCode myHKeInvestCode = new HKeInvestCode();
         ExternalFunctions myExternalFunctions = new ExternalFunctions();
 
-        protected void Page_Load(object sender, EventArgs e){
+        protected void Page_Load(object sender, EventArgs e)
+        {
             StockGV.Visible = false;
             BondGV.Visible = false;
-            UnitTrustGV.Visible = false;
+            UTGV.Visible = false;
         }
 
         protected void Search_Click(object sender, EventArgs e)
         {
-            // ALL Bond
-            if (ddlSecurityType.SelectedValue == "bond" && SecName.Text == null && SecCode.Text == null)
+
+            // all bond
+            if (ddlSecurityType.SelectedValue == "bond" && (string.IsNullOrEmpty(SecName.Text) == true && string.IsNullOrEmpty(SecCode.Text) == true))
             {
-                DataTable dtBond = myExternalFunctions.getSecuritiesData("bond");
-                BondGV.DataSource = dtBond;
+                DataTable dtbond = myExternalFunctions.getSecuritiesData("bond");
+                BondGV.DataSource = dtbond;
                 BondGV.DataBind();
                 BondGV.Visible = true;
+                return;
             }
 
-            // ALL Stock
-            if (ddlSecurityType.SelectedValue == "stock" && SecName.Text == null && SecCode.Text == null)
+            // all stock
+            if (ddlSecurityType.SelectedValue == "stock" && (string.IsNullOrEmpty(SecName.Text) == true && string.IsNullOrEmpty(SecCode.Text) == true))
             {
-                DataTable dtStock = myExternalFunctions.getSecuritiesData("stock");
-                StockGV.DataSource = dtStock;
+                DataTable dtstock = myExternalFunctions.getSecuritiesData("stock");
+                StockGV.DataSource = dtstock;
                 StockGV.DataBind();
                 StockGV.Visible = true;
+                return;
             }
 
-            // ALL Unit Trust
-            if (ddlSecurityType.SelectedValue == "unit trust" && SecName.Text == null && SecCode.Text == null)
+            // all unit trust
+            if (ddlSecurityType.SelectedValue == "unit trust" && (string.IsNullOrEmpty(SecName.Text) == true && string.IsNullOrEmpty(SecCode.Text) == true))
             {
                 DataTable dtUT = myExternalFunctions.getSecuritiesData("unit trust");
-                UnitTrustGV.DataSource = dtUT;
-                UnitTrustGV.DataBind();
-                UnitTrustGV.Visible = true;
+                UTGV.DataSource = dtUT;
+                UTGV.DataBind();
+                UTGV.Visible = true;
+                return;
             }
 
-            // Bond with Code
-            if (ddlSecurityType.SelectedItem.Value == "bond" && SecName.Text == null && SecCode.Text != null)
+            //bond case
+            if (ddlSecurityType.SelectedValue == "bond")
             {
-                string input = SecCode.Text.Trim();
-                DataTable dtBondC = myExternalFunctions.getSecuritiesByCode("bond", input);
-                BondGV.DataSource = dtBondC;
-                BondGV.DataBind();
-                BondGV.Visible = true;
+                if (string.IsNullOrEmpty(SecName.Text) == false && string.IsNullOrEmpty(SecCode.Text) == false)
+                {
+                    string input = SecCode.Text.Trim();
+                    DataTable dtBondB = myExternalFunctions.getSecuritiesByCode("bond", input);
+                    BondGV.DataSource = dtBondB;
+                    BondGV.DataBind();
+                    BondGV.Visible = true;
+                    return;
+                }
+                else if (string.IsNullOrEmpty(SecName.Text) == true && string.IsNullOrEmpty(SecCode.Text) == false)
+                {
+                    string input = SecCode.Text.Trim();
+                    DataTable dtBondC = myExternalFunctions.getSecuritiesByCode("bond", input);
+                    BondGV.DataSource = dtBondC;
+                    BondGV.DataBind();
+                    BondGV.Visible = true;
+                    return;
+                }
+                else
+                {
+                    string input = SecName.Text.Trim();
+                    DataTable dtBondN = myExternalFunctions.getSecuritiesByName("bond", input);
+                    BondGV.DataSource = dtBondN;
+                    BondGV.DataBind();
+                    BondGV.Visible = true;
+                    return;
+                }
             }
 
-            // Stock with Code
-            if (ddlSecurityType.SelectedValue == "stock" && SecName.Text == null && SecCode.Text != null)
+
+            //stock case
+            if (ddlSecurityType.SelectedValue == "stock")
             {
-                string input = SecCode.Text.Trim();
-                DataTable dtStockC = myExternalFunctions.getSecuritiesByCode("stock", input);
-                StockGV.DataSource = dtStockC;
-                StockGV.DataBind();
-                StockGV.Visible = true;
+                if (string.IsNullOrEmpty(SecName.Text) == false && string.IsNullOrEmpty(SecCode.Text) == false)
+                {
+                    string input = SecCode.Text.Trim();
+                    DataTable dtStockB = myExternalFunctions.getSecuritiesByCode("stock", input);
+                    StockGV.DataSource = dtStockB;
+                    StockGV.DataBind();
+                    StockGV.Visible = true;
+                    return;
+                }
+                else if (string.IsNullOrEmpty(SecName.Text) == true && string.IsNullOrEmpty(SecCode.Text) == false)
+                {
+                    string input = SecCode.Text.Trim();
+                    DataTable dtStockC = myExternalFunctions.getSecuritiesByCode("stock", input);
+                    StockGV.DataSource = dtStockC;
+                    StockGV.DataBind();
+                    StockGV.Visible = true;
+                    return;
+                }
+                else
+                {
+                    string input = SecName.Text.Trim();
+                    DataTable dtStockN = myExternalFunctions.getSecuritiesByName("stock", input);
+                    StockGV.DataSource = dtStockN;
+                    StockGV.DataBind();
+                    StockGV.Visible = true;
+                    return;
+                }
             }
 
-            // Unit Trust with Code
-            if (ddlSecurityType.SelectedValue == "unit trust" && SecName.Text == null && SecCode.Text != null)
-            {
-                string input = SecCode.Text.Trim();
-                DataTable dtUTC = myExternalFunctions.getSecuritiesByCode("unit trust", input);
-                UnitTrustGV.DataSource = dtUTC;
-                UnitTrustGV.DataBind();
-                UnitTrustGV.Visible = true;
-            }
 
-            // Bond with Name
-            if (ddlSecurityType.SelectedItem.Value == "bond" && SecName.Text != null)
-            {
-                string input = SecName.Text.Trim();
-                DataTable dtBondN = myExternalFunctions.getSecuritiesByName("bond", input);
-                BondGV.DataSource = dtBondN;
-                BondGV.DataBind();
-                BondGV.Visible = true;
-            }
 
-            // Stock with Name
-            if (ddlSecurityType.SelectedValue == "stock" && SecName.Text != null)
-            {
-                string input = SecName.Text.Trim();
-                DataTable dtStockN = myExternalFunctions.getSecuritiesByName("stock", input);
-                StockGV.DataSource = dtStockN;
-                StockGV.DataBind();
-                StockGV.Visible = true;
-            }
 
-            // Unit Trust with Name
-            if (ddlSecurityType.SelectedValue == "unit trust" && SecName.Text != null)
+            //unit trust case
+            if (ddlSecurityType.SelectedValue == "unit trust")
             {
-                string input = SecName.Text.Trim();
-                DataTable dtUTN = myExternalFunctions.getSecuritiesByName("unit trust", input);
-                UnitTrustGV.DataSource = dtUTN;
-                UnitTrustGV.DataBind();
-                UnitTrustGV.Visible = true;
+                if (string.IsNullOrEmpty(SecName.Text) == false && string.IsNullOrEmpty(SecCode.Text) == false)
+                {
+                    string input = SecCode.Text.Trim();
+                    DataTable dtUTB = myExternalFunctions.getSecuritiesByCode("unit trust", input);
+                    UTGV.DataSource = dtUTB;
+                    UTGV.DataBind();
+                    UTGV.Visible = true;
+                    return;
+                }
+                else if (string.IsNullOrEmpty(SecName.Text) == true && string.IsNullOrEmpty(SecCode.Text) == false)
+                {
+                    string input = SecCode.Text.Trim();
+                    DataTable dtUTC = myExternalFunctions.getSecuritiesByCode("unit trust", input);
+                    UTGV.DataSource = dtUTC;
+                    UTGV.DataBind();
+                    UTGV.Visible = true;
+                    return;
+                }
+                else
+                {
+                    string input = SecName.Text.Trim();
+                    DataTable dtUTN = myExternalFunctions.getSecuritiesByName("unit trust", input);
+                    UTGV.DataSource = dtUTN;
+                    UTGV.DataBind();
+                    UTGV.Visible = true;
+                    return;
+                }
             }
         }
     }
