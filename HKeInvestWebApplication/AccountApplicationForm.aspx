@@ -50,9 +50,7 @@
         </div>
 
         <div class="form-group">
-            <asp:Label AssociatedControlID="AccountNumber" runat="server" Text="Account #" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
-                <asp:TextBox ID="AccountNumber" runat="server" CssClass="form-control" MaxLength="10"></asp:TextBox>
             </div>
         </div>
 

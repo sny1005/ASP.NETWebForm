@@ -21,40 +21,78 @@ namespace HKeInvestWebApplication
             StockGV.Visible = false;
             BondGV.Visible = false;
             UTGV.Visible = false;
+
+
+            if (!IsPostBack)
+            {
+                //BondGV.Sort("OrigShiftDescr", SortDirection.Descending);
+                ViewState["SortOn"] = "ASC";
+                ViewState["SortBy"] = "DESC";
+            }
+
+
         }
 
         protected void BondGV_Sorting(object sender, GridViewSortEventArgs e)
         {
-            switch (e.SortExpression)
-            {
-                case "code":
-                    if (e.SortDirection == SortDirection.Ascending)
-                    {
-                        //BondGV.DataSource = // Asc query 
-                        //BondGV.DataBind();
-                    }
-                    else
-                    {
-                        //BondGV.DataSource = // Desc query 
-                        //BondGV.DataBind();
-                    }
-                    break;
 
-                case "name":
-                    if (e.SortDirection == SortDirection.Ascending)
-                    {
-                        //BondGV.DataSource = // Asc query 
-                        //BondGV.DataBind();
-                    }
-                    else
-                    {
-                        //BondGV.DataSource = // Desc query 
-                        //BondGV.DataBind();
-                    }
-                    break;
-            }
+            string strcolumnname = e.SortExpression;
+            ViewState["SortOn"] = strcolumnname;
+            if (ViewState["SortBy"].ToString() == "ASC")
+                ViewState["SortBy"] = "DESC";
+            else
+                ViewState["SortBy"] = "ASC";
+
+
+            //switch (e.SortExpression)
+            //{
+            //    case "code":
+            //        if (e.SortDirection == SortDirection.Ascending)
+            //        {
+            //            //BondGV.DataSource = // Asc query 
+            //            //BondGV.DataBind();
+            //        }
+            //        else
+            //        {
+            //            //BondGV.DataSource = // Desc query 
+            //            //BondGV.DataBind();
+            //        }
+            //        break;
+
+            //    case "name":
+            //        if (e.SortDirection == SortDirection.Ascending)
+            //        {
+            //            //BondGV.DataSource = // Asc query 
+            //            //BondGV.DataBind();
+            //        }
+            //        else
+            //        {
+            //            //BondGV.DataSource = // Desc query 
+            //            //BondGV.DataBind();
+            //        }
+            //        break;
+            //}
         }
 
+        protected void StockGV_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            string strcolumnname = e.SortExpression;
+            ViewState["SortOn"] = strcolumnname;
+            if (ViewState["SortBy"].ToString() == "ASC")
+                ViewState["SortBy"] = "DESC";
+            else
+                ViewState["SortBy"] = "ASC";
+        }
+
+        protected void UTGV_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            string strcolumnname = e.SortExpression;
+            ViewState["SortOn"] = strcolumnname;
+            if (ViewState["SortBy"].ToString() == "ASC")
+                ViewState["SortBy"] = "DESC";
+            else
+                ViewState["SortBy"] = "ASC";
+        }
 
         protected void Search_Click(object sender, EventArgs e)
         {

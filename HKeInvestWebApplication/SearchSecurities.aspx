@@ -28,7 +28,7 @@
 
         <div class="form-group">
             <div>
-            <asp:GridView ID="BondGV" runat="server" Visible="False" AllowSorting="True" OnSorting="BondGV_Sorting" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" >
+            <asp:GridView ID="BondGV" runat="server" Visible="False" AllowSorting="True" OnSorting="BondGV_Sorting" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Bond Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Bond Name" ReadOnly="True" SortExpression="name" />
@@ -45,7 +45,7 @@
             </div>
             
             <div>
-            <asp:GridView ID="StockGV" runat="server" Visible="False" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found">
+            <asp:GridView ID="StockGV" runat="server" Visible="False" OnSorting="StockGV_Sorting" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Stock code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Stock Name" ReadOnly="True" SortExpression="name" />
@@ -53,8 +53,8 @@
                     <asp:BoundField DataField="changeDollar" DataFormatString="{0:n2}" HeaderText="Last trading day change" ReadOnly="True" SortExpression="lastchange" />
                     <asp:BoundField DataField="changePercent" DataFormatString="{0:n2}" HeaderText="Last trading day percentage change" ReadOnly="True" SortExpression="lastpercentage" />
                     <asp:BoundField DataField="volume" DataFormatString="{0:n2}" HeaderText="Last trading day volume of shares" ReadOnly="True" SortExpression="lastvolume" />
-                    <asp:BoundField DataField="high" DataFormatString="{0:n2}" HeaderText="highprice" ReadOnly="True" />
-                    <asp:BoundField DataField="low" DataFormatString="{0:n2}" HeaderText="lowprice" ReadOnly="True" />
+                    <asp:BoundField DataField="high" DataFormatString="{0:n2}" HeaderText="highprice" ReadOnly="True" SortExpression="high" />
+                    <asp:BoundField DataField="low" DataFormatString="{0:n2}" HeaderText="lowprice" ReadOnly="True" SortExpression="low" />
                     <asp:BoundField DataField="peRatio" DataFormatString="{0:n2}" HeaderText="Price earnings ratio of the stock" ReadOnly="True" SortExpression="pe" />
                     <asp:BoundField DataField="yield" DataFormatString="{0:n2}" HeaderText="Yield of the stock" ReadOnly="True" SortExpression="yield" />
                 </Columns>
@@ -62,7 +62,7 @@
             </div>
 
             <div>
-            <asp:GridView ID="UTGV" runat="server" Visible="False" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found">
+            <asp:GridView ID="UTGV" runat="server" Visible="False" OnSorting="UTGV_Sorting" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="name" />

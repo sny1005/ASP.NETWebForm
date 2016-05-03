@@ -202,7 +202,7 @@ namespace HKeInvestWebApplication
             if (Page.IsValid)
             {
                 HKeInvestData myHKeInvest = new HKeInvestData();
-                string acNo = AccountNumber.Text;
+                //string acNo = AccountNumber.Text;
 
                 decimal initialBalance;
                 if (Transfer.Checked && Cheque.Checked)         //both contain value

@@ -65,6 +65,12 @@ namespace HKeInvestWebApplication.Account
 
                     //relate the newly created username with existing record
                     sql = "UPDATE LoginAccount SET username = '" + user.UserName + "' WHERE accountNumber = '" + acNo + "'";
+                    // send confirmation email
+                    HKeInvestCode myCode = new HKeInvestCode();
+                    string mailTo = email.Trim();
+                    string subject = "Confirmation email";
+                    string mailBody = "This is to confirm that your account" + acNo + "have been created.";
+                    myCode.sendemail(mailTo, subject, mailBody);
                     SqlTransaction trans = myHKeInvestData.beginTransaction();
                     myHKeInvestData.setData(sql, trans);
                     myHKeInvestData.commitTransaction(trans);
@@ -72,12 +78,7 @@ namespace HKeInvestWebApplication.Account
                     signInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
                     IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
 
-                    // send confirmation email
-                    HKeInvestCode myCode = new HKeInvestCode();
-                    string mailTo = email.Trim();
-                    string subject = "Confirmation email";
-                    string mailBody = "This is to confirm that your account" + acNo + "have been created.";
-                    myCode.sendemail(mailTo, subject, mailBody);
+
                 }
                 else
                 {
