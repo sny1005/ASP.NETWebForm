@@ -440,7 +440,7 @@ namespace HKeInvestWebApplication
               
                 DateTime current = DateTime.Now;
                 if (date == current) //already sent email today
-                    continue;
+                    break;
 
                 string subject = "Alert From HKeInvest";
                 string body = "Dear Customer," + Environment.NewLine + "The price of the following security passes/reaches '"+value+"': " + Environment.NewLine + "Security Type: '"+type+"' " + Environment.NewLine + "Secuirty Code: '"+code+"'";
