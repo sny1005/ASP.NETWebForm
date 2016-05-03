@@ -71,6 +71,13 @@ namespace HKeInvestWebApplication.Account
 
                     signInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
                     IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
+
+                    // send confirmation email
+                    HKeInvestCode myCode = new HKeInvestCode();
+                    string mailTo = email.Trim();
+                    string subject = "Confirmation email";
+                    string mailBody = "This is to confirm that your account" + acNo + "have been created.";
+                    myCode.sendemail(mailTo, subject, mailBody);
                 }
                 else
                 {

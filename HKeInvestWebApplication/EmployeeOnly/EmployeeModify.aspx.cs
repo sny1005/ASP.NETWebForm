@@ -117,7 +117,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
             if (Page.IsValid)
             {
                 HKeInvestData myHKeInvest = new HKeInvestData();
-                string acNo = txtAccountNumber.Text;
+                string acNo = accountNumber;
                 string sql;
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
 
@@ -379,29 +379,29 @@ namespace HKeInvestWebApplication.EmployeeOnly
                     //insert phone numbers
                     if (hPhone2.Text != "")
                     {
-                        sql = "UPDATE [Client] SET homePhone = '" + hPhone2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET homePhone = '" + hPhone2.Text + "' WHERE clientNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
                     if (hFax2.Text != "")
                     {
-                        sql = "UPDATE [Client] SET homeFax = '" + hFax2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET homeFax = '" + hFax2.Text + "' WHERE clientNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
                     if (bPhone2.Text != "")
                     {
-                        sql = "UPDATE [Client] SET businessPhone = '" + bPhone2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET businessPhone = '" + bPhone2.Text + "' WHERE clientNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
                     if (bFax2.Text != "")
                     {
-                        sql = "UPDATE [Client] SET businessFax = '" + bFax2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET businessFax = '" + bFax2.Text + "' WHERE clientNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
 
                     //insert employmeny information
                     if (EmpStatus2.SelectedValue == "Employed")
                     {
-                        sql = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE clientNumber = '" + cNo + "'";
+                        sql = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE clientNumber = '" + acNo + "'";
                         myHKeInvest.setData(sql, myTransaction);
                     }
 
