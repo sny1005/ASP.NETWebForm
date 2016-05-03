@@ -74,6 +74,25 @@ namespace HKeInvestWebApplication
             //}
         }
 
+        protected void StockGV_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            string strcolumnname = e.SortExpression;
+            ViewState["SortOn"] = strcolumnname;
+            if (ViewState["SortBy"].ToString() == "ASC")
+                ViewState["SortBy"] = "DESC";
+            else
+                ViewState["SortBy"] = "ASC";
+        }
+
+        protected void UTGV_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            string strcolumnname = e.SortExpression;
+            ViewState["SortOn"] = strcolumnname;
+            if (ViewState["SortBy"].ToString() == "ASC")
+                ViewState["SortBy"] = "DESC";
+            else
+                ViewState["SortBy"] = "ASC";
+        }
 
         protected void Search_Click(object sender, EventArgs e)
         {

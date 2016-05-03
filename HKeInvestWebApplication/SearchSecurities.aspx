@@ -28,7 +28,7 @@
 
         <div class="form-group">
             <div>
-            <asp:GridView ID="BondGV" runat="server" Visible="False" AllowSorting="True" OnSorting="BondGV_Sorting" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" >
+            <asp:GridView ID="BondGV" runat="server" Visible="False" AllowSorting="True" OnSorting="BondGV_Sorting" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Bond Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Bond Name" ReadOnly="True" SortExpression="name" />
@@ -45,7 +45,7 @@
             </div>
             
             <div>
-            <asp:GridView ID="StockGV" runat="server" Visible="False" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found">
+            <asp:GridView ID="StockGV" runat="server" Visible="False" OnSorting="StockGV_Sorting" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Stock code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Stock Name" ReadOnly="True" SortExpression="name" />
@@ -62,7 +62,7 @@
             </div>
 
             <div>
-            <asp:GridView ID="UTGV" runat="server" Visible="False" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found">
+            <asp:GridView ID="UTGV" runat="server" Visible="False" OnSorting="UTGV_Sorting" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="name" />
