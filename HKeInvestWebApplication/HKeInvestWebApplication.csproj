@@ -196,6 +196,9 @@
     <Content Include="App_Data\alert_log.ldf">
       <DependentUpon>alert.mdf</DependentUpon>
     </Content>
+    <Content Include="App_Data\aspnet-HKeInvestWebApplication-20160205055552_log.ldf">
+      <DependentUpon>aspnet-HKeInvestWebApplication-20160205055552.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\ExternalDatabases_log.ldf">
       <DependentUpon>ExternalDatabases.mdf</DependentUpon>
     </Content>
@@ -227,9 +230,6 @@
     <Content Include="AccountApplicationForm.aspx" />
     <Content Include="App_Data\alert.mdf" />
     <Content Include="App_Data\aspnet-HKeInvestWebApplication-20160205055552.mdf" />
-    <Content Include="App_Data\aspnet-HKeInvestWebApplication-20160205055552_log.ldf">
-      <DependentUpon>aspnet-HKeInvestWebApplication-20160205055552.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\ExternalDatabases.mdf" />
     <Content Include="App_Data\HKeInvestDB.mdf" />
     <Content Include="App_Themes\eInvestTheme\bootstrap.min.css" />
