@@ -219,15 +219,11 @@ namespace HKeInvestWebApplication
                 count = count + 1;
                 string acnew = achead.ToUpper() + count.ToString().PadLeft(8,'0');
 
-
-
                 //the account will be successfully updated
                 string sql = "INSERT INTO [LoginAccount] VALUES ('" + acnew + "', '" + acType.SelectedValue + "', " + initialBalance + ", NULL)";
 
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
                 myHKeInvest.setData(sql, myTransaction);
-                
-
 
                 //insert all required fields first
                 sql = "INSERT INTO [Client] (isPrimary, title, accountNumber, firstName, lastName, dateOfBirth, email, HKIDPassportNumber, citizenship, residence, building, street, district, employmentStatus, employByBroker, publiclyTradedCompany, primarySourceFund, investObjective, investKnowledge, investExperience, annualIncome, liquidNetWorth, freeBalanceToFund) ";

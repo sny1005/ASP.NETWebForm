@@ -429,7 +429,7 @@ namespace HKeInvestWebApplication
                 //decimal lastPrice = Convert.ToDecimal(row["lastUpdate"]);
 
                 //temp fix
-                decimal lastPrice;
+                decimal lastPrice = -1;
                 decimal.TryParse(row["lastUpdate"].ToString().Trim(), out lastPrice);
 
                 string findEmail = "SELECT email FROM [Client] WHERE accountNumber = '"+accountNumber+"' AND isPrimary = 'true'";
@@ -449,7 +449,7 @@ namespace HKeInvestWebApplication
                 SqlTransaction trans = myData.beginTransaction();
 
                 //low value
-                if (alertType == "lowAlert")
+                if (alertType == "lowAlert" && lastPrice != -1)
                 {
                     if (value == currentPrice || (currentPrice < value && value < lastPrice)) // reach or pass
                     {
@@ -458,18 +458,9 @@ namespace HKeInvestWebApplication
                         string insert = "UPDATE [Alert] SET dateOfTrigger = '" + current + "' WHERE accountNumber='" + accountNumber + "' AND alertType = '" + alertType + "' AND type = '" + type + "' AND code = '" + code + "' AND value = '" + value + "'"; //record date
                         myData.setData(insert, trans);
                     }
-
-                    // lastUpdate is always null since no sql to update it
-                    // TODO: update lastUpdate
-
-
-
-
-
-
                 }
                 //high value
-               else if (alertType == "highAlert")
+               else if (alertType == "highAlert" && lastPrice != -1)
                 {
                     if (value == currentPrice || (currentPrice > value && value > lastPrice)) // reach or pass
                     {
@@ -477,13 +468,6 @@ namespace HKeInvestWebApplication
                         string insert = "UPDATE [Alert] SET dateOfTrigger = '" + current + "' WHERE accountNumber='" + accountNumber + "' AND alertType = '" + alertType + "' AND type = '" + type + "' AND code = '" + code + "' AND value = '" + value + "'"; //record date
                         myData.setData(insert, trans);
                     }
-
-                    // lastUpdate is always null since no sql to update it
-                    // TODO: update lastUpdate
-
-
-
-
                 }
                 
                 sql = "UPDATE [Alert] SET lastUpdate = '"+currentPrice+"' WHERE accountNumber='"+accountNumber+"' AND alertType = '"+alertType+"' AND type = '"+type+"' AND code = '"+code+"' AND value = '"+value+"'"; //update lastest price
