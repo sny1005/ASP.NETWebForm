@@ -41,7 +41,7 @@ namespace HKeInvestWebApplication
                 Queue<string> orderNumbers = myCode.getIncompleteOrder();
 
                 buySellUpdate(myExternal, ref myData, ref myCode, orderNumbers);
-                //triggerAlert(myExternal, ref myData, ref myCode);
+                triggerAlert(myExternal, ref myData, ref myCode);
 
             } while (true);
         }
@@ -416,16 +416,17 @@ namespace HKeInvestWebApplication
                 return;
             foreach(DataRow row in dtAlert.Rows)
             {
-                string accountNumber = row["accountNumber"].ToString();
-                string alertType = row["alertType"].ToString();
-                string type = row["type"].ToString();
-                string code = row["code"].ToString();
+                string accountNumber = row["accountNumber"].ToString().Trim();
+                string alertType = row["alertType"].ToString().Trim();
+                string type = row["type"].ToString().Trim();
+                string code = row["code"].ToString().Trim();
                 decimal value = Convert.ToDecimal(row["value"]);
 
                 // date and last update can be null
                 // will cause exception here
                 // need fix
-                DateTime date = Convert.ToDateTime( row["dateOfTrigger"]);
+                DateTime date;
+                DateTime.TryParse(row["dateOfTrigger"].ToString().Trim(), out date);
                 //decimal lastPrice = Convert.ToDecimal(row["lastUpdate"]);
 
                 //temp fix
@@ -434,7 +435,8 @@ namespace HKeInvestWebApplication
 
                 string findEmail = "SELECT email FROM [Client] WHERE accountNumber = '"+accountNumber+"' AND isPrimary = 'true'";
                 DataTable dtEmail = myData.getData(findEmail);
-                string email = dtEmail.Rows[0].ToString();
+              
+                string email = dtEmail.Rows[0][0].ToString().Trim();
               
                 DateTime current = DateTime.Now;
                 if (date == current) //already sent email today
