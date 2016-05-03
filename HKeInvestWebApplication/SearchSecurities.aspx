@@ -53,8 +53,8 @@
                     <asp:BoundField DataField="changeDollar" DataFormatString="{0:n2}" HeaderText="Last trading day change" ReadOnly="True" SortExpression="lastchange" />
                     <asp:BoundField DataField="changePercent" DataFormatString="{0:n2}" HeaderText="Last trading day percentage change" ReadOnly="True" SortExpression="lastpercentage" />
                     <asp:BoundField DataField="volume" DataFormatString="{0:n2}" HeaderText="Last trading day volume of shares" ReadOnly="True" SortExpression="lastvolume" />
-                    <asp:BoundField DataField="high" DataFormatString="{0:n2}" HeaderText="highprice" ReadOnly="True" />
-                    <asp:BoundField DataField="low" DataFormatString="{0:n2}" HeaderText="lowprice" ReadOnly="True" />
+                    <asp:BoundField DataField="high" DataFormatString="{0:n2}" HeaderText="highprice" ReadOnly="True" SortExpression="high" />
+                    <asp:BoundField DataField="low" DataFormatString="{0:n2}" HeaderText="lowprice" ReadOnly="True" SortExpression="low" />
                     <asp:BoundField DataField="peRatio" DataFormatString="{0:n2}" HeaderText="Price earnings ratio of the stock" ReadOnly="True" SortExpression="pe" />
                     <asp:BoundField DataField="yield" DataFormatString="{0:n2}" HeaderText="Yield of the stock" ReadOnly="True" SortExpression="yield" />
                 </Columns>
