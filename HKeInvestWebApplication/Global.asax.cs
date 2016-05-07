@@ -438,7 +438,7 @@ namespace HKeInvestWebApplication
               
                 string email = dtEmail.Rows[0][0].ToString().Trim();
               
-                DateTime current = DateTime.Now;
+                DateTime current = DateTime.Now.Date;
                 if (date == current) //already sent email today
                     break;
 
