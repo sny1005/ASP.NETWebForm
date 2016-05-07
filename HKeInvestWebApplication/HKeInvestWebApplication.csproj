@@ -209,6 +209,11 @@
     <Content Include="App_Data\HKeInvestDB_log.ldf">
       <DependentUpon>HKeInvestDB.mdf</DependentUpon>
     </Content>
+    <Content Include="calendarguide\access.jpg" />
+    <Content Include="calendarguide\addevent.jpg" />
+    <Content Include="calendarguide\click.jpg" />
+    <Content Include="calendarguide\highlight.jpg" />
+    <Content Include="calendarguide\updated.jpg" />
     <Content Include="ClientOnly\ClientModify.aspx" />
     <Content Include="ClientOnly\ClientSecurityHoldingDetails.aspx" />
     <Content Include="EmployeeOnly\EmployeeModify.aspx" />
