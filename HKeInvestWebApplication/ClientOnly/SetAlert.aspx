@@ -30,7 +30,8 @@
         <div class="col-md-4">
             <asp:Label runat="server" Text="Alert Value" AssociatedControlID="AlertValue" CssClass="control-label"></asp:Label>
             <asp:TextBox ID="AlertValue" runat="server" CssClass="form-control"></asp:TextBox>
-            <asp:CustomValidator ID="cvAlertValue" runat="server" ControlToValidate="AlertValue" Display="Dynamic" EnableClientScript="False" OnServerValidate="cvAlertValue_ServerValidate" CssClass="text-danger">*</asp:CustomValidator>
+            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="AlertValue" Display="Dynamic" EnableClientScript="False" ErrorMessage="Alert value must be number equal or greater than zero." ForeColor="Red" ValidationExpression="^[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*$">*</asp:RegularExpressionValidator>
+            <asp:CustomValidator ID="cvAlertValue" runat="server" ControlToValidate="AlertValue" Display="Dynamic" EnableClientScript="False" OnServerValidate="cvAlertValue_ServerValidate" CssClass="text-danger" ForeColor="Red">*</asp:CustomValidator>
             <asp:RequiredFieldValidator runat="server" ErrorMessage="Alert value is required." ControlToValidate="AlertValue" Display="Dynamic" EnableClientScript="False" ForeColor="Red">*</asp:RequiredFieldValidator>
         </div>
     </div>

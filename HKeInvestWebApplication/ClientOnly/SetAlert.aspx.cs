@@ -57,6 +57,8 @@ namespace HKeInvestWebApplication.ClientOnly
             string alertType = AlertType_RadioButtonList.SelectedValue;
             string securityType = ddlSecurityType.SelectedValue;
             string code = SecurityCode.Text.Trim();
+            
+            
 
             string sql = "SELECT [value] FROM [Alert] WHERE alertType <> '" + alertType + "' AND type = '" + securityType + "' AND accountNumber = '" + accountNumber + "' AND code = '" + code + "'";
             DataTable dtAlert = myHKeInvestData.getData(sql);
