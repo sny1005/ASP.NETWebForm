@@ -314,7 +314,6 @@
     <Content Include="SearchSecurities.aspx" />
     <Content Include="ServiceFees.aspx" />
     <Content Include="Site.Master" />
-    <Content Include="Test aggrevate.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -638,13 +637,6 @@
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
-    <Compile Include="Test aggrevate.aspx.cs">
-      <DependentUpon>Test aggrevate.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Test aggrevate.aspx.designer.cs">
-      <DependentUpon>Test aggrevate.aspx</DependentUpon>
-    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -655,6 +647,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Themes\ExternalSystemsTheme\" />
+    <Folder Include="OLD_Version\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

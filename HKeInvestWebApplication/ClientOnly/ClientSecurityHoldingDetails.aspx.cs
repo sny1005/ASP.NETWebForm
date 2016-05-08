@@ -273,19 +273,13 @@ namespace HKeInvestWebApplication.ClientOnly
             string name, baseCurrency;          // baseCurrency is just a dummy variable
             foreach (DataRow row in activeBondOrder.Rows)
             {
-                if(Convert.ToString(row["status"]).Trim() == "pending")
-                {
-                    //row["feeCharged"] = 0;
-                    //row["totalShares"] = 0;
-                    //row["totalAmount"] = 0;
-                }
-
                 if (Convert.ToString(row["securityType"]).Trim() == "bond")
                     myHKeInvestCode.getSecurityNameBase("bond", (string)row["securityCode"], out name, out baseCurrency);
                 else
                     myHKeInvestCode.getSecurityNameBase("unit trust", (string)row["securityCode"], out name, out baseCurrency);
                 row["name"] = name;
             }
+
             activeBondOrder.AcceptChanges();
 
             // Set the initial sort expression and sort direction for sorting the GridView in ViewState.
@@ -305,9 +299,16 @@ namespace HKeInvestWebApplication.ClientOnly
 
             foreach (DataRow row in activeStockOrder.Rows)
             {
+                if (Convert.ToString(row["limitPrice"]).Trim() == "")
+                    row["limitPrice"] = 0.00;
+                if (Convert.ToString(row["stopPrice"]).Trim() == "")
+                    row["stopPrice"] = 0.00;
+
                 myHKeInvestCode.getSecurityNameBase("stock", (string)row["securityCode"], out name, out baseCurrency);
                 row["name"] = name;
             }
+
+            activeStockOrder.AcceptChanges();
 
             gvActiveStock.DataSource = activeStockOrder;
             gvActiveStock.DataBind();
