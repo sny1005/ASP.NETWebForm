@@ -57,6 +57,9 @@ namespace HKeInvestWebApplication.ClientOnly
                 lblAccountNumber.Text = "account number: " + accountNumber;
                 lblAccountNumber.Visible = true;
 
+
+
+
                 // load current date into date range for 6d
                 string today = DateTime.Today.ToString("dd/MM/yyyy");
                 startDate.Text = today;
@@ -259,6 +262,150 @@ namespace HKeInvestWebApplication.ClientOnly
             gvHistory.DataBind();
         }
 
+        protected void generate6a_Click(object sender, EventArgs e)
+        {
+            //get client name
+            string sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber + "'";
+
+            DataTable dtClient = myHKeInvestData.getData(sql);
+            if (dtClient == null || dtClient.Rows.Count == 0) { return; } // If the DataSet is null, a SQL error occurred.
+
+            // Show the client name(s) on the web page.
+            string clientName = "Client(s): ";
+            int i = 1;
+            foreach (DataRow row in dtClient.Rows)
+            {
+                clientName = clientName + row["lastName"] + ", " + row["firstName"];
+                if (dtClient.Rows.Count != i)
+                {
+                    clientName = clientName + "and ";
+                }
+                i = i + 1;
+            }
+            lblClientName.Text = clientName;
+            lblClientName.Visible = true;
+
+            // calculate total monetary value of securities held by the account
+            sql = "SELECT [shares], [base], [type], [code] FROM [SecurityHolding] WHERE [accountNumber] = '" + accountNumber + "'";
+            DataTable dtHolding = myHKeInvestData.getData(sql);
+
+            if (dtHolding == null || dtHolding.Rows.Count == 0)
+                return;
+
+            decimal totalValue = 0, bondValue = 0, stockValue = 0, trustValue = 0;
+            foreach (DataRow row in dtHolding.Rows)
+            {
+                decimal rate = myExternalFunctions.getCurrencyRate(row["base"].ToString().Trim());
+                decimal price = myExternalFunctions.getSecuritiesPrice(row["type"].ToString().Trim(), row["code"].ToString().Trim());
+                decimal value = rate * Convert.ToDecimal(row["shares"]) * price;
+
+                if (row["type"].ToString().Trim() == "bond")
+                    bondValue += value;
+                else if (row["type"].ToString().Trim() == "stock")
+                    stockValue += value;
+                else if (row["type"].ToString().Trim() == "unit trust")
+                    trustValue += value;
+
+                totalValue += value;
+            }
+            lblTotalValue.Text = "The total monetary value of securities held by the account is: " + totalValue.ToString();
+            lblTotalValue.Visible = true;
+
+            // retrieve account free balance
+            sql = "SELECT [balance] FROM [LoginAccount] WHERE [accountNumber] = '" + accountNumber + "'";
+            DataTable dtBalance = myHKeInvestData.getData(sql);
+
+            if (dtBalance == null || dtBalance.Rows.Count == 0)
+                return;
+
+            DataRow[] record = dtBalance.Select();
+            string freeBalance = record[0]["balance"].ToString().Trim();
+            lblFreeBalance.Text = "The account free balance is: " + freeBalance;
+            lblFreeBalance.Visible = true;
+
+            // prepare datatable for securit summary
+            DataTable dtSummary = new DataTable();
+            dtSummary.Columns.Add("type");
+            dtSummary.Columns.Add("totalValue");
+            dtSummary.Columns.Add("lastDate", typeof(DateTime));
+            dtSummary.Columns.Add("lastDollar");
+
+            // data retrieved above
+            string[] types = { "Bond", "Stock", "Unit Trust" };
+            decimal[] values = { bondValue, stockValue, trustValue };
+            DateTime[] dates = new DateTime[3];
+            decimal[] dollars = new decimal[3];
+
+            // retreive data
+            for (int k=0; k<3; k++)
+            {
+                sql = "SELECT MAX(orderNumber) FROM [Order] WHERE [accountNumber] = '" + accountNumber + "' AND [securityType] = '" + types[k] + "'";
+                sql = "SELECT [orderNumber], [dateSubmitted], [securityType], [securityCode], [buyOrSell] FROM [Order] WHERE [orderNumber] = (" + sql + ")";
+                DataTable dt = myHKeInvestData.getData(sql);
+                if (dt == null || dt.Rows.Count == 0)
+                    return;
+
+                // store the date value
+                DataRow[] dr = dt.Select();
+                dates[k] = Convert.ToDateTime(dr[0]["dateSubmitted"]);
+
+                // get dollar amount
+                if(dr[0]["securityType"].ToString().Trim() == "stock")
+                {
+                    decimal price = myExternalFunctions.getSecuritiesPrice("stock", dr[0]["securityCode"].ToString().Trim());
+
+                    sql = "SELECT [shares] FROM [StockOrder] WHERE [orderNumber] = '" + dr[0]["orderNumber"].ToString().Trim() + "'";
+                    DataTable dtShares = myHKeInvestData.getData(sql);
+                    if (dtShares == null || dtShares.Rows.Count == 0)
+                        return;
+                    DataRow[] drShares = dtShares.Select();
+
+                    dollars[k] = Convert.ToDecimal(drShares[0]["shares"]) * price;
+                }
+                //bond or trust
+                else if(dr[0]["buyOrSell"].ToString().Trim() == "buy")
+                {
+                    sql = "SELECT [amount] FROM [BuyBondOrder] WHERE [orderNumber] = '" + dr[0]["orderNumber"].ToString().Trim() + "'";
+                    DataTable dtAmount = myHKeInvestData.getData(sql);
+                    if (dtAmount == null || dtAmount.Rows.Count == 0)
+                        return;
+                    DataRow[] drAmount = dtAmount.Select();
+
+                    dollars[k] = Convert.ToDecimal(drAmount[0]["amount"]);
+                }
+                // selling bond or trust
+                else
+                {
+                    string name, currency;      //name is dummy variable
+                    myHKeInvestCode.getSecurityNameBase("unit trust", dr[0]["securityCode"].ToString().Trim(), out name, out currency);
+                    decimal rate = myExternalFunctions.getCurrencyRate(currency);
+                    decimal price = myExternalFunctions.getSecuritiesPrice("unit trust", dr[0]["securityCode"].ToString().Trim());
+
+                    sql = "SELECT [shares] FROM [SellBondOrder] WHERE [orderNumber] = '" + dr[0]["orderNumber"].ToString().Trim() + "'";
+                    DataTable dtShares = myHKeInvestData.getData(sql);
+                    if (dtShares == null || dtShares.Rows.Count == 0)
+                        return;
+                    DataRow[] drShares = dtShares.Select();
+
+                    dollars[k] = Convert.ToDecimal(drShares[0]["shares"]) * price * rate;
+                }
+
+
+                DataRow row = dtSummary.NewRow();
+                row["type"] = types[k];
+                row["totalValue"] = values[k];
+                row["lastDate"] = dates[k];
+                row["lastDollar"] = dollars[k];
+
+                dtSummary.Rows.Add(row);
+            }
+            dtSummary.AcceptChanges();
+
+            gvSecuritySummary.DataSource = dtSummary;
+            gvSecuritySummary.DataBind();
+            gvSecuritySummary.Visible = true;
+        }
+
         protected void generate6c_Click(object sender, EventArgs e)
         {
             // REQUIREMENT 6C IMPLEMENTATION
@@ -269,6 +416,14 @@ namespace HKeInvestWebApplication.ClientOnly
             sql = "SELECT [Order].*, [SellBondOrder].shares AS amount FROM [Order] INNER JOIN [SellBondOrder] ON [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [status] <> 'completed' AND [accountNumber] = '" + accountNumber + "'";
             activeBondOrder.Merge(myHKeInvestData.getData(sql));
             activeBondOrder.Columns.Add("name");
+
+            if (activeBondOrder.Rows.Count == 0)
+            {
+                lblActiveBond.Visible = false;
+                gvActiveBond.Visible = false;
+                return;
+            }
+                
 
             string name, baseCurrency;          // baseCurrency is just a dummy variable
             foreach (DataRow row in activeBondOrder.Rows)
@@ -296,6 +451,13 @@ namespace HKeInvestWebApplication.ClientOnly
             sql = "SELECT [Order].*, [StockOrder].shares, [StockOrder].orderType, [StockOrder].expiaryDay, [StockOrder].limitPrice, [StockOrder].stopPrice FROM [Order] INNER JOIN [StockOrder] ON [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [status] <> 'completed' AND [status] <> 'cancelled' AND [accountNumber] = '" + accountNumber + "'";
             DataTable activeStockOrder = myHKeInvestData.getData(sql);
             activeStockOrder.Columns.Add("name");
+
+            if (activeStockOrder.Rows.Count == 0)
+            {
+                lblActiveStock.Visible = false;
+                gvActiveStock.Visible = false;
+                return;
+            }
 
             foreach (DataRow row in activeStockOrder.Rows)
             {

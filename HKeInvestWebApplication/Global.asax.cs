@@ -396,7 +396,6 @@ namespace HKeInvestWebApplication
                     DataRow row = transTable.Rows[i];
                     if (!myCode.isExistTransaction(Convert.ToString(row["transactionNumber"])))
                     {
-                        // TODO: may need to update the stock order as well...
                         object[] para = { Convert.ToString(row["transactionNumber"]), Convert.ToString(row["referenceNumber"]), Convert.ToString(row["executeDate"]), Convert.ToString(row["executeShares"]), Convert.ToString(row["executePrice"]) };
                         string sql = string.Format("INSERT INTO [Transaction] VALUES ( {0}, {1}, '{2}', {3}, {4})", para);
                         myData.setData(sql, trans);
