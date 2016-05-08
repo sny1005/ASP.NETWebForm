@@ -349,6 +349,9 @@ namespace HKeInvestWebApplication
                     //END of optional fields for co-ac holder
                     myHKeInvest.commitTransaction(myTransaction);
                 }
+
+                lblMsg.Visible = true;
+                lblMsg.Text = "The account number created is: " + acnew;
             }
         }
 

@@ -2,8 +2,44 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Security Holding Details</h2>
     <div class="form-horizontal">
+
+        <div class="form-group row">
+            <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="col-md-3 text-info" ></asp:Label>
+            <asp:Label ID="lblClientName" runat="server" Visible="False" CssClass="col-md-3 text-info"></asp:Label>
+            <asp:Label ID="lblResultMessage" runat="server" Visible="False"></asp:Label>
+        </div>
+        <div class="form-group row">
+        </div>
+
+        <br />
+        <h5>Rrquirement 6a - Account Summary</h5>
+        <div class="form-group row">
+            <asp:Label ID="lblTotalValue" runat="server" Visible="False" CssClass="col-md-6 text-info"></asp:Label>
+        </div>
+        <div class="form-group row">
+            <asp:Label ID="lblFreeBalance" runat="server" Visible="False" CssClass="col-md-6 text-info"></asp:Label>
+        </div>
+        <div>
+            <asp:GridView ID="gvSecuritySummary" runat="server" Visible="False" AutoGenerateColumns="False" CellPadding="5">
+                <Columns>
+                    <asp:BoundField DataField="type" HeaderText="Security Type" ReadOnly="True"/>
+                    <asp:BoundField DataField="totalValue" DataFormatString="{0:n2}" HeaderText="Total Monetary Value" ReadOnly="True"/>
+                    <asp:BoundField DataField="lastDate" DataFormatString="{0:d}" HeaderText="Submission Date of Last Order" ReadOnly="True"/>
+                    <asp:BoundField DataField="lastDollar" DataFormatString="{0:n2}" HeaderText="Dollar Amount of Last Order" ReadOnly="True" />
+                </Columns>
+            </asp:GridView>
+        </div>
+
         <div class="form-group">
-            <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="col-md-3" ></asp:Label>
+            <div class="col-md-3"><asp:Button ID="generate6a" runat="server" Text="Generate 6a" CssClass="btn" OnClick="generate6a_Click"></asp:Button></div>
+        </div>
+
+
+
+
+        <br />
+        <h5>Rrquirement 6b - Summary of specified security</h5>
+        <div class="form-group">
             <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSecurityType_SelectedIndexChanged">
                 <asp:ListItem Value="0">Security type</asp:ListItem>
                 <asp:ListItem Value="bond">Bond</asp:ListItem>
@@ -13,10 +49,6 @@
             <asp:DropDownList ID="ddlCurrency" runat="server" AutoPostBack="True" Visible="False" OnSelectedIndexChanged="ddlCurrency_SelectedIndexChanged">
                 <asp:ListItem Value="0">Currency</asp:ListItem>
             </asp:DropDownList>
-        </div>
-        <div class="form-group">
-            <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
-            <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>
         </div>
         <div>
             <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="true">
@@ -34,7 +66,7 @@
     </div>
 
     <br />
-    <h5>Rrquirement 6c - listing of active orders</h5>
+    <h5>Rrquirement 6c - Listing of active orders</h5>
     <div class="form-horizontal">
         <asp:Label ID="lblActiveBond" runat="server" Text="Listing of active bond/unit trust order" Visible="False" CssClass="h6"></asp:Label>
         <div>
@@ -78,7 +110,7 @@
     </div>
 
     <br />
-    <h5>Rrquirement 6d - listing of order history</h5>
+    <h5>Rrquirement 6d - Listing of order history</h5>
     <div class="form-horizontal">
         <div class="form-group">                
             <asp:Label ID="Label1" runat="server" Text="From: " CssClass="control-label col-md-1"></asp:Label>

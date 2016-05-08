@@ -3,6 +3,7 @@
 
     <h4>New Client Application</h4>
     <div class="form-horizontal">
+        <asp:Label ID="lblMsg" runat="server" Text="" CssClass="control-label col-md-2 text-info" Visible="false"></asp:Label>
         <asp:ValidationSummary ID="ValidationSummary1" runat="server" EnableClientScript="False" CssClass="text-danger" />
 
 
