@@ -22,14 +22,12 @@ namespace HKeInvestWebApplication.EmployeeOnly
         int i = 1;
         string last1 = "";
         string last2 = "";
-        bool exist = false;
-
+ 
         protected void Page_Load(object sender, EventArgs e)
         {
             Primary1.Visible = true;
             Primary2.Visible = true;
             CoHolderPanel.Visible = true;
-            bool exist = false;
         }
 
         protected void Check_Click(object sender, EventArgs e)
@@ -54,7 +52,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
             // Get username
             //string userName = User.Identity.Name;
             accountNumber = txtAccountNumber.Text.Trim();
-            sql = "SELECT lastName, firstName FROM Client WHERE '" + accountNumber+ "'"; 
+            sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber+ "'"; 
 
             DataTable dtClient = myHKeInvestData.getData(sql);
             if (dtClient == null) { return; } // If the DataSet is null, a SQL error occurred.
@@ -96,7 +94,6 @@ namespace HKeInvestWebApplication.EmployeeOnly
             lblClientName.Visible = true;
             Primary1.Visible = true;
             Primary2.Visible = true;
-            exist = true;
         }
 
         protected void cvOccupation_ServerValidate(object source, ServerValidateEventArgs args)
@@ -141,7 +138,6 @@ namespace HKeInvestWebApplication.EmployeeOnly
                     lblClientName.Visible = false;
                     return;
                 }
-                exist = true;
 
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
                 if (title.SelectedValue != "")
