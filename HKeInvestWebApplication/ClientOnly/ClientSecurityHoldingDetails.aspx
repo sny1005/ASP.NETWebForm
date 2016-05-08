@@ -19,7 +19,7 @@
             <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>
         </div>
         <div>
-            <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="true" OnSelectedIndexChanged="gvSecurityHolding_SelectedIndexChanged">
+            <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="true">
                 <Columns>
                     <asp:BoundField DataField="code" HeaderText="Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="name" />
@@ -38,14 +38,14 @@
     <div class="form-horizontal">
         <asp:Label ID="lblActiveBond" runat="server" Text="Listing of active bond/unit trust order" Visible="False" CssClass="h6"></asp:Label>
         <div>
-            <asp:GridView ID="gvActiveBond" runat="server" Visible="false" AutoGenerateColumns="False" OnSorting="gvActive_Sorting" CellPadding="5" AllowSorting="True" OnSelectedIndexChanged="gvActiveBond_SelectedIndexChanged">
+            <asp:GridView ID="gvActiveBond" runat="server" Visible="false" AutoGenerateColumns="False" OnSorting="gvActive_Sorting" CellPadding="5" AllowSorting="True">
                 <Columns>
                     <asp:BoundField DataField="orderNumber" HeaderText="Order Reference Number" ReadOnly="True"/>
                     <asp:BoundField DataField="buyOrSell" HeaderText="Buy or Sell" ReadOnly="True"/>
                     <asp:BoundField DataField="securityType" HeaderText="Security Type" ReadOnly="True"/>
                     <asp:BoundField DataField="securitycode" HeaderText="Security Code" ReadOnly="True" />
                     <asp:BoundField DataField="name" HeaderText="Security Name" ReadOnly="True" />
-                    <asp:BoundField DataField="dateSubmitted" HeaderText="Date Submitted" ReadOnly="True" SortExpression="datesubmitted" />
+                    <asp:BoundField DataField="dateSubmitted" DataFormatString="{0:d}" HeaderText="Date Submitted" ReadOnly="True" SortExpression="datesubmitted" />
                     <asp:BoundField DataField="status" HeaderText="Current status" ReadOnly="True"/>
                     <asp:BoundField DataField="amount" DataFormatString="{0:n2}" HeaderText="Dollar amount/Quantity of shares" ReadOnly="True"/>
                 </Columns>

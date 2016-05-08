@@ -46,10 +46,13 @@ namespace HKeInvestWebApplication
                 accountNumber = myHKeInvestCode.getAccountNumber(username);
                 lblAccountNumber.Text = "Account number: " + accountNumber;
 
-                //update account balance
-                balance = myHKeInvestCode.getAccountBalance(accountNumber);
-                lblAccountBalance.Text = "Account balance: " + Convert.ToString(balance);
+                ////update account balance
+                //balance = myHKeInvestCode.getAccountBalance(accountNumber);
+                //lblAccountBalance.Text = "Account balance: " + Convert.ToString(balance);
             }
+            //update account balance
+            balance = myHKeInvestCode.getAccountBalance(accountNumber);
+            lblAccountBalance.Text = "Account balance: " + Convert.ToString(balance);
         }
 
         //UI change
@@ -165,7 +168,7 @@ namespace HKeInvestWebApplication
 
             // set up sql to create a copy of Order from External System
             orderPara[0] = orderNumber;
-            string sql = string.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', CONVERT(smalldatetime, '{6}', 103), NULL)", orderPara);
+            string sql = string.Format("INSERT INTO [Order] VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', NULL)", orderPara);
 
             SqlTransaction trans = myHKeInvestData.beginTransaction();
             myHKeInvestData.setData(sql, trans);    //insert into order
@@ -248,7 +251,14 @@ namespace HKeInvestWebApplication
 
         protected void cvShares_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            decimal value = Convert.ToDecimal(args.Value);
+            decimal value;
+            if(!decimal.TryParse(args.Value, out value))
+            {
+                cvShares.ErrorMessage = "Please enter a number for shares";
+                args.IsValid = false;
+                return;
+            }
+
             if (value <= 0)
             {
                 cvShares.ErrorMessage = "Quantity of shares must greater than 0";
@@ -279,10 +289,6 @@ namespace HKeInvestWebApplication
                     }
                     return;
                 }
-
-                cvShares.ErrorMessage = "Quantity of shares to buy must be an integer.";
-                args.IsValid = false;
-                return;
             }
             // check sell conditions
             else
@@ -324,22 +330,35 @@ namespace HKeInvestWebApplication
         {
             if (rblTransType.SelectedValue == "buy" && (rblOrderType.SelectedValue == "limit" || rblOrderType.SelectedValue == "stop limit"))
             {
+                decimal p;
                 if (hPrice.Text == "")
                 {
                     args.IsValid = false;
                     cvhPrice.ErrorMessage = "Highest buying price is needed.";
                     return;
                 }
+                else if (!decimal.TryParse(args.Value, out p))
+                {
+                    args.IsValid = false;
+                    cvlPrice.ErrorMessage = "Low price must be a number";
+                    return;
+                }
             }
             else if (rblTransType.SelectedValue == "sell" && (rblOrderType.SelectedValue == "stop" || rblOrderType.SelectedValue == "stop limit"))
             {
+                decimal p;
                 if (hPrice.Text == "")
                 {
                     args.IsValid = false;
                     cvhPrice.ErrorMessage = "Highest selling price is needed.";
                     return;
                 }
-                
+                else if (!decimal.TryParse(args.Value, out p))
+                {
+                    args.IsValid = false;
+                    cvlPrice.ErrorMessage = "Low price must be a number";
+                    return;
+                }
             }
 
             // check that high price must be larger than low price when the order type is stop limit
@@ -359,23 +378,54 @@ namespace HKeInvestWebApplication
         {
             if (rblTransType.SelectedValue == "buy" && (rblOrderType.SelectedValue == "stop" || rblOrderType.SelectedValue == "stop limit"))
             {
-                if (lPrice.Text != "") { return; }
-                args.IsValid = false;
-                cvlPrice.ErrorMessage = "Lowest buying price is needed.";
+                decimal p;
+                if (lPrice.Text == "")
+                {
+                    args.IsValid = false;
+                    cvlPrice.ErrorMessage = "Lowest buying price is needed.";
+                    return;
+                }
+                else if(!decimal.TryParse(args.Value, out p))
+                {
+                    args.IsValid = false;
+                    cvlPrice.ErrorMessage = "Low price must be a number";
+                    return;
+                }
                 return;
+
             }
             else if (rblTransType.SelectedValue == "sell" && (rblOrderType.SelectedValue == "limit" || rblOrderType.SelectedValue == "stop limit"))
             {
-                if (lPrice.Text != "") { return; }
-                args.IsValid = false;
-                cvlPrice.ErrorMessage = "Lowest selling price is needed.";
+                decimal p;
+                if (lPrice.Text == "")
+                {
+                    args.IsValid = false;
+                    cvlPrice.ErrorMessage = "Lowest selling price is needed.";
+                    return;
+                }
+                else if (!decimal.TryParse(args.Value, out p))
+                {
+                    args.IsValid = false;
+                    cvlPrice.ErrorMessage = "Low price must be a number";
+                    return;
+                }
                 return;
             }
         }
 
         protected void cvAmount_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            decimal value = Convert.ToDecimal(args.Value);
+            decimal value;
+            if (!decimal.TryParse(args.Value, out value))
+            {
+                if (source.Equals(cvBondAmount))
+                    cvBondAmount.ErrorMessage = "Please enter a number for shares";
+                else if (source.Equals(cvUnitAmount))
+                    cvUnitAmount.ErrorMessage = "Please enter a number for shares";
+                args.IsValid = false;
+                return;
+            }
+
             if (value <= 0)
             {
                 if (source.Equals(cvBondAmount))

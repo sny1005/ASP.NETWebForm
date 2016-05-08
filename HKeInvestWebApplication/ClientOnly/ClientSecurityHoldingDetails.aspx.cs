@@ -273,12 +273,20 @@ namespace HKeInvestWebApplication.ClientOnly
             string name, baseCurrency;          // baseCurrency is just a dummy variable
             foreach (DataRow row in activeBondOrder.Rows)
             {
+                if(Convert.ToString(row["status"]).Trim() == "pending")
+                {
+                    //row["feeCharged"] = 0;
+                    //row["totalShares"] = 0;
+                    //row["totalAmount"] = 0;
+                }
+
                 if (Convert.ToString(row["securityType"]).Trim() == "bond")
                     myHKeInvestCode.getSecurityNameBase("bond", (string)row["securityCode"], out name, out baseCurrency);
                 else
                     myHKeInvestCode.getSecurityNameBase("unit trust", (string)row["securityCode"], out name, out baseCurrency);
                 row["name"] = name;
             }
+            activeBondOrder.AcceptChanges();
 
             // Set the initial sort expression and sort direction for sorting the GridView in ViewState.
             ViewState["SortExpression"] = "datesubmitted";
@@ -312,20 +320,28 @@ namespace HKeInvestWebApplication.ClientOnly
             string start = startDate.Text;
             string end = endDate.Text;
 
-            string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND [dateSubmitted] BETWEEN CONVERT(date, '" + start + "', 103) AND CONVERT(date, '" + end + "', 103)";
+            string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND CAST([dateSubmitted] AS DATE) BETWEEN CONVERT(DATE, '" + start + "', 103) AND CONVERT(DATE, '" + end + "', 103)";
             DataTable orderHistory = myHKeInvestData.getData(sql);
-            sql = "SELECT [Order].*, [SellBondOrder].shares AS amount FROM [Order] INNER JOIN [SellBondOrder] ON [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND [dateSubmitted] BETWEEN CONVERT(date, '" + start + "', 103) AND CONVERT(date, '" + end + "', 103)";
+            sql = "SELECT [Order].*, [SellBondOrder].shares AS amount FROM [Order] INNER JOIN [SellBondOrder] ON [Order].[orderNumber] = [SellBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND CAST([dateSubmitted] AS DATE) BETWEEN CONVERT(DATE, '" + start + "', 103) AND CONVERT(DATE, '" + end + "', 103)";
             orderHistory.Merge(myHKeInvestData.getData(sql));
-            sql = "SELECT [Order].*, [StockOrder].shares AS amount FROM [Order] INNER JOIN [StockOrder] ON [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND [dateSubmitted] BETWEEN CONVERT(date, '" + start + "', 103) AND CONVERT(date, '" + end + "', 103)";
+            sql = "SELECT [Order].*, [StockOrder].shares AS amount FROM [Order] INNER JOIN [StockOrder] ON [Order].[orderNumber] = [StockOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND CAST([dateSubmitted] AS DATE) BETWEEN CONVERT(DATE, '" + start + "', 103) AND CONVERT(DATE, '" + end + "', 103)";
             orderHistory.Merge(myHKeInvestData.getData(sql));
             orderHistory.Columns.Add("name");
-            orderHistory.Columns.Add("totalShares");
-            orderHistory.Columns.Add("totalAmount");
+            orderHistory.Columns.Add("totalShares", typeof(Decimal));
+            orderHistory.Columns.Add("totalAmount", typeof(Decimal));
 
             // apply filter
             for (int i=0; i < orderHistory.Rows.Count; i++)
             {
                 DataRow row = orderHistory.Rows[i];
+
+                if (Convert.ToString(row["status"]).Trim() == "pending")
+                {
+                    row["feeCharged"] = (decimal)0.00;
+                    row["totalShares"] = (decimal)0.00;
+                    row["totalAmount"] = (decimal)0.00;
+                }
+
                 if (ddlOrderFilter.SelectedValue != row["buyOrSell"].ToString().Trim() && ddlOrderFilter.SelectedValue != "0")
                 {
                     row.Delete();
@@ -433,16 +449,6 @@ namespace HKeInvestWebApplication.ClientOnly
 
             gvActiveStock.DataSource = activeStockOrder;
             gvActiveStock.DataBind();*/
-        }
-
-        protected void gvSecurityHolding_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void gvActiveBond_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
