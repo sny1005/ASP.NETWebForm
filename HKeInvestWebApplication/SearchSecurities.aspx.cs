@@ -35,13 +35,30 @@ namespace HKeInvestWebApplication
 
         protected void BondGV_Sorting(object sender, GridViewSortEventArgs e)
         {
+       
+            //string strcolumnname = e.SortExpression;
+            //ViewState["SortOn"] = strcolumnname;
+            //if (ViewState["SortBy"].ToString() == "ASC")
+            //    ViewState["SortBy"] = "DESC";
+            //else
+            //    ViewState["SortBy"] = "ASC";
 
-            string strcolumnname = e.SortExpression;
-            ViewState["SortOn"] = strcolumnname;
-            if (ViewState["SortBy"].ToString() == "ASC")
-                ViewState["SortBy"] = "DESC";
-            else
-                ViewState["SortBy"] = "ASC";
+
+            // Since a GridView cannot be sorted directly, it is first loaded into a DataTable using the helper method 'unloadGridView'.
+            // Create a DataTable from the GridView.
+            DataTable dtSecurityHolding = myHKeInvestCode.unloadGridView(BondGV);
+
+            // Set the sort expression in ViewState for correct toggling of sort direction,
+            // Sort the DataTable and bind it to the GridView.
+            string sortExpression = e.SortExpression.ToLower();
+            ViewState["SortExpression"] = sortExpression;
+            dtSecurityHolding.DefaultView.Sort = sortExpression + " " + myHKeInvestCode.getSortDirection(ViewState, e.SortExpression);
+            dtSecurityHolding.AcceptChanges();
+
+            // Bind the DataTable to the GridView.
+            BondGV.DataSource = dtSecurityHolding.DefaultView;
+            BondGV.DataBind();
+
 
 
             //switch (e.SortExpression)
@@ -76,22 +93,22 @@ namespace HKeInvestWebApplication
 
         protected void StockGV_Sorting(object sender, GridViewSortEventArgs e)
         {
-            string strcolumnname = e.SortExpression;
-            ViewState["SortOn"] = strcolumnname;
-            if (ViewState["SortBy"].ToString() == "ASC")
-                ViewState["SortBy"] = "DESC";
-            else
-                ViewState["SortBy"] = "ASC";
+            //string strcolumnname = e.SortExpression;
+            //ViewState["SortOn"] = strcolumnname;
+            //if (ViewState["SortBy"].ToString() == "ASC")
+            //    ViewState["SortBy"] = "DESC";
+            //else
+            //    ViewState["SortBy"] = "ASC";
         }
 
         protected void UTGV_Sorting(object sender, GridViewSortEventArgs e)
         {
-            string strcolumnname = e.SortExpression;
-            ViewState["SortOn"] = strcolumnname;
-            if (ViewState["SortBy"].ToString() == "ASC")
-                ViewState["SortBy"] = "DESC";
-            else
-                ViewState["SortBy"] = "ASC";
+            //string strcolumnname = e.SortExpression;
+            //ViewState["SortOn"] = strcolumnname;
+            //if (ViewState["SortBy"].ToString() == "ASC")
+            //    ViewState["SortBy"] = "DESC";
+            //else
+            //    ViewState["SortBy"] = "ASC";
         }
 
         protected void Search_Click(object sender, EventArgs e)
