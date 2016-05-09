@@ -1,12 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EmployeeModify.aspx.cs" Inherits="HKeInvestWebApplication.EmployeeOnly.EmployeeModify" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-<h2>Modify Account Informations - EMPLOYEE view</h2>
+<h1>Modify Account Informations - EMPLOYEE view</h1>
 
      <div class="form-horizontal">
         <asp:ValidationSummary runat="server" CssClass="text-danger" EnableClientScript="False" />
          
         <div class="form-group">
-            <h3>Please input the account number to proceed the modification.</h3>
+            <h4>Please input the account number to proceed the modification.</h4>
             
             <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="control-label col-md-2" AssociatedControlID="txtAccountNumber"></asp:Label>
             <asp:TextBox ID="txtAccountNumber" runat="server"></asp:TextBox>

@@ -12,7 +12,7 @@
         </div>
 
         <br />
-        <h5>Rrquirement 6a - Account Summary</h5>
+        <h5>Requirement 6a - Account Summary</h5>
         <div class="form-group row">
             <asp:Label ID="lblTotalValue" runat="server" Visible="False" CssClass="col-md-6 text-info"></asp:Label>
         </div>
@@ -38,7 +38,7 @@
 
 
         <br />
-        <h5>Rrquirement 6b - Summary of specified security</h5>
+        <h5>Requirement 6b - Summary of specified security</h5>
         <div class="form-group">
             <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSecurityType_SelectedIndexChanged">
                 <asp:ListItem Value="0">Security type</asp:ListItem>
@@ -66,7 +66,7 @@
     </div>
 
     <br />
-    <h5>Rrquirement 6c - Listing of active orders</h5>
+    <h5>Requirement 6c - Listing of active orders</h5>
     <div class="form-horizontal">
         <asp:Label ID="lblActiveBond" runat="server" Text="Listing of active bond/unit trust order" Visible="False" CssClass="h6"></asp:Label>
         <div>
@@ -110,7 +110,7 @@
     </div>
 
     <br />
-    <h5>Rrquirement 6d - Listing of order history</h5>
+    <h5>Requirement 6d - Listing of order history</h5>
     <div class="form-horizontal">
         <div class="form-group">                
             <asp:Label ID="Label1" runat="server" Text="From: " CssClass="control-label col-md-1"></asp:Label>

@@ -105,8 +105,8 @@ namespace HKeInvestWebApplication.ClientOnly
         protected void Register_Click(object sender, EventArgs e)
         {
             string sqlC;
-            //if (Page.IsValid)
-            //{
+            if (Page.IsValid)
+            {
                 HKeInvestData myHKeInvest = new HKeInvestData();
                 SqlTransaction myTransaction = myHKeInvest.beginTransaction();
                 string acNo = accountNumber;
@@ -334,58 +334,57 @@ namespace HKeInvestWebApplication.ClientOnly
                         sqlC = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvest.setData(sqlC, myTransaction);
                     }
-            
-                if (PrimarySource.SelectedValue != "")
-                {
-                    sqlC = "UPDATE [Client] SET primarySourceFund = '" + PrimarySource.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
-                    myHKeInvest.setData(sqlC, myTransaction);
-                }
 
-                if (Objective.SelectedValue != "")
-                {
-                    sqlC = "UPDATE [Client] SET investObjective = '" + Objective.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
-                    myHKeInvest.setData(sqlC, myTransaction);
-                }
+                    if (PrimarySource.SelectedValue != "")
+                    {
+                        sqlC = "UPDATE [Client] SET primarySourceFund = '" + PrimarySource.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sqlC, myTransaction);
+                    }
 
-                if (Knowledge.SelectedValue != "")
-                {
-                    sqlC = "UPDATE [Client] SET investKnowledge = '" + Knowledge.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
-                    myHKeInvest.setData(sqlC, myTransaction);
-                }
+                    if (Objective.SelectedValue != "")
+                    {
+                        sqlC = "UPDATE [Client] SET investObjective = '" + Objective.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sqlC, myTransaction);
+                    }
 
-                if (Experience.SelectedValue != "")
-                {
-                    sqlC = "UPDATE [Client] SET investExperience = '" + Experience.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
-                    myHKeInvest.setData(sqlC, myTransaction);
-                }
+                    if (Knowledge.SelectedValue != "")
+                    {
+                        sqlC = "UPDATE [Client] SET investKnowledge = '" + Knowledge.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sqlC, myTransaction);
+                    }
 
-                if (Income.SelectedValue != "")
-                {
-                    sqlC = "UPDATE [Client] SET annualIncome = '" + Income.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
-                    myHKeInvest.setData(sqlC, myTransaction);
-                }
+                    if (Experience.SelectedValue != "")
+                    {
+                        sqlC = "UPDATE [Client] SET investExperience = '" + Experience.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sqlC, myTransaction);
+                    }
 
-                if (NetWorth.SelectedValue != "")
-                {
-                    sqlC = "UPDATE [Client] SET liquidNetWorth = '" + NetWorth.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
-                    myHKeInvest.setData(sqlC, myTransaction);
-                }
+                    if (Income.SelectedValue != "")
+                    {
+                        sqlC = "UPDATE [Client] SET annualIncome = '" + Income.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sqlC, myTransaction);
+                    }
 
-                if (Fund.Checked)
-                {
-                    sqlC = "UPDATE [Client] SET freeBalanceToFund = '" + Fund.Checked + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
-                    myHKeInvest.setData(sqlC, myTransaction);
-                }
+                    if (NetWorth.SelectedValue != "")
+                    {
+                        sqlC = "UPDATE [Client] SET liquidNetWorth = '" + NetWorth.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sqlC, myTransaction);
+                    }
 
-                //END of optional fields for co-ac holder
-                myHKeInvest.commitTransaction(myTransaction);
-                }
+                    if (Fund.Checked)
+                    {
+                        sqlC = "UPDATE [Client] SET freeBalanceToFund = '" + Fund.Checked + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sqlC, myTransaction);
+                    }
 
+                    //END of optional fields for co-ac holder
+                    myHKeInvest.commitTransaction(myTransaction);
+                }
                 lblmsg.Visible = true;
                 lblmsg.Text = "Account info updated successfully!";
                 return;
             }
-            //lblmsg.Visible = false;
-        //}
+            lblmsg.Visible = false;
+        }
     }
 }
