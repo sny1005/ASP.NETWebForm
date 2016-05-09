@@ -57,9 +57,6 @@ namespace HKeInvestWebApplication.ClientOnly
                 lblAccountNumber.Text = "account number: " + accountNumber;
                 lblAccountNumber.Visible = true;
 
-
-
-
                 // load current date into date range for 6d
                 string today = DateTime.Today.ToString("dd/MM/yyyy");
                 startDate.Text = today;
@@ -67,7 +64,7 @@ namespace HKeInvestWebApplication.ClientOnly
             }
         }
 
-        protected void ddlSecurityType_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlSecurityType_SelectedIndexChanged()
         {
             // Reset visbility of controls and initialize values.
             lblResultMessage.Visible = false;
@@ -262,31 +259,10 @@ namespace HKeInvestWebApplication.ClientOnly
             gvHistory.DataBind();
         }
 
-        protected void generate6a_Click(object sender, EventArgs e)
+        protected void generate6a_Click()
         {
-            //get client name
-            string sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber + "'";
-
-            DataTable dtClient = myHKeInvestData.getData(sql);
-            if (dtClient == null || dtClient.Rows.Count == 0) { return; } // If the DataSet is null, a SQL error occurred.
-
-            // Show the client name(s) on the web page.
-            string clientName = "Client(s): ";
-            int i = 1;
-            foreach (DataRow row in dtClient.Rows)
-            {
-                clientName = clientName + row["lastName"] + ", " + row["firstName"];
-                if (dtClient.Rows.Count != i)
-                {
-                    clientName = clientName + "and ";
-                }
-                i = i + 1;
-            }
-            lblClientName.Text = clientName;
-            lblClientName.Visible = true;
-
             // calculate total monetary value of securities held by the account
-            sql = "SELECT [shares], [base], [type], [code] FROM [SecurityHolding] WHERE [accountNumber] = '" + accountNumber + "'";
+            string sql = "SELECT [shares], [base], [type], [code] FROM [SecurityHolding] WHERE [accountNumber] = '" + accountNumber + "'";
             DataTable dtHolding = myHKeInvestData.getData(sql);
 
             if (dtHolding == null || dtHolding.Rows.Count == 0)
@@ -406,7 +382,7 @@ namespace HKeInvestWebApplication.ClientOnly
             gvSecuritySummary.Visible = true;
         }
 
-        protected void generate6c_Click(object sender, EventArgs e)
+        protected void generate6c_Click()
         {
             // REQUIREMENT 6C IMPLEMENTATION
             // Bond/Unit trust listings
@@ -477,11 +453,16 @@ namespace HKeInvestWebApplication.ClientOnly
             gvActiveStock.Visible = true;
         }
 
-        protected void generate6d_Click(object sender, EventArgs e)
+        protected void generate6d_Click()
         {
             // REQUIREMENT 6D IMPLEMENTATION
             string start = startDate.Text;
             string end = endDate.Text;
+
+            if (start == "")
+                start = "01/01/0001";
+            if (end == "")
+                end = "31/12/9999";
 
             string sql = "SELECT [Order].*, [BuyBondOrder].amount FROM [Order] INNER JOIN [BuyBondOrder] ON [Order].[orderNumber] = [BuyBondOrder].[orderNumber] WHERE [accountNumber] = '" + accountNumber + "' AND CAST([dateSubmitted] AS DATE) BETWEEN CONVERT(DATE, '" + start + "', 103) AND CONVERT(DATE, '" + end + "', 103)";
             DataTable orderHistory = myHKeInvestData.getData(sql);
@@ -572,10 +553,6 @@ namespace HKeInvestWebApplication.ClientOnly
             gvTransaction.DataBind();
             gvTransaction.Visible = true;
 
-
-
-
-
             /*
             // Bond/Unit trust listings
             lblActiveBond.Visible = true;
@@ -613,5 +590,44 @@ namespace HKeInvestWebApplication.ClientOnly
             gvActiveStock.DataSource = activeStockOrder;
             gvActiveStock.DataBind();*/
         }
+
+        protected void genReport_Click(object sender, EventArgs e)
+        {
+            //get client name
+            string sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber + "'";
+
+            DataTable dtClient = myHKeInvestData.getData(sql);
+            if (dtClient == null || dtClient.Rows.Count == 0) {
+                lbl6b.Visible = false;
+                lbl6c.Visible = false;
+                lbl6d.Visible = false;
+                return; } // If the DataSet is null, a SQL error occurred.
+
+            // Show the client name(s) on the web page.
+            string clientName = "Client(s): ";
+            int i = 1;
+            foreach (DataRow row in dtClient.Rows)
+            {
+                clientName = clientName + row["lastName"] + ", " + row["firstName"];
+                if (dtClient.Rows.Count != i)
+                {
+                    clientName = clientName + "and ";
+                }
+                i = i + 1;
+            }
+            lblClientName.Text = clientName;
+            lblClientName.Visible = true;
+
+            generate6a_Click();
+            ddlSecurityType_SelectedIndexChanged();
+            generate6c_Click();
+            generate6d_Click();
+
+            lbl6b.Visible = true;
+            lbl6c.Visible = true;
+            lbl6d.Visible = true;
+        }
+
+
     }
 }
