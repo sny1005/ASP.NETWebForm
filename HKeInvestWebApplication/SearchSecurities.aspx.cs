@@ -76,7 +76,7 @@ namespace HKeInvestWebApplication
                     if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                 }
 
-                ViewState["SortDirection"] = "name";
+                ViewState["SortExpression"] = "name";
                 ViewState["SortDirection"] = "DESC";
 
                 BondGV.DataSource = dtbond;
@@ -103,7 +103,7 @@ namespace HKeInvestWebApplication
                     if (row["yield"].ToString().Trim() == "" || row["yield"] == null) row["yield"] = (decimal)0.00;
                 }
 
-                ViewState["SortDirection"] = "name";
+                ViewState["SortExpression"] = "name";
                 ViewState["SortDirection"] = "DESC";
 
                 StockGV.DataSource = dtstock;
@@ -130,7 +130,7 @@ namespace HKeInvestWebApplication
                     if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                 }
 
-                ViewState["SortDirection"] = "name";
+                ViewState["SortExpression"] = "name";
                 ViewState["SortDirection"] = "DESC";
 
                 UTGV.DataSource = dtUT;
@@ -159,7 +159,7 @@ namespace HKeInvestWebApplication
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     BondGV.DataSource = dtBondB;
@@ -184,7 +184,7 @@ namespace HKeInvestWebApplication
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     BondGV.DataSource = dtBondC;
@@ -209,7 +209,7 @@ namespace HKeInvestWebApplication
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     BondGV.DataSource = dtBondN;
@@ -241,7 +241,7 @@ namespace HKeInvestWebApplication
                         if (row["yield"].ToString().Trim() == "" || row["yield"] == null) row["yield"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     StockGV.DataSource = dtStockB;
@@ -267,7 +267,7 @@ namespace HKeInvestWebApplication
                         if (row["yield"].ToString().Trim() == "" || row["yield"] == null) row["yield"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     StockGV.DataSource = dtStockC;
@@ -293,7 +293,7 @@ namespace HKeInvestWebApplication
                         if (row["yield"].ToString().Trim() == "" || row["yield"] == null) row["yield"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     StockGV.DataSource = dtStockN;
@@ -324,7 +324,7 @@ namespace HKeInvestWebApplication
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     UTGV.DataSource = dtUTB;
@@ -350,7 +350,7 @@ namespace HKeInvestWebApplication
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     UTGV.DataSource = dtUTC;
@@ -376,7 +376,7 @@ namespace HKeInvestWebApplication
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
 
-                    ViewState["SortDirection"] = "name";
+                    ViewState["SortExpression"] = "name";
                     ViewState["SortDirection"] = "DESC";
 
                     UTGV.DataSource = dtUTN;
