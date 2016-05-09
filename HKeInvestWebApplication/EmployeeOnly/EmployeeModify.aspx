@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EmployeeModify.aspx.cs" Inherits="HKeInvestWebApplication.EmployeeOnly.EmployeeModify" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-<h1>Modify Account Informations - EMPLOYEE view</h1>
+<h2>Modify Account Informations - EMPLOYEE view</h2>
 
      <div class="form-horizontal">
         <asp:ValidationSummary runat="server" CssClass="text-danger" EnableClientScript="False" />
@@ -208,7 +208,6 @@
                     <asp:ListItem Value="family">family/relatives/inheritance</asp:ListItem>
                     <asp:ListItem Value="other">other</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" ErrorMessage="Primary source of fund is required." ControlToValidate="PrimarySource" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>
             </div>
             <div class="row col-md-12">
                 <asp:Label AssociatedControlID="SpecificSource" runat="server" Text="Please specify" CssClass="control-label col-md-4"></asp:Label>

@@ -108,7 +108,6 @@ namespace HKeInvestWebApplication.ClientOnly
             if (Page.IsValid)
             {
                 HKeInvestData myHKeInvest = new HKeInvestData();
-                SqlTransaction myTransaction = myHKeInvest.beginTransaction();
                 string acNo = accountNumber;
 
                 sqlC = "SELECT lastName, firstName FROM [Client] WHERE accountNumber = '" + acNo + "' ";
@@ -125,25 +124,26 @@ namespace HKeInvestWebApplication.ClientOnly
                     return;
                 }
 
-                if (Email.Text != "")
+                SqlTransaction myTransaction = myHKeInvest.beginTransaction();
+                if (!String.IsNullOrEmpty(Email.Text))
                 {
                     sqlC = "UPDATE [Client] SET email = '" + Email.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
                     myHKeInvest.setData(sqlC, myTransaction);
                 }
 
-                if (Building.Text != "")
+                if (!String.IsNullOrEmpty(Building.Text))
                 {
                     sqlC = "UPDATE [Client] SET building = '" + Building.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
                     myHKeInvest.setData(sqlC, myTransaction);
                 }
 
-                if (Street.Text != "")
+                if (!String.IsNullOrEmpty(Street.Text))
                 {
                     sqlC = "UPDATE [Client] SET street = '" + Street.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
                     myHKeInvest.setData(sqlC, myTransaction);
                 }
 
-                if (District.Text != "")
+                if (!String.IsNullOrEmpty(District.Text))
                 {
                     sqlC = "UPDATE [Client] SET district = '" + District.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
                     myHKeInvest.setData(sqlC, myTransaction);
@@ -246,49 +246,40 @@ namespace HKeInvestWebApplication.ClientOnly
                 }
 
                 //end of primary account holder infomation
-                myHKeInvest.commitTransaction(myTransaction);
+                //myHKeInvest.commitTransaction(myTransaction);
 
 
                 //INSERT CO HOLDER'S INFORMATION
                 if (i != 1)
                 {
                     CoHolderPanel.Visible = true;
-                    myTransaction = myHKeInvest.beginTransaction();
+                    //myTransaction = myHKeInvest.beginTransaction();
 
-                    ////get co-ac holder's clientnumber
-                    //sqlC = "select clientnumber from client where accountnumber = '" + acNo + "' and lastname = '" + last2 + "'";
-                    //DataTable dtclient = myHKeInvest.getData(sqlC);
-                    //string acNo2 = "";
-                    //foreach (DataRow row in dtclient.Rows)
-                    //{
-                    //    acNo2 = Convert.ToString(row["clientnumber"]);
-                    //}
-
-                    if (Email2.Text != "")
+                    if (String.IsNullOrEmpty(Email2.Text))
                     {
                         sqlC = "UPDATE [Client] SET email = '" + Email2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvest.setData(sqlC, myTransaction);
                     }
 
-                    if (Building2.Text != "")
+                    if (String.IsNullOrEmpty(Building2.Text))
                     {
                         sqlC = "UPDATE [Client] SET building = '" + Building2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvest.setData(sqlC, myTransaction);
                     }
 
-                    if (Street2.Text != "")
+                    if (String.IsNullOrEmpty(Street2.Text))
                     {
                         sqlC = "UPDATE [Client] SET street = '" + Street2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvest.setData(sqlC, myTransaction);
                     }
 
-                    if (District2.Text != "")
+                    if (String.IsNullOrEmpty(District2.Text))
                     {
                         sqlC = "UPDATE [Client] SET district = '" + District2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvest.setData(sqlC, myTransaction);
                     }
 
-                    if (EmpStatus2.SelectedValue != "")
+                    if (EmpStatus2.SelectedValue != "" )
                     {
                         sqlC = "UPDATE [Client] SET employmentStatus = '" + EmpStatus2.SelectedValue + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvest.setData(sqlC, myTransaction);
@@ -378,8 +369,9 @@ namespace HKeInvestWebApplication.ClientOnly
                     }
 
                     //END of optional fields for co-ac holder
-                    myHKeInvest.commitTransaction(myTransaction);
+                    
                 }
+                myHKeInvest.commitTransaction(myTransaction);
                 lblmsg.Visible = true;
                 lblmsg.Text = "Account info updated successfully!";
                 return;

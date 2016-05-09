@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SearchSecurities.aspx.cs" Inherits="HKeInvestWebApplication.SearchSecurities1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h10>Search Securites</h10>
+    <h2>Search Securites</h2>
     <div class="form-horizontal">
         <div class="form-group">
             <asp:Label runat="server" Text="Security Type : " CssClass="control-label col-md-2" AssociatedControlID="ddlSecurityType" ></asp:Label>
@@ -30,16 +30,16 @@
             <div>
             <asp:GridView ID="BondGV" runat="server" Visible="False" AllowSorting="True" OnSorting="BondGV_Sorting" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
-                    <asp:BoundField DataField="code" HeaderText="Bond Code" ReadOnly="True" SortExpression="code" />
+                    <asp:BoundField DataField="code" DataFormatString="{0:d4}" HeaderText="Bond Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Bond Name" ReadOnly="True" SortExpression="name" />
-                    <asp:BoundField DataField="launchDate" HeaderText="Launch date" ReadOnly="True" SortExpression="date" />
-                    <asp:BoundField DataField="base" HeaderText="Base" ReadOnly="True" SortExpression="base"/>
-                    <asp:BoundField DataField="size" DataFormatString="{0:n2}" HeaderText="Total Monetary value" ReadOnly="True" SortExpression="value" />
+                    <asp:BoundField DataField="launchDate" DataFormatString="{0:d}" HeaderText="Launch date" ReadOnly="True" />
+                    <asp:BoundField DataField="base" HeaderText="Base" ReadOnly="True" SortExpression="base" />
+                    <asp:BoundField DataField="size" DataFormatString="{0:n2}" HeaderText="Total Monetary value" ReadOnly="True" />
                     <asp:BoundField DataField="price" DataFormatString="{0:n2}" HeaderText="Current price per share" ReadOnly="True" SortExpression="price"/>
-                    <asp:BoundField DataField="sixMonths" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last six months" ReadOnly="True" SortExpression="cagp06"/>
-                    <asp:BoundField DataField="oneYear" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last one year" ReadOnly="True" SortExpression="cagp12"/>
-                    <asp:BoundField DataField="threeYears" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last three years" ReadOnly="True" SortExpression="cagp36"/>
-                    <asp:BoundField DataField="sinceLaunch" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage since the bond was launched" ReadOnly="True" SortExpression="cagp00"/>
+                    <asp:BoundField DataField="sixMonths" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last six months" ReadOnly="True"/>
+                    <asp:BoundField DataField="oneYear" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last one year" ReadOnly="True" />
+                    <asp:BoundField DataField="threeYears" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last three years" ReadOnly="True"/>
+                    <asp:BoundField DataField="sinceLaunch" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage since the bond was launched" ReadOnly="True" />
                 </Columns>
             </asp:GridView>
             </div>
@@ -47,16 +47,16 @@
             <div>
             <asp:GridView ID="StockGV" runat="server" Visible="False" OnSorting="StockGV_Sorting" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
-                    <asp:BoundField DataField="code" HeaderText="Stock code" ReadOnly="True" SortExpression="code" />
+                    <asp:BoundField DataField="code" DataFormatString="{0:d4}" HeaderText="Stock code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Stock Name" ReadOnly="True" SortExpression="name" />
-                    <asp:BoundField DataField="close" DataFormatString="{0:n2}" HeaderText="Most recent closing price per share" ReadOnly="True" SortExpression="recentclosing" />
-                    <asp:BoundField DataField="changeDollar" DataFormatString="{0:n2}" HeaderText="Last trading day change" ReadOnly="True" SortExpression="lastchange" />
-                    <asp:BoundField DataField="changePercent" DataFormatString="{0:n2}" HeaderText="Last trading day percentage change" ReadOnly="True" SortExpression="lastpercentage" />
-                    <asp:BoundField DataField="volume" DataFormatString="{0:n2}" HeaderText="Last trading day volume of shares" ReadOnly="True" SortExpression="lastvolume" />
-                    <asp:BoundField DataField="high" DataFormatString="{0:n2}" HeaderText="highprice" ReadOnly="True" SortExpression="high" />
-                    <asp:BoundField DataField="low" DataFormatString="{0:n2}" HeaderText="lowprice" ReadOnly="True" SortExpression="low" />
-                    <asp:BoundField DataField="peRatio" DataFormatString="{0:n2}" HeaderText="Price earnings ratio of the stock" ReadOnly="True" SortExpression="pe" />
-                    <asp:BoundField DataField="yield" DataFormatString="{0:n2}" HeaderText="Yield of the stock" ReadOnly="True" SortExpression="yield" />
+                    <asp:BoundField DataField="close" DataFormatString="{0:n2}" HeaderText="Most recent closing price per share" ReadOnly="True" />
+                    <asp:BoundField DataField="changeDollar" DataFormatString="{0:n2}" HeaderText="Last trading day change" ReadOnly="True"  />
+                    <asp:BoundField DataField="changePercent" DataFormatString="{0:n2}" HeaderText="Last trading day percentage change" ReadOnly="True"  />
+                    <asp:BoundField DataField="volume" DataFormatString="{0:n2}" HeaderText="Last trading day volume of shares" ReadOnly="True"  />
+                    <asp:BoundField DataField="high" DataFormatString="{0:n2}" HeaderText="highprice" ReadOnly="True"  />
+                    <asp:BoundField DataField="low" DataFormatString="{0:n2}" HeaderText="lowprice" ReadOnly="True"  />
+                    <asp:BoundField DataField="peRatio" DataFormatString="{0:n2}" HeaderText="Price earnings ratio of the stock" ReadOnly="True" />
+                    <asp:BoundField DataField="yield" DataFormatString="{0:n2}" HeaderText="Yield of the stock" ReadOnly="True" />
                 </Columns>
             </asp:GridView>
             </div>
@@ -64,17 +64,17 @@
             <div>
             <asp:GridView ID="UTGV" runat="server" Visible="False" OnSorting="UTGV_Sorting" AllowSorting="True" AutoGenerateColumns="False" CellPadding="5" EmptyDataText = "No records Found" DataKeyNames="code">
                 <Columns>
-                    <asp:BoundField DataField="code" HeaderText="Code" ReadOnly="True" SortExpression="code" />
+                    <asp:BoundField DataField="code" DataFormatString="{0:d4}" HeaderText="Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="name" />
-                    <asp:BoundField DataField="launchDate" HeaderText="Launch date" ReadOnly="True" SortExpression="date" />
+                    <asp:BoundField DataField="launchDate" HeaderText="Launch date" ReadOnly="True"  />
                     <asp:BoundField DataField="base" HeaderText="Base" ReadOnly="True" SortExpression="base"/>
-                    <asp:BoundField DataField="size" DataFormatString="{0:n2}" HeaderText="Total Monetary value" ReadOnly="True" SortExpression="value" />
-                    <asp:BoundField DataField="price" DataFormatString="{0:n2}" HeaderText="Current price per share" ReadOnly="True" SortExpression="price"/>
-                    <asp:BoundField DataField="riskReturn" HeaderText="Risk/return rating" ReadOnly="True" SortExpression="rating"/>
-                    <asp:BoundField DataField="sixMonths" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last six months" ReadOnly="True" SortExpression="cagp06"/>
-                    <asp:BoundField DataField="oneYear" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last one year" ReadOnly="True" SortExpression="cagp12"/>
-                    <asp:BoundField DataField="threeYears" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last three years" ReadOnly="True" SortExpression="cagp36"/>
-                    <asp:BoundField DataField="sinceLaunch" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage since the bond was launched" ReadOnly="True" SortExpression="cagp00"/>
+                    <asp:BoundField DataField="size" DataFormatString="{0:n2}" HeaderText="Total Monetary value" ReadOnly="True"  />
+                    <asp:BoundField DataField="price" DataFormatString="{0:n2}" HeaderText="Current price per share" ReadOnly="True" />
+                    <asp:BoundField DataField="riskReturn" HeaderText="Risk/return rating" ReadOnly="True" />
+                    <asp:BoundField DataField="sixMonths" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last six months" ReadOnly="True" />
+                    <asp:BoundField DataField="oneYear" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last one year" ReadOnly="True" />
+                    <asp:BoundField DataField="threeYears" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage last three years" ReadOnly="True" />
+                    <asp:BoundField DataField="sinceLaunch" DataFormatString="{0:n2}" HeaderText="Compound annual growth percentage since the bond was launched" ReadOnly="True" />
                 </Columns>
             </asp:GridView>
             </div>
