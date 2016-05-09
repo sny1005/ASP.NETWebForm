@@ -65,7 +65,7 @@ namespace HKeInvestWebApplication.ClientOnly
                 }
                 else if (last2 == "")
                 {
-                    last2 = last2 + row["lastName"];  
+                    last2 = last2 + row["lastName"];
                 }
                 else
                 {
@@ -216,16 +216,19 @@ namespace HKeInvestWebApplication.ClientOnly
                     sqlC = "UPDATE [Client] SET homePhone = '" + hPhone.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
                     myHKeInvestData.setData(sqlC, myTransaction);
                 }
+
                 if (hFax.Text != "")
                 {
                     sqlC = "UPDATE [Client] SET homeFax = '" + hFax.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
                     myHKeInvestData.setData(sqlC, myTransaction);
                 }
+
                 if (bPhone.Text != "")
                 {
                     sqlC = "UPDATE [Client] SET businessPhone = '" + bPhone.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
                     myHKeInvestData.setData(sqlC, myTransaction);
                 }
+
                 if (bFax.Text != "")
                 {
                     sqlC = "UPDATE [Client] SET businessFax = '" + bFax.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
@@ -239,7 +242,7 @@ namespace HKeInvestWebApplication.ClientOnly
                     myHKeInvestData.setData(sqlC, myTransaction);
                 }
 
-                //insert specific primary source fof fund
+                //insert specific primary source of fund
                 if (PrimarySource.SelectedValue == "other")
                 {
                     sqlC = "UPDATE [Client] SET specificSource = '" + SpecificSource.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
@@ -275,7 +278,7 @@ namespace HKeInvestWebApplication.ClientOnly
                         myHKeInvestData.setData(sqlC, myTransaction);
                     }
 
-                    if (EmpStatus2.SelectedValue != "" )
+                    if (EmpStatus2.SelectedValue != "")
                     {
                         sqlC = "UPDATE [Client] SET employmentStatus = '" + EmpStatus2.SelectedValue + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sqlC, myTransaction);
@@ -299,23 +302,26 @@ namespace HKeInvestWebApplication.ClientOnly
                         sqlC = "UPDATE [Client] SET homePhone = '" + hPhone2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sqlC, myTransaction);
                     }
+
                     if (hFax2.Text != "")
                     {
                         sqlC = "UPDATE [Client] SET homeFax = '" + hFax2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sqlC, myTransaction);
                     }
+
                     if (bPhone2.Text != "")
                     {
                         sqlC = "UPDATE [Client] SET businessPhone = '" + bPhone2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sqlC, myTransaction);
                     }
+
                     if (bFax2.Text != "")
                     {
                         sqlC = "UPDATE [Client] SET businessFax = '" + bFax2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sqlC, myTransaction);
                     }
 
-                    //insert employmeny information
+                    //insert employment information
                     if (EmpStatus2.SelectedValue == "Employed")
                     {
                         sqlC = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
@@ -363,7 +369,6 @@ namespace HKeInvestWebApplication.ClientOnly
                         sqlC = "UPDATE [Client] SET freeBalanceToFund = '" + Fund.Checked + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
                         myHKeInvestData.setData(sqlC, myTransaction);
                     }
-
                 }
                 //END of optional fields for co-ac holder
                 myHKeInvestData.commitTransaction(myTransaction);

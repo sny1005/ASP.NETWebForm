@@ -7,7 +7,6 @@
          
         <div class="form-group">
             <h4>Please input the account number to proceed the modification.</h4>
-            
             <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="control-label col-md-2" AssociatedControlID="txtAccountNumber"></asp:Label>
             <asp:TextBox ID="txtAccountNumber" runat="server"></asp:TextBox>
             <asp:Button ID="Check" runat="server" Text="Check Account Exist" CssClass="btn" OnClick="Check_Click" />
@@ -15,11 +14,8 @@
 
         <div class="form-group">
             <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
-            <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>  
-                        <asp:Label ID="Label1" runat="server" Text="" ></asp:Label> 
-             <asp:Label ID="Label2" runat="server" Text="" ></asp:Label>
+            <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label> 
         </div>
-
 
        <asp:Panel ID="Primary1" runat="server" Visible="False">
         <br />
@@ -62,7 +58,6 @@
             <asp:Label AssociatedControlID="IssueCountry" runat="server" Text="Passport country of issue" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="IssueCountry" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
-                <%--<asp:CustomValidator ID="cvIssueCountry" runat="server" ControlToValidate="IssueCountry" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvIssueCountry_ServerValidate" ValidateEmptyText="True">*</asp:CustomValidator>--%>
             </div>
         </div>
 
@@ -189,7 +184,6 @@
                     <asp:ListItem Value="TRUE">Yes</asp:ListItem>
                     <asp:ListItem Value="FALSE">No</asp:ListItem>
                 </asp:RadioButtonList>
-                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="Employed by broker status is required." ControlToValidate="EmpByBroker" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>--%>
             </div>
             <asp:Label AssociatedControlID="CompanyDirector" runat="server" Text="Are you a director, 10% shareholder or policy-making officer of a publicly traded company?" CssClass="control-label col-md-4"></asp:Label>
             <div class="col-md-2">
@@ -197,7 +191,6 @@
                     <asp:ListItem Value="TRUE">Yes</asp:ListItem>
                     <asp:ListItem Value="FALSE">No</asp:ListItem>
                 </asp:RadioButtonList>
-                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="Shareholder status is required." ControlToValidate="CompanyDirector" EnableClientScript="False" CssClass="text-danger" Display="Dynamic">*</asp:RequiredFieldValidator>--%>
             </div>
         </div>
 
@@ -265,7 +258,6 @@
                 <asp:Label AssociatedControlID="IssueCountry2" runat="server" Text="Passport country of issue" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="IssueCountry2" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
-                    <%--<asp:CustomValidator ID="cvIssueCountry2" runat="server" ControlToValidate="IssueCountry2" EnableClientScript="False" CssClass="text-danger" Display="Dynamic" OnServerValidate="cvIssueCountry2_ServerValidate" ValidateEmptyText="True">*</asp:CustomValidator>--%>
                 </div>
             </div>
 
