@@ -64,6 +64,7 @@ namespace HKeInvestWebApplication.Code_File
             for (int i = 0; i < gv.Columns.Count; i++)
             {
                 dt.Columns[i].DataType = Type.GetType(getDataType(gv.SelectedRow.Cells[i].Text));
+
             }
 
             // Load the GridView data into the DataTable.

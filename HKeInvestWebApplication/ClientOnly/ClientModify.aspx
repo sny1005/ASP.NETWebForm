@@ -6,14 +6,14 @@
     <div class="form-horizontal">
         <asp:ValidationSummary runat="server" CssClass="text-danger" EnableClientScript="False" />
         
-        <br />
-        <h6>Primary Account Holder - Personal Information</h6>
-
         <div class="form-group">
             <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="col-md-3" ></asp:Label>
             <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
             <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>    
         </div>
+
+        <br />
+        <h6>Primary Account Holder - Personal Information</h6>
 
         <div class="form-group">
             <asp:Label AssociatedControlID="Email" runat="server" Text="Email" CssClass="control-label col-md-2"></asp:Label>
