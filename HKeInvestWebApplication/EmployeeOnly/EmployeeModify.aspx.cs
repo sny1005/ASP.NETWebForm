@@ -25,15 +25,16 @@ namespace HKeInvestWebApplication.EmployeeOnly
  
         protected void Page_Load(object sender, EventArgs e)
         {
-            Primary1.Visible = true;
-            Primary2.Visible = true;
-            CoHolderPanel.Visible = true;
+            Primary1.Visible = false;
+            Primary2.Visible = false;
+            CoHolderPanel.Visible = false;
+            lblResultMessage.Visible = false;
+            lblClientName.Visible = false;
         }
 
         protected void Check_Click(object sender, EventArgs e)
         {
-            string sql = "";
-
+            string sqlC = "";
             //// Get username
             //string username = User.Identity.Name;
             //string sql = "select accountNumber from LoginAccount where username ='" + username + "'";
@@ -52,9 +53,9 @@ namespace HKeInvestWebApplication.EmployeeOnly
             // Get username
             //string userName = User.Identity.Name;
             accountNumber = txtAccountNumber.Text.Trim();
-            sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber+ "'"; 
+            sqlC = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber+ "'"; 
 
-            DataTable dtClient = myHKeInvestData.getData(sql);
+            DataTable dtClient = myHKeInvestData.getData(sqlC);
             if (dtClient == null) { return; } // If the DataSet is null, a SQL error occurred.
 
             // If no result is returned by the SQL statement, then display a message.
@@ -125,7 +126,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
                 string acNo = txtAccountNumber.Text.Trim();
                 string sql = "";
          
-                sql = "SELECT lastName, firstName FROM Client WHERE '" + accountNumber + "'";
+                sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber + "'";
 
                 DataTable dtClient = myHKeInvestData.getData(sql);
                 if (dtClient == null) { return; } // If the DataSet is null, a SQL error occurred.
@@ -416,6 +417,49 @@ namespace HKeInvestWebApplication.EmployeeOnly
                     if (EmpStatus2.SelectedValue == "Employed")
                     {
                         sql = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+
+
+                    if (PrimarySource.SelectedValue != "")
+                    {
+                        sql = "UPDATE [Client] SET primarySourceFund = '" + PrimarySource.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+
+                    if (Objective.SelectedValue != "")
+                    {
+                        sql = "UPDATE [Client] SET investObjective = '" + Objective.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+
+                    if (Knowledge.SelectedValue != "")
+                    {
+                        sql = "UPDATE [Client] SET investKnowledge = '" + Knowledge.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+
+                    if (Experience.SelectedValue != "")
+                    {
+                        sql = "UPDATE [Client] SET investExperience = '" + Experience.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+
+                    if (Income.SelectedValue != "")
+                    {
+                        sql = "UPDATE [Client] SET annualIncome = '" + Income.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+
+                    if (NetWorth.SelectedValue != "")
+                    {
+                        sql = "UPDATE [Client] SET liquidNetWorth = '" + NetWorth.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
+                        myHKeInvest.setData(sql, myTransaction);
+                    }
+
+                    if (Fund.Checked)
+                    {
+                        sql = "UPDATE [Client] SET freeBalanceToFund = '" + Fund.Checked + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
                         myHKeInvest.setData(sql, myTransaction);
                     }
 

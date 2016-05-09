@@ -6,6 +6,8 @@
         <asp:ValidationSummary runat="server" CssClass="text-danger" EnableClientScript="False" />
          
         <div class="form-group">
+            <h3>Please input the account number to proceed the modification.</h3>
+            
             <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="control-label col-md-2" AssociatedControlID="txtAccountNumber"></asp:Label>
             <asp:TextBox ID="txtAccountNumber" runat="server"></asp:TextBox>
             <asp:Button ID="Check" runat="server" Text="Check Account Exist" CssClass="btn" OnClick="Check_Click" />
@@ -51,7 +53,7 @@
         </div>
 
         <div class="form-group">
-            <asp:Label AssociatedControlID="HKID" runat="server" Text="Passport#" CssClass="control-label col-md-2"></asp:Label>
+            <asp:Label AssociatedControlID="HKID" runat="server" Text="HKID/Passport#" CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-4">
                 <asp:TextBox ID="HKID" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
             </div>
@@ -255,7 +257,7 @@
             </div>
 
             <div class="form-group">
-                <asp:Label AssociatedControlID="HKID2" runat="server" Text="Passport#" CssClass="control-label col-md-2"></asp:Label>
+                <asp:Label AssociatedControlID="HKID2" runat="server" Text="HKID/Passport#" CssClass="control-label col-md-2"></asp:Label>
                 <div class="col-md-4">
                     <asp:TextBox ID="HKID2" runat="server" CssClass="form-control" MaxLength="8"></asp:TextBox>
                 </div>
