@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Contact" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Contact.aspx.cs" Inherits="HKeInvestWebApplication.Contact" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2><%: Title %>Contact Information</h2>
+    <h2>Contact Information</h2>
     <h3>COMP3111 TEAM 109 InvestPRO</h3>
     </br>
 Members:</br>

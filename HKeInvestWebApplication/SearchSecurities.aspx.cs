@@ -76,8 +76,12 @@ namespace HKeInvestWebApplication
                     if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                 }
 
+                ViewState["SortDirection"] = "name";
+                ViewState["SortDirection"] = "DESC";
+
                 BondGV.DataSource = dtbond;
                 BondGV.DataBind();
+                BondGV.Sort("name", SortDirection.Descending);
                 BondGV.Visible = true;
                 StockGV.Visible = false;
                 UTGV.Visible = false;
@@ -98,8 +102,13 @@ namespace HKeInvestWebApplication
                     if (row["peRatio"].ToString().Trim() == "" || row["peRatio"] == null) row["peRatio"] = (decimal)0.00;
                     if (row["yield"].ToString().Trim() == "" || row["yield"] == null) row["yield"] = (decimal)0.00;
                 }
+
+                ViewState["SortDirection"] = "name";
+                ViewState["SortDirection"] = "DESC";
+
                 StockGV.DataSource = dtstock;
                 StockGV.DataBind();
+                StockGV.Sort("name", SortDirection.Descending);
                 BondGV.Visible = false;
                 StockGV.Visible = true;
                 UTGV.Visible = false;
@@ -120,8 +129,13 @@ namespace HKeInvestWebApplication
                     if (row["threeYears"].ToString().Trim() == "" || row["threeYears"] == null) row["threeYears"] = (decimal)0.00;
                     if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                 }
+
+                ViewState["SortDirection"] = "name";
+                ViewState["SortDirection"] = "DESC";
+
                 UTGV.DataSource = dtUT;
                 UTGV.DataBind();
+                UTGV.Sort("name", SortDirection.Descending);
                 BondGV.Visible = false;
                 StockGV.Visible = false;
                 UTGV.Visible = true;
@@ -144,8 +158,13 @@ namespace HKeInvestWebApplication
                         if (row["threeYears"].ToString().Trim() == "" || row["threeYears"] == null) row["threeYears"] = (decimal)0.00;
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     BondGV.DataSource = dtBondB;
                     BondGV.DataBind();
+                    BondGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = true;
                     StockGV.Visible = false;
                     UTGV.Visible = false;
@@ -164,8 +183,13 @@ namespace HKeInvestWebApplication
                         if (row["threeYears"].ToString().Trim() == "" || row["threeYears"] == null) row["threeYears"] = (decimal)0.00;
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     BondGV.DataSource = dtBondC;
                     BondGV.DataBind();
+                    BondGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = true;
                     StockGV.Visible = false;
                     UTGV.Visible = false;
@@ -184,8 +208,13 @@ namespace HKeInvestWebApplication
                         if (row["threeYears"].ToString().Trim() == "" || row["threeYears"] == null) row["threeYears"] = (decimal)0.00;
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     BondGV.DataSource = dtBondN;
                     BondGV.DataBind();
+                    BondGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = true;
                     StockGV.Visible = false;
                     UTGV.Visible = false;
@@ -211,8 +240,13 @@ namespace HKeInvestWebApplication
                         if (row["peRatio"].ToString().Trim() == "" || row["peRatio"] == null) row["peRatio"] = (decimal)0.00;
                         if (row["yield"].ToString().Trim() == "" || row["yield"] == null) row["yield"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     StockGV.DataSource = dtStockB;
                     StockGV.DataBind();
+                    StockGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = false;
                     StockGV.Visible = true;
                     UTGV.Visible = false;
@@ -232,8 +266,13 @@ namespace HKeInvestWebApplication
                         if (row["peRatio"].ToString().Trim() == "" || row["peRatio"] == null) row["peRatio"] = (decimal)0.00;
                         if (row["yield"].ToString().Trim() == "" || row["yield"] == null) row["yield"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     StockGV.DataSource = dtStockC;
                     StockGV.DataBind();
+                    StockGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = false;
                     StockGV.Visible = true;
                     UTGV.Visible = false;
@@ -253,8 +292,13 @@ namespace HKeInvestWebApplication
                         if (row["peRatio"].ToString().Trim() == "" || row["peRatio"] == null) row["peRatio"] = (decimal)0.00;
                         if (row["yield"].ToString().Trim() == "" || row["yield"] == null) row["yield"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     StockGV.DataSource = dtStockN;
                     StockGV.DataBind();
+                    StockGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = false;
                     StockGV.Visible = true;
                     UTGV.Visible = false;
@@ -279,8 +323,13 @@ namespace HKeInvestWebApplication
                         if (row["threeYears"].ToString().Trim() == "" || row["threeYears"] == null) row["threeYears"] = (decimal)0.00;
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     UTGV.DataSource = dtUTB;
                     UTGV.DataBind();
+                    UTGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = false;
                     StockGV.Visible = false;
                     UTGV.Visible = true;
@@ -300,8 +349,13 @@ namespace HKeInvestWebApplication
                         if (row["threeYears"].ToString().Trim() == "" || row["threeYears"] == null) row["threeYears"] = (decimal)0.00;
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     UTGV.DataSource = dtUTC;
                     UTGV.DataBind();
+                    UTGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = false;
                     StockGV.Visible = false;
                     UTGV.Visible = true;
@@ -321,8 +375,13 @@ namespace HKeInvestWebApplication
                         if (row["threeYears"].ToString().Trim() == "" || row["threeYears"] == null) row["threeYears"] = (decimal)0.00;
                         if (row["sinceLaunch"].ToString().Trim() == "" || row["sinceLaunch"] == null) row["sinceLaunch"] = (decimal)0.00;
                     }
+
+                    ViewState["SortDirection"] = "name";
+                    ViewState["SortDirection"] = "DESC";
+
                     UTGV.DataSource = dtUTN;
                     UTGV.DataBind();
+                    UTGV.Sort("name", SortDirection.Descending);
                     BondGV.Visible = false;
                     StockGV.Visible = false;
                     UTGV.Visible = true;

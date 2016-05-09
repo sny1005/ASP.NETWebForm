@@ -5,7 +5,7 @@
     <div class="jumbotron">
         <h1>HKeInvest</h1>
         <p class="lead">Hong Kong Electronic Investments LLC (HKeInvest) management system allows its clients to manage the securities that they own and to trade these securities through the Web</p>
-        <p><a href="http://www.asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+        <p></p>
     </div>
 
     <div class="row">
