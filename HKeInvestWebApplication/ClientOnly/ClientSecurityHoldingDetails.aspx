@@ -2,17 +2,17 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Security Holding Details</h2>
     <div class="form-horizontal">
+        <asp:ValidationSummary ID="ValidationSummary1" runat="server" EnableClientScript="False" CssClass="text-danger" />
+
 
         <div class="form-group row">
             <asp:Label ID="lblAccountNumber" runat="server" Text="Account number:" CssClass="col-md-3 text-info" ></asp:Label>
             <asp:Label ID="lblClientName" runat="server" Visible="False" CssClass="col-md-3 text-info"></asp:Label>
             <asp:Label ID="lblResultMessage" runat="server" Visible="False"></asp:Label>
         </div>
-        <div class="form-group row">
-        </div>
 
         <br />
-        <h5>Requirement 6a - Account Summary</h5>
+        <asp:Label ID="lbl6a" runat="server" Visible="true" Text ="6A - Account Summary" CssClass="h5"></asp:Label>
         <div class="form-group row">
             <asp:Label ID="lblTotalValue" runat="server" Visible="False" CssClass="col-md-6 text-info"></asp:Label>
         </div>
@@ -30,23 +30,19 @@
             </asp:GridView>
         </div>
 
-        <div class="form-group">
+<%--        <div class="form-group">
             <div class="col-md-3"><asp:Button ID="generate6a" runat="server" Text="Generate 6a" CssClass="btn" OnClick="generate6a_Click"></asp:Button></div>
-        </div>
-
-
-
+        </div>--%>
 
         <br />
-        <h5>Requirement 6b - Summary of specified security</h5>
+        <asp:Label ID="lbl6b" runat="server" Visible="False" Text ="6B - Summary of specified security" CssClass="h5"></asp:Label>
         <div class="form-group">
-            <asp:DropDownList ID="ddlSecurityType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSecurityType_SelectedIndexChanged">
-                <asp:ListItem Value="0">Security type</asp:ListItem>
+            <asp:DropDownList ID="ddlSecurityType" runat="server">
                 <asp:ListItem Value="bond">Bond</asp:ListItem>
                 <asp:ListItem Value="stock">Stock</asp:ListItem>
                 <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
             </asp:DropDownList>
-            <asp:DropDownList ID="ddlCurrency" runat="server" AutoPostBack="True" Visible="False" OnSelectedIndexChanged="ddlCurrency_SelectedIndexChanged">
+            <asp:DropDownList ID="ddlCurrency" runat="server" Visible="False" OnSelectedIndexChanged="ddlCurrency_SelectedIndexChanged" AutoPostBack="true">
                 <asp:ListItem Value="0">Currency</asp:ListItem>
             </asp:DropDownList>
         </div>
@@ -66,7 +62,7 @@
     </div>
 
     <br />
-    <h5>Requirement 6c - Listing of active orders</h5>
+    <asp:Label ID="lbl6c" runat="server" Visible="False" Text ="6C - Listing of active orders" CssClass="h5"></asp:Label>
     <div class="form-horizontal">
         <asp:Label ID="lblActiveBond" runat="server" Text="Listing of active bond/unit trust order" Visible="False" CssClass="h6"></asp:Label>
         <div>
@@ -104,23 +100,26 @@
             </asp:GridView>
         </div>
 
-        <div class="form-group">
+<%--        <div class="form-group">
             <div class="col-md-3"><asp:Button ID="generate" runat="server" Text="Generate 6c" CssClass="btn" OnClick="generate6c_Click"></asp:Button></div>
-        </div>
+        </div>--%>
     </div>
 
     <br />
-    <h5>Requirement 6d - Listing of order history</h5>
+    <asp:Label ID="lbl6d" runat="server" Visible="False" Text ="6D - Listing of order history" CssClass="h5"></asp:Label>
     <div class="form-horizontal">
         <div class="form-group">                
             <asp:Label ID="Label1" runat="server" Text="From: " CssClass="control-label col-md-1"></asp:Label>
             <div class="col-md-2">
                 <asp:TextBox ID="startDate" runat="server" CssClass="form-control"></asp:TextBox>
             </div>
+            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="Date must be in the format of dd/mm/yyyy" ControlToValidate="startDate" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\d\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)">*</asp:RegularExpressionValidator>
+
             <asp:Label ID="Label2" runat="server" Text="To: " CssClass="control-label col-md-1"></asp:Label>
             <div class="col-md-2">
                 <asp:TextBox ID="endDate" runat="server" CssClass="form-control"></asp:TextBox>
             </div>
+            <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ErrorMessage="Date must be in the format of dd/mm/yyyy" ControlToValidate="endDate" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\d\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)">*</asp:RegularExpressionValidator>
         </div>
 
         <div class="form-group">       
@@ -129,8 +128,10 @@
         <div class="form-group">       
             <asp:Label ID="Label4" runat="server" Text="Security Code: " CssClass="control-label col-md-2"></asp:Label>
             <div class="col-md-2">
-                <asp:TextBox ID="codeFilter" runat="server" CssClass="form-control"></asp:TextBox>
+                <asp:TextBox ID="codeFilter" runat="server" CssClass="form-control" MaxLength="4"></asp:TextBox>
             </div>
+            <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ErrorMessage="Security Code must be a number" ControlToValidate="codeFilter" Display="Dynamic" CssClass="text-danger" EnableClientScript="False" ValidationExpression="^\d*$">*</asp:RegularExpressionValidator>
+
             <div class="col-md-2">
                 <asp:DropDownList ID="ddlOrderFilter" runat="server">
                     <asp:ListItem Value="0">Type of Order</asp:ListItem>
@@ -188,8 +189,12 @@
         </div>
 
 
-        <div class="form-group">
+<%--        <div class="form-group">
             <div class="col-md-3"><asp:Button ID="Button1" runat="server" Text="Generate 6d" CssClass="btn" OnClick="generate6d_Click"></asp:Button></div>
+        </div>--%>
+
+        <div class="form-group">
+            <div class="col-md-3"><asp:Button ID="btnReport" runat="server" Text="Generate Report" CssClass="btn" OnClick="genReport_Click"></asp:Button></div>
         </div>
     </div>
 </asp:Content>

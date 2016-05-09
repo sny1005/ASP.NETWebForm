@@ -13,6 +13,15 @@ namespace HKeInvestWebApplication.ClientOnly {
     public partial class ClientSecurityHoldingsDetails {
         
         /// <summary>
+        /// ValidationSummary1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
+        
+        /// <summary>
         /// lblAccountNumber control.
         /// </summary>
         /// <remarks>
@@ -38,6 +47,15 @@ namespace HKeInvestWebApplication.ClientOnly {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblResultMessage;
+        
+        /// <summary>
+        /// lbl6a control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl6a;
         
         /// <summary>
         /// lblTotalValue control.
@@ -67,13 +85,13 @@ namespace HKeInvestWebApplication.ClientOnly {
         protected global::System.Web.UI.WebControls.GridView gvSecuritySummary;
         
         /// <summary>
-        /// generate6a control.
+        /// lbl6b control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button generate6a;
+        protected global::System.Web.UI.WebControls.Label lbl6b;
         
         /// <summary>
         /// ddlSecurityType control.
@@ -101,6 +119,15 @@ namespace HKeInvestWebApplication.ClientOnly {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvSecurityHolding;
+        
+        /// <summary>
+        /// lbl6c control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl6c;
         
         /// <summary>
         /// lblActiveBond control.
@@ -139,13 +166,13 @@ namespace HKeInvestWebApplication.ClientOnly {
         protected global::System.Web.UI.WebControls.GridView gvActiveStock;
         
         /// <summary>
-        /// generate control.
+        /// lbl6d control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button generate;
+        protected global::System.Web.UI.WebControls.Label lbl6d;
         
         /// <summary>
         /// Label1 control.
@@ -166,6 +193,15 @@ namespace HKeInvestWebApplication.ClientOnly {
         protected global::System.Web.UI.WebControls.TextBox startDate;
         
         /// <summary>
+        /// RegularExpressionValidator1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
+        
+        /// <summary>
         /// Label2 control.
         /// </summary>
         /// <remarks>
@@ -182,6 +218,15 @@ namespace HKeInvestWebApplication.ClientOnly {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox endDate;
+        
+        /// <summary>
+        /// RegularExpressionValidator2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator2;
         
         /// <summary>
         /// Label3 control.
@@ -209,6 +254,15 @@ namespace HKeInvestWebApplication.ClientOnly {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox codeFilter;
+        
+        /// <summary>
+        /// RegularExpressionValidator3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
         
         /// <summary>
         /// ddlOrderFilter control.
@@ -256,12 +310,12 @@ namespace HKeInvestWebApplication.ClientOnly {
         protected global::System.Web.UI.WebControls.GridView gvTransaction;
         
         /// <summary>
-        /// Button1 control.
+        /// btnReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.WebControls.Button btnReport;
     }
 }
