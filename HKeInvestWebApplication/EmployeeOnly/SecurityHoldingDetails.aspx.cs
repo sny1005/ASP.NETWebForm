@@ -276,50 +276,7 @@ namespace HKeInvestWebApplication
             // *******************************************************************
             string securityType = ddlSecurityType.SelectedValue; // Set the securityType from a web form control!
 
-            // No action when the first item in the DropDownList is selected.
-            if (securityType == "0") { return; }
-
-            // *****************************************************************************************
-            // Construct the SQL statement to retrieve the first and last name of the client(s). *
-            // *****************************************************************************************
-            string userName = User.Identity.Name;
-            sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = (SELECT accountNumber FROM LoginAccount WHERE userName ='" + userName + "')"; // Complete the SQL statement.
-
-            DataTable dtClient = myHKeInvestData.getData(sql);
-            if (dtClient == null) { return; } // If the DataSet is null, a SQL error occurred.
-
-            // If no result is returned by the SQL statement, then display a message.
-            if (dtClient.Rows.Count == 0)
-            {
-                lblResultMessage.Text = "No such account number.";
-                lblResultMessage.Visible = true;
-                lblClientName.Visible = false;
-                gvSecurityHolding.Visible = false;
-                return;
-            }
-
-            // Show the client name(s) on the web page.
-            string clientName = "Client(s): ";
-            int i = 1;
-            foreach (DataRow row in dtClient.Rows)
-            {
-                clientName = clientName + row["lastName"] + ", " + row["firstName"];
-                if (dtClient.Rows.Count != i)
-                {
-                    clientName = clientName + "and ";
-                }
-                i = i + 1;
-            }
-            lblClientName.Text = clientName;
-            lblClientName.Visible = true;
-
-            // *****************************************************************************************************************************
-            //       Construct the SQL select statement to get the code, name, shares and base of the security holdings of a specific type *
-            //       in an account. The select statement should also return three additonal columns -- price, value and convertedValue --  *
-            //       whose values are not actually in the database, but are set to the constant 0.00 by the select statement. (HINT: see   *
-            //       http://stackoverflow.com/questions/2504163/include-in-select-a-column-that-isnt-actually-in-the-database.)            *   
-            // *****************************************************************************************************************************
-            sql = "SELECT code, name, shares, base, '0.00' as price, '0.00' AS value, '0.00' AS convertedValue FROM dbo.SecurityHolding WHERE accountNumber= (SELECT accountNumber FROM LoginAccount WHERE userName ='" + userName + "') AND type='" + securityType + "'"; // Complete the SQL statement.
+            sql = "SELECT code, name, shares, base, '0.00' as price, '0.00' AS value, '0.00' AS convertedValue FROM dbo.SecurityHolding WHERE accountNumber= '" +accountNumber + "' AND type='" + securityType + "'"; // Complete the SQL statement.
 
             DataTable dtSecurityHolding = myHKeInvestData.getData(sql);
             if (dtSecurityHolding == null) { return; } // If the DataSet is null, a SQL error occurred.

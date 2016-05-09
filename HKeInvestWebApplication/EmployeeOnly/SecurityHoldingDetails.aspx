@@ -8,9 +8,8 @@
         </div>
         <div class="form-group row">
             <asp:Label ID="lblClientName" runat="server" Visible="False" CssClass="col-md-3 text-info"></asp:Label>
-            <asp:Label ID="lblResultMessage" runat="server" Visible="False"></asp:Label>
+            <asp:Label ID="lblResultMessage" CssClass="text-danger" runat="server" Visible="False"></asp:Label>
         </div>
-
 
         <br />
         <asp:Label ID="lbl6a" runat="server" Visible="true" Text ="6A - Account Summary" CssClass="h5"></asp:Label>
@@ -31,22 +30,21 @@
             </asp:GridView>
         </div>
 
-<%--        <div class="form-group">
-            <div class="col-md-3"><asp:Button ID="generate6a" runat="server" Text="Generate 6a" CssClass="btn" OnClick="generate6a_Click"></asp:Button></div>
-        </div>--%>
-
         <br />
         <asp:Label ID="lbl6b" runat="server" Visible="False" Text ="6B - Summary of specified security" CssClass="h5"></asp:Label>
         <div class="form-group">
-            <asp:DropDownList ID="ddlSecurityType" runat="server">
-                <asp:ListItem Value="0">Security type</asp:ListItem>
-                <asp:ListItem Value="bond">Bond</asp:ListItem>
-                <asp:ListItem Value="stock">Stock</asp:ListItem>
-                <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
-            </asp:DropDownList>
-            <asp:DropDownList ID="ddlCurrency" runat="server" Visible="False" OnSelectedIndexChanged="ddlCurrency_SelectedIndexChanged" AutoPostBack="true">
-                <asp:ListItem Value="0">Currency</asp:ListItem>
-            </asp:DropDownList>
+            <div class="col-md-2">
+                <asp:DropDownList ID="ddlSecurityType" runat="server">
+                    <asp:ListItem Value="bond">Bond</asp:ListItem>
+                    <asp:ListItem Value="stock">Stock</asp:ListItem>
+                    <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
+                </asp:DropDownList>
+            </div>
+            <div class="col-md-2">
+                <asp:DropDownList ID="ddlCurrency" runat="server" Visible="False" OnSelectedIndexChanged="ddlCurrency_SelectedIndexChanged" AutoPostBack="true">
+                    <asp:ListItem Value="0">Currency</asp:ListItem>
+                </asp:DropDownList>
+            </div>
         </div>
         <div>
             <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="true">
@@ -101,10 +99,6 @@
                 </Columns>
             </asp:GridView>
         </div>
-
-<%--        <div class="form-group">
-            <div class="col-md-3"><asp:Button ID="generate" runat="server" Text="Generate 6c" CssClass="btn" OnClick="generate6c_Click"></asp:Button></div>
-        </div>--%>
     </div>
 
     <br />
@@ -189,11 +183,6 @@
                 </Columns>
             </asp:GridView>
         </div>
-
-
-<%--        <div class="form-group">
-            <div class="col-md-3"><asp:Button ID="Button1" runat="server" Text="Generate 6d" CssClass="btn" OnClick="generate6d_Click"></asp:Button></div>
-        </div>--%>
 
         <div class="form-group">
             <div class="col-md-3"><asp:Button ID="btnReport" runat="server" Text="Generate Report" CssClass="btn" OnClick="genReport_Click"></asp:Button></div>

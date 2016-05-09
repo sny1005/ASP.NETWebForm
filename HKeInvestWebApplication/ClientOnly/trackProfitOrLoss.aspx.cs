@@ -166,7 +166,15 @@ namespace HKeInvestWebApplication.ClientOnly
                     record["buyAmount"] = totalBuyAmount;
                     record["sellAmount"] = totalSellAmount;
                     record["fee"] = totalFeeCharged;
-                    record["profit"] = profitOrLoss;
+
+                    //convert to abs amount
+                    if (profitOrLoss < 0)
+                    {
+                        profitOrLoss = Math.Abs(profitOrLoss);
+                        record["profit"] = "(" + profitOrLoss + ")";
+                    }
+                    else
+                        record["profit"] = profitOrLoss;
 
                     source.Rows.Add(record);
                     source.AcceptChanges();
@@ -181,9 +189,16 @@ namespace HKeInvestWebApplication.ClientOnly
                     record["buyAmount"] = totalBuyAmount;
                     record["sellAmount"] = totalSellAmount;
                     record["fee"] = totalFeeCharged;
+
                     if (profitOrLoss == 0)
                         record["profit"] = 0 + "%";
-                    else record["profit"] = (profitOrLoss/(totalBuyAmount+totalFeeCharged)*100)+"%";
+                    else if (profitOrLoss < 0)
+                    {
+                        profitOrLoss = Math.Abs(profitOrLoss);
+                        record["profit"] = "(" + (profitOrLoss / (totalBuyAmount + totalFeeCharged) * 100) + ") %";
+                    }
+                    else
+                        record["profit"] = (profitOrLoss/(totalBuyAmount+totalFeeCharged)*100)+"%";
 
                     source.Rows.Add(record);
                     source.AcceptChanges();
@@ -336,7 +351,15 @@ namespace HKeInvestWebApplication.ClientOnly
                     record["buyAmount"] = totalBuyAmount;
                     record["sellAmount"] = totalSellAmount;
                     record["fee"] = totalFeeCharged;
-                    record["profit"] = profitOrLoss;
+
+                    //convert to abs amount
+                    if (profitOrLoss < 0)
+                    {
+                        profitOrLoss = Math.Abs(profitOrLoss);
+                        record["profit"] = "(" + profitOrLoss + ")";
+                    }
+                    else
+                        record["profit"] = profitOrLoss;
 
                     source.Rows.Add(record);
                     source.AcceptChanges();
@@ -351,9 +374,16 @@ namespace HKeInvestWebApplication.ClientOnly
                     record["buyAmount"] = totalBuyAmount;
                     record["sellAmount"] = totalSellAmount;
                     record["fee"] = totalFeeCharged;
+
                     if (profitOrLoss == 0)
                         record["profit"] = 0 + "%";
-                    else record["profit"] = (profitOrLoss / (totalBuyAmount + totalFeeCharged) * 100) + "%";
+                    else if (profitOrLoss < 0)
+                    {
+                        profitOrLoss = Math.Abs(profitOrLoss);
+                        record["profit"] = "(" + (profitOrLoss / (totalBuyAmount + totalFeeCharged) * 100) + ") %";
+                    }
+                    else
+                        record["profit"] = (profitOrLoss / (totalBuyAmount + totalFeeCharged) * 100) + "%";
 
                     source.Rows.Add(record);
                     source.AcceptChanges();
@@ -510,11 +540,28 @@ namespace HKeInvestWebApplication.ClientOnly
             record["fee"] = totalFeeCharged;
 
             if (viewIn.SelectedIndex == 0)//dollar
-                record["profit"] = profitOrLoss;
+            {
+                //convert to abs amount
+                if (profitOrLoss < 0)
+                {
+                    profitOrLoss = Math.Abs(profitOrLoss);
+                    record["profit"] = "(" + profitOrLoss + ")";
+                }
+                else
+                    record["profit"] = profitOrLoss;
+            }
             else if (viewIn.SelectedIndex == 1)//percentage
+            {
                 if (profitOrLoss == 0)
                     record["profit"] = 0 + "%";
-                else record["profit"] = (profitOrLoss/(totalBuyAmount+totalFeeCharged))*100 +"%";
+                else if (profitOrLoss < 0)
+                {
+                    profitOrLoss = Math.Abs(profitOrLoss);
+                    record["profit"] = "(" + (profitOrLoss / (totalBuyAmount + totalFeeCharged) * 100) + ") %";
+                }
+                else
+                    record["profit"] = (profitOrLoss / (totalBuyAmount + totalFeeCharged) * 100) + "%";
+            }
 
             source.Rows.Add(record);
             source.AcceptChanges();
