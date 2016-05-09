@@ -66,7 +66,7 @@
                 <Columns>
                     <asp:BoundField DataField="code" DataFormatString="{0:d4}" HeaderText="Code" ReadOnly="True" SortExpression="code" />
                     <asp:BoundField DataField="name" HeaderText="Name" ReadOnly="True" SortExpression="name" />
-                    <asp:BoundField DataField="launchDate" HeaderText="Launch date" ReadOnly="True"  />
+                    <asp:BoundField DataField="launchDate" DataFormatString="{0:Y}" HeaderText="Launch date" ReadOnly="True"  />
                     <asp:BoundField DataField="base" HeaderText="Base" ReadOnly="True" SortExpression="base"/>
                     <asp:BoundField DataField="size" DataFormatString="{0:n2}" HeaderText="Total Monetary value" ReadOnly="True"  />
                     <asp:BoundField DataField="price" DataFormatString="{0:n2}" HeaderText="Current price per share" ReadOnly="True" />

@@ -1,17 +1,18 @@
 ﻿<%@ Page Title="Contact" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Contact.aspx.cs" Inherits="HKeInvestWebApplication.Contact" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2><%: Title %>.</h2>
-    <h3>Your contact page.</h3>
-    <address>
-        One Microsoft Way<br />
-        Redmond, WA 98052-6399<br />
-        <abbr title="Phone">P:</abbr>
-        425.555.0100
-    </address>
+    <h2><%: Title %>Contact Information</h2>
+    <h3>COMP3111 TEAM 109 InvestPRO</h3>
+    </br>
+Members:</br>
+Chan Long Hei Stanley (20187854) **LEADER </br>
+Chow Long Yin (20196037)</br>
+Ho Cho Ming (20199845)</br>
+Leung Hiu Tung (20200242)</br>
+    </br>
+    
 
     <address>
-        <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
+        <strong>Support:</strong>   <a href="mailto:comp3111_team109@cse.ust.hk">comp3111_team109@cse.ust.hk</a>
     </address>
 </asp:Content>
