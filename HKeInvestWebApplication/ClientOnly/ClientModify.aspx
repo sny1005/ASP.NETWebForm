@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ClientModify.aspx.cs" Inherits="HKeInvestWebApplication.ClientOnly.ClientModify" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-<h2>Modify Account Informations</h2>
+<h2>Modify Account Informations - CLIENT VIEW</h2>
     <asp:Label ID="lblmsg" runat="server" Visible="false"></asp:Label>
 
     <div class="form-horizontal">

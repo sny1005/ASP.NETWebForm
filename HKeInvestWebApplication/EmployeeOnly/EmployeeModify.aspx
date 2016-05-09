@@ -16,6 +16,8 @@
         <div class="form-group">
             <asp:Label ID="lblClientName" runat="server" Text="" Visible="False" CssClass="col-md-3"></asp:Label>
             <asp:Label ID="lblResultMessage" runat="server" Text="" Visible="False"></asp:Label>  
+                        <asp:Label ID="Label1" runat="server" Text="" ></asp:Label> 
+             <asp:Label ID="Label2" runat="server" Text="" ></asp:Label>
         </div>
 
 
