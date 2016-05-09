@@ -59,7 +59,6 @@ namespace HKeInvestWebApplication.Code_File
             }
 
             // For correct sorting, set the data type of each DataTable column based on the values in the GridView.
-            //TODO: handle empty exception
             gv.SelectedIndex = 0;
             for (int i = 0; i < gv.Columns.Count; i++)
             {

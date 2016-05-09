@@ -267,7 +267,7 @@ namespace HKeInvestWebApplication
                             mailBody += nl;
                         }
 
-                        // TODO: send the invoice
+                        // send the invoice
                         //System.Windows.Forms.MessageBox.Show(mailBody);
                         sql = "SELECT [email] from [Client] WHERE [isPrimary] = 'true' AND [accountNumber] = '" + accountNumber + "'";
                         DataTable Table = myData.getData(sql);
