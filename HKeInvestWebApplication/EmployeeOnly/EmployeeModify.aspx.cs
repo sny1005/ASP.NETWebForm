@@ -19,10 +19,10 @@ namespace HKeInvestWebApplication.EmployeeOnly
         HKeInvestCode myHKeInvestCode = new HKeInvestCode();
         ExternalFunctions myExternalFunctions = new ExternalFunctions();
         string accountNumber;
-        int i = 1;
-        string last1 = "";
-        string last2 = "";
- 
+        static int i = 1;
+        static string last1 = "";
+        static string last2 = "";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             lblResultMessage.Text = "";
@@ -40,8 +40,8 @@ namespace HKeInvestWebApplication.EmployeeOnly
         {
             string sqlC = "";
             accountNumber = txtAccountNumber.Text.Trim();
-            sqlC = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber+ "'"; 
-            
+            sqlC = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + accountNumber + "'";
+
             DataTable dtClient = myHKeInvestData.getData(sqlC);
             if (dtClient == null) { return; } // If the DataSet is null, a SQL error occurred.
 
@@ -75,7 +75,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
                 {
                     clientName = clientName + "and ";
                     CoHolderPanel.Visible = true;
-                    i = i + 1;
+                    i++;
                 }
             }
             lblClientName.Text = clientName;
@@ -105,14 +105,15 @@ namespace HKeInvestWebApplication.EmployeeOnly
             if (PrimarySource.SelectedValue == "other" && args.Value == "") args.IsValid = false;
         }
 
+
         protected void Register_Click(object sender, EventArgs e)
         {
+            string sql = "";
             if (Page.IsValid)
             {
                 HKeInvestData myHKeInvest = new HKeInvestData();
                 string acNo = txtAccountNumber.Text.Trim();
-                string sql = "";
-         
+
                 sql = "SELECT lastName, firstName FROM Client WHERE accountNumber = '" + acNo + "'";
 
                 DataTable dtClient = myHKeInvestData.getData(sql);
@@ -127,7 +128,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
                     return;
                 }
 
-                 SqlTransaction myTransaction = myHKeInvestData.beginTransaction();
+                SqlTransaction myTransaction = myHKeInvestData.beginTransaction();
 
                 if (title.SelectedValue != "")
                 {
@@ -253,6 +254,7 @@ namespace HKeInvestWebApplication.EmployeeOnly
                 if (hPhone.Text != "")
                 {
                     sql = "UPDATE [Client] SET homePhone = '" + hPhone.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
+                    myHKeInvestData.setData(sql, myTransaction);
                 }
 
                 if (hFax.Text != "")
@@ -280,13 +282,13 @@ namespace HKeInvestWebApplication.EmployeeOnly
                     myHKeInvestData.setData(sql, myTransaction);
                 }
 
-                //insert specific primary source fof fund
+                //insert specific primary source of fund
                 if (PrimarySource.SelectedValue == "other")
                 {
                     sql = "UPDATE [Client] SET specificSource = '" + SpecificSource.Text + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last1 + "')) ";
                     myHKeInvestData.setData(sql, myTransaction);
                 }
-                
+
                 //INSERT CO HOLDER'S INFORMATION
                 if (i != 1)
                 {
@@ -374,29 +376,32 @@ namespace HKeInvestWebApplication.EmployeeOnly
                         sql = "UPDATE [Client] SET homePhone = '" + hPhone2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sql, myTransaction);
                     }
+
                     if (hFax2.Text != "")
                     {
                         sql = "UPDATE [Client] SET homeFax = '" + hFax2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sql, myTransaction);
                     }
+
                     if (bPhone2.Text != "")
                     {
                         sql = "UPDATE [Client] SET businessPhone = '" + bPhone2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sql, myTransaction);
                     }
+
                     if (bFax2.Text != "")
                     {
                         sql = "UPDATE [Client] SET businessFax = '" + bFax2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sql, myTransaction);
                     }
 
-                    //insert employmeny information
+                    //insert employment information
                     if (EmpStatus2.SelectedValue == "Employed")
                     {
                         sql = "UPDATE [Client] SET occupation = '" + Occupation2.Text + "', yearsWithEmployer = '" + yrWithEmp2.Text + "', employerName = '" + Employer2.Text + "', employerPhone = '" + EmployerPhone2.Text + "', businessNature = '" + Business2.Text + "' WHERE (accountNumber = '" + acNo + "' AND lastName = '" + last2 + "')";
                         myHKeInvestData.setData(sql, myTransaction);
                     }
-                    
+
                     if (PrimarySource.SelectedValue != "")
                     {
                         sql = "UPDATE [Client] SET primarySourceFund = '" + PrimarySource.SelectedValue + "' WHERE ((accountNumber = '" + acNo + "') AND (lastName = '" + last2 + "')) ";
