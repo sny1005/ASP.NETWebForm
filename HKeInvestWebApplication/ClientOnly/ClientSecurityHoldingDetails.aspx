@@ -37,14 +37,18 @@
         <br />
         <asp:Label ID="lbl6b" runat="server" Visible="False" Text ="6B - Summary of specified security" CssClass="h5"></asp:Label>
         <div class="form-group">
-            <asp:DropDownList ID="ddlSecurityType" runat="server">
-                <asp:ListItem Value="bond">Bond</asp:ListItem>
-                <asp:ListItem Value="stock">Stock</asp:ListItem>
-                <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
-            </asp:DropDownList>
-            <asp:DropDownList ID="ddlCurrency" runat="server" Visible="False" OnSelectedIndexChanged="ddlCurrency_SelectedIndexChanged" AutoPostBack="true">
-                <asp:ListItem Value="0">Currency</asp:ListItem>
-            </asp:DropDownList>
+            <div class="col-md-2">
+                <asp:DropDownList ID="ddlSecurityType" runat="server">
+                    <asp:ListItem Value="bond">Bond</asp:ListItem>
+                    <asp:ListItem Value="stock">Stock</asp:ListItem>
+                    <asp:ListItem Value="unit trust">Unit Trust</asp:ListItem>
+                </asp:DropDownList>
+            </div>
+            <div class="col-md-2">
+                <asp:DropDownList ID="ddlCurrency" runat="server" Visible="False" OnSelectedIndexChanged="ddlCurrency_SelectedIndexChanged" AutoPostBack="true">
+                    <asp:ListItem Value="0">Currency</asp:ListItem>
+                </asp:DropDownList>
+            </div>
         </div>
         <div>
             <asp:GridView ID="gvSecurityHolding" runat="server" Visible="False" AutoGenerateColumns="False" OnSorting="gvSecurityHolding_Sorting" CellPadding="5" AllowSorting="true">

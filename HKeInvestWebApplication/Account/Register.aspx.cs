@@ -69,7 +69,7 @@ namespace HKeInvestWebApplication.Account
                     HKeInvestCode myCode = new HKeInvestCode();
                     string mailTo = email.Trim();
                     string subject = "Confirmation email";
-                    string mailBody = "This is to confirm that your account" + acNo + "have been created.";
+                    string mailBody = "This is to confirm that your login account with account number " + acNo + " have been created.";
                     myCode.sendemail(mailTo, subject, mailBody);
                     SqlTransaction trans = myHKeInvestData.beginTransaction();
                     myHKeInvestData.setData(sql, trans);

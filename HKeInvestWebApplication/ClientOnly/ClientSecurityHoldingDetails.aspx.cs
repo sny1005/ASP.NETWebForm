@@ -261,8 +261,20 @@ namespace HKeInvestWebApplication.ClientOnly
 
         protected void generate6a_Click()
         {
+            // retrieve account free balance
+            string sql = "SELECT [balance] FROM [LoginAccount] WHERE [accountNumber] = '" + accountNumber + "'";
+            DataTable dtBalance = myHKeInvestData.getData(sql);
+
+            if (dtBalance == null || dtBalance.Rows.Count == 0)
+                return;
+
+            DataRow[] record = dtBalance.Select();
+            string freeBalance = record[0]["balance"].ToString().Trim();
+            lblFreeBalance.Text = "The account free balance is: " + freeBalance;
+            lblFreeBalance.Visible = true;
+
             // calculate total monetary value of securities held by the account
-            string sql = "SELECT [shares], [base], [type], [code] FROM [SecurityHolding] WHERE [accountNumber] = '" + accountNumber + "'";
+            sql = "SELECT [shares], [base], [type], [code] FROM [SecurityHolding] WHERE [accountNumber] = '" + accountNumber + "'";
             DataTable dtHolding = myHKeInvestData.getData(sql);
 
             if (dtHolding == null || dtHolding.Rows.Count == 0)
@@ -286,18 +298,6 @@ namespace HKeInvestWebApplication.ClientOnly
             }
             lblTotalValue.Text = "The total monetary value of securities held by the account is: " + totalValue.ToString();
             lblTotalValue.Visible = true;
-
-            // retrieve account free balance
-            sql = "SELECT [balance] FROM [LoginAccount] WHERE [accountNumber] = '" + accountNumber + "'";
-            DataTable dtBalance = myHKeInvestData.getData(sql);
-
-            if (dtBalance == null || dtBalance.Rows.Count == 0)
-                return;
-
-            DataRow[] record = dtBalance.Select();
-            string freeBalance = record[0]["balance"].ToString().Trim();
-            lblFreeBalance.Text = "The account free balance is: " + freeBalance;
-            lblFreeBalance.Visible = true;
 
             // prepare datatable for securit summary
             DataTable dtSummary = new DataTable();
