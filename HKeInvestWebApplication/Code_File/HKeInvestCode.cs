@@ -364,11 +364,7 @@ namespace HKeInvestWebApplication.Code_File
             mail.To.Add(target);
             mail.Subject = subject;
             mail.Body = body;
-            // Specify login credentials
-            emailServer.UseDefaultCredentials = false;
-            emailServer.EnableSsl = true;
-            NetworkCredential myCredentials = new NetworkCredential("comp3111_team109@cse.ust.hk", "team109#");
-            emailServer.Credentials = myCredentials;
+
             // Send the message.
             emailServer.Send(mail);
         }
